@@ -1,6 +1,6 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import { HomeIcon, ChartPieIcon } from "@heroicons/react/24/outline";
+import { ChartPieIcon, UserCircleIcon } from "@heroicons/react/24/outline";
 import Logo from "/MetreeUI.png";
 
 export default function Sidebar() {
@@ -33,12 +33,12 @@ export default function Sidebar() {
                  : "hover:bg-gradient-to-r hover:from-indigo-500 hover:to-teal-400"
              }`
           }
-        >
+        ><UserCircleIcon className="w-6 h-6" />
           Profile
         </NavLink>
 
         <NavLink
-          to="/maintenance"
+          to="/Table"
           className={({ isActive }) =>
             `flex items-center gap-2 px-3 py-2 rounded-lg transition 
              ${
@@ -48,7 +48,7 @@ export default function Sidebar() {
              }`
           }
         >
-          🛠 แจ้งซ่อม
+          Table
         </NavLink>
       </nav>
     </aside>

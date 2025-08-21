@@ -1,7 +1,10 @@
-import React from 'react'
+import React from "react";
+import DefaultLayout from "../layouts/DefaultLayout";
 
 export default function Table() {
   return (
-    <div>Table</div>
-  )
+    <DefaultLayout>
+      <div>Table</div>
+    </DefaultLayout>
+  );
 }

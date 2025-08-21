@@ -4,6 +4,7 @@ import { Route, Routes, useLocation } from "react-router-dom";
 
 import Dashborad from "./pages/Dashborad";
 import Profile from "./pages/Profile";
+import Table from "./pages/Table";
 
 export default function App() {
   const [loading, setLoading] = useState(true);
@@ -30,7 +31,7 @@ export default function App() {
           }
         />
         <Route path="/Profile" element={<Profile />} />
-        {/* <Route path="/settings" element={<Settings />} /> */}
+        <Route path="/Table" element={<Table />} />
       </Routes>
     </>
   );
