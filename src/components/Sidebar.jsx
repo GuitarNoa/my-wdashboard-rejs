@@ -156,6 +156,7 @@ export default function Sidebar() {
                 <Link
                   to="/ui/buttons"
                   className="block px-2 py-2 rounded-md hover:bg-[#0a8a94]"
+                  onClick={handleLinkClick}
                 >
                   Buttons
                 </Link>
@@ -164,6 +165,7 @@ export default function Sidebar() {
                 <Link
                   to="/ui/badges"
                   className="block px-2 py-2 rounded-md hover:bg-[#0a8a94]"
+                  onClick={handleLinkClick}
                 >
                   Badges
                 </Link>
@@ -172,6 +174,7 @@ export default function Sidebar() {
                 <Link
                   to="/ui/cards"
                   className="block px-2 py-2 rounded-md hover:bg-[#0a8a94]"
+                  onClick={handleLinkClick}
                 >
                   Cards
                 </Link>
@@ -180,6 +183,7 @@ export default function Sidebar() {
                 <Link
                   to="/ui/tabs"
                   className="block px-2 py-2 rounded-md hover:bg-[#0a8a94]"
+                  onClick={handleLinkClick}
                 >
                   Tabs
                 </Link>
@@ -221,6 +225,7 @@ export default function Sidebar() {
                 <Link
                   to="/ui/buttons"
                   className="block px-2 py-2 rounded-md hover:bg-[#0a8a94]"
+                  onClick={handleLinkClick}
                 >
                   Form Elements
                 </Link>
@@ -229,6 +234,7 @@ export default function Sidebar() {
                 <Link
                   to="/ui/badges"
                   className="block px-2 py-2 rounded-md hover:bg-[#0a8a94]"
+                  onClick={handleLinkClick}
                 >
                   Form Validation
                 </Link>
@@ -237,6 +243,7 @@ export default function Sidebar() {
                 <Link
                   to="/ui/cards"
                   className="block px-2 py-2 rounded-md hover:bg-[#0a8a94]"
+                  onClick={handleLinkClick}
                 >
                   Form Wizard
                 </Link>
@@ -278,6 +285,7 @@ export default function Sidebar() {
                 <Link
                   to="/ui/buttons"
                   className="block px-2 py-2 rounded-md hover:bg-[#0a8a94]"
+                  onClick={handleLinkClick}
                 >
                   Form Elements
                 </Link>
@@ -286,6 +294,7 @@ export default function Sidebar() {
                 <Link
                   to="/ui/badges"
                   className="block px-2 py-2 rounded-md hover:bg-[#0a8a94]"
+                  onClick={handleLinkClick}
                 >
                   Form Validation
                 </Link>
@@ -294,6 +303,7 @@ export default function Sidebar() {
                 <Link
                   to="/ui/cards"
                   className="block px-2 py-2 rounded-md hover:bg-[#0a8a94]"
+                  onClick={handleLinkClick}
                 >
                   Form Wizard
                 </Link>
@@ -335,6 +345,7 @@ export default function Sidebar() {
                 <Link
                   to="/ui/buttons"
                   className="block px-2 py-2 rounded-md hover:bg-[#0a8a94]"
+                  onClick={handleLinkClick}
                 >
                   Line
                 </Link>
@@ -343,6 +354,7 @@ export default function Sidebar() {
                 <Link
                   to="/ui/badges"
                   className="block px-2 py-2 rounded-md hover:bg-[#0a8a94]"
+                  onClick={handleLinkClick}
                 >
                   Bar
                 </Link>
@@ -351,6 +363,7 @@ export default function Sidebar() {
                 <Link
                   to="/ui/cards"
                   className="block px-2 py-2 rounded-md hover:bg-[#0a8a94]"
+                  onClick={handleLinkClick}
                 >
                   Pie
                 </Link>
@@ -359,6 +372,7 @@ export default function Sidebar() {
                 <Link
                   to="/ui/cards"
                   className="block px-2 py-2 rounded-md hover:bg-[#0a8a94]"
+                  onClick={handleLinkClick}
                 >
                   Donut
                 </Link>
@@ -371,6 +385,7 @@ export default function Sidebar() {
           <Link
             to="/profile"
             className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gradient-to-r hover:from-indigo-500 hover:to-teal-400 transition"
+            onClick={handleLinkClick}
           >
             <LockClosedIcon className="w-6 h-6" />
             Login
@@ -379,6 +394,7 @@ export default function Sidebar() {
           <Link
             to="/profile"
             className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gradient-to-r hover:from-indigo-500 hover:to-teal-400 transition"
+            onClick={handleLinkClick}
           >
             <UserPlusIcon className="w-6 h-6" />
             Register
@@ -387,6 +403,7 @@ export default function Sidebar() {
           <Link
             to="/profile"
             className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gradient-to-r hover:from-indigo-500 hover:to-teal-400 transition"
+            onClick={handleLinkClick}
           >
             <UserCircleIcon className="w-6 h-6" />
             Profile
@@ -395,6 +412,7 @@ export default function Sidebar() {
           <Link
             to="/profile"
             className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gradient-to-r hover:from-indigo-500 hover:to-teal-400 transition"
+            onClick={handleLinkClick}
           >
             <Cog6ToothIcon className="w-6 h-6" />
             Setting
@@ -403,6 +421,7 @@ export default function Sidebar() {
           <Link
             to="/profile"
             className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gradient-to-r hover:from-indigo-500 hover:to-teal-400 transition"
+            onClick={handleLinkClick}
           >
             <ExclamationCircleIcon className="w-6 h-6" />
             Error(404/500)
@@ -411,6 +430,7 @@ export default function Sidebar() {
           <Link
             to="/profile"
             className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gradient-to-r hover:from-indigo-500 hover:to-teal-400 transition"
+            onClick={handleLinkClick}
           >
             <CurrencyDollarIcon className="w-6 h-6" />
             Invoice / Pricing
@@ -419,6 +439,7 @@ export default function Sidebar() {
           <Link
             to="/profile"
             className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gradient-to-r hover:from-indigo-500 hover:to-teal-400 transition"
+            onClick={handleLinkClick}
           >
             <QuestionMarkCircleIcon className="w-6 h-6" />
             FAQ/Help
