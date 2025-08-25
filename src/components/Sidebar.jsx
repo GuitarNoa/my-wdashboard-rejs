@@ -25,6 +25,9 @@ export default function Sidebar() {
   const [openTable, setTable] = useState(false);
   const [openChart, setChart] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const handleLinkClick = () => {
+    if (window.innerWidth < 768) setIsOpen(false);
+  };
 
   return (
     <>
@@ -50,12 +53,11 @@ export default function Sidebar() {
 
       {/* Sidebar */}
       <aside
-        className={`fixed top-0 left-0 z-50 w-64 h-full bg-gradient-to-t from-green-400 to-cyan-400 text-white p-4 transform transition-transform duration-300 ease-in-out shadow-xl
+        className={`fixed top-0 left-0 z-50 w-64 h-full bg-gradient-to-t from-green-400 to-cyan-400 text-white p-4 transform transition-transform duration-300 ease-in-out shadow-xl overflow-y-auto
         ${isOpen ? "translate-x-0" : "-translate-x-full"} md:translate-x-0`}
       >
         {/* Logo */}
         <div className="flex justify-center mb-6">
-          {/* ✅ ถ้าใช้ public folder → <img src="/MetreeUI.png" alt="Logo" className="w-28 h-auto" /> */}
           <img src={Logo} alt="Logo" className="w-28 h-auto" />
         </div>
 
@@ -63,7 +65,7 @@ export default function Sidebar() {
           {/* Dashboard */}
           <button
             onClick={() => setOpenDashboard(!openDashboard)}
-            className="w-full flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gradient-to-r hover:from-indigo-500 hover:to-teal-400 transition"
+            className="w-full flex items-center gap-2 px-3 py-3 rounded-lg hover:bg-gradient-to-r hover:from-indigo-500 hover:to-teal-400 transition"
           >
             <ChartPieIcon className="w-6 h-6" />
             <span>Dashboard</span>
@@ -93,6 +95,7 @@ export default function Sidebar() {
               <li>
                 <Link
                   to="/"
+                  onClick={handleLinkClick}
                   className="block px-2 py-2 rounded-md hover:bg-[#0a8a94]"
                 >
                   Analytic
@@ -101,6 +104,7 @@ export default function Sidebar() {
               <li>
                 <Link
                   to="/dashboard/ecommerce"
+                  onClick={handleLinkClick}
                   className="block px-2 py-2 rounded-md hover:bg-[#0a8a94]"
                 >
                   eCommerce
@@ -109,6 +113,7 @@ export default function Sidebar() {
               <li>
                 <Link
                   to="/dashboard/crm"
+                  onClick={handleLinkClick}
                   className="block px-2 py-2 rounded-md hover:bg-[#0a8a94]"
                 >
                   CRM
