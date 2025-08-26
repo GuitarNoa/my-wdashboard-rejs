@@ -103,7 +103,7 @@ export default function Sidebar() {
               </li>
               <li>
                 <Link
-                  to="/dashboard/ecommerce"
+                  to="/ECommerce"
                   onClick={handleLinkClick}
                   className="block px-2 py-2 rounded-md hover:bg-[#0a8a94]"
                 >
@@ -112,7 +112,7 @@ export default function Sidebar() {
               </li>
               <li>
                 <Link
-                  to="/dashboard/crm"
+                  to="/CRM"
                   onClick={handleLinkClick}
                   className="block px-2 py-2 rounded-md hover:bg-[#0a8a94]"
                 >
@@ -154,7 +154,7 @@ export default function Sidebar() {
             <ul className="mt-2 flex flex-col gap-2 pl-6">
               <li>
                 <Link
-                  to="/ui/buttons"
+                  to="/ui/buttonsUI"
                   className="block px-2 py-2 rounded-md hover:bg-[#0a8a94]"
                   onClick={handleLinkClick}
                 >
@@ -163,7 +163,7 @@ export default function Sidebar() {
               </li>
               <li>
                 <Link
-                  to="/ui/badges"
+                  to="/ui/badgesUI"
                   className="block px-2 py-2 rounded-md hover:bg-[#0a8a94]"
                   onClick={handleLinkClick}
                 >
@@ -172,7 +172,7 @@ export default function Sidebar() {
               </li>
               <li>
                 <Link
-                  to="/ui/cards"
+                  to="/ui/cardsUI"
                   className="block px-2 py-2 rounded-md hover:bg-[#0a8a94]"
                   onClick={handleLinkClick}
                 >
@@ -181,7 +181,7 @@ export default function Sidebar() {
               </li>
               <li>
                 <Link
-                  to="/ui/tabs"
+                  to="/ui/tabsUI"
                   className="block px-2 py-2 rounded-md hover:bg-[#0a8a94]"
                   onClick={handleLinkClick}
                 >
@@ -287,7 +287,7 @@ export default function Sidebar() {
                   className="block px-2 py-2 rounded-md hover:bg-[#0a8a94]"
                   onClick={handleLinkClick}
                 >
-                  Form Elements
+                  Basic Tables
                 </Link>
               </li>
               <li>
@@ -296,16 +296,7 @@ export default function Sidebar() {
                   className="block px-2 py-2 rounded-md hover:bg-[#0a8a94]"
                   onClick={handleLinkClick}
                 >
-                  Form Validation
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/ui/cards"
-                  className="block px-2 py-2 rounded-md hover:bg-[#0a8a94]"
-                  onClick={handleLinkClick}
-                >
-                  Form Wizard
+                  DataTables (sortable + searchable)
                 </Link>
               </li>
             </ul>
