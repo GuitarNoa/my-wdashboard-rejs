@@ -65,10 +65,10 @@ export default function App() {
         <Route path="/tables/basictable" element={<BasicTables />} />
         <Route path="/tables/datatable" element={<DataTables />} />
         {/* Charts */}
-        <Route path="/charts/bar" element={<Bar />} />
-        <Route path="/charts/donut" element={<Donut />} />
         <Route path="/charts/line" element={<Line />} />
+        <Route path="/charts/bar" element={<Bar />} />
         <Route path="/charts/pie" element={<Pie />} />
+        <Route path="/charts/donut" element={<Donut />} />
         {/* Pages */}
         <Route path="/Profile" element={<Profile />} />
       </Routes>

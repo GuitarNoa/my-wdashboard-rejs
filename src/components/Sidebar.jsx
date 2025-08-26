@@ -334,7 +334,7 @@ export default function Sidebar() {
             <ul className="mt-2 flex flex-col gap-2 pl-6">
               <li>
                 <Link
-                  to="/ui/buttons"
+                  to="/charts/line"
                   className="block px-2 py-2 rounded-md hover:bg-[#0a8a94]"
                   onClick={handleLinkClick}
                 >
@@ -343,7 +343,7 @@ export default function Sidebar() {
               </li>
               <li>
                 <Link
-                  to="/ui/badges"
+                  to="/charts/bar"
                   className="block px-2 py-2 rounded-md hover:bg-[#0a8a94]"
                   onClick={handleLinkClick}
                 >
@@ -352,7 +352,7 @@ export default function Sidebar() {
               </li>
               <li>
                 <Link
-                  to="/ui/cards"
+                  to="/charts/pie"
                   className="block px-2 py-2 rounded-md hover:bg-[#0a8a94]"
                   onClick={handleLinkClick}
                 >
@@ -361,7 +361,7 @@ export default function Sidebar() {
               </li>
               <li>
                 <Link
-                  to="/ui/cards"
+                  to="/charts/donut"
                   className="block px-2 py-2 rounded-md hover:bg-[#0a8a94]"
                   onClick={handleLinkClick}
                 >
