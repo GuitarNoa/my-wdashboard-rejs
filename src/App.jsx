@@ -6,10 +6,10 @@ import Dashborad from "./pages/Dashborad";
 import ECommerce from "./pages/ECommerce";
 import CRM from "./pages/CRM";
 //UI
-import ButtonsUI from "./pages/Ui/ButtonsUI";
-import BadgesUI from "./pages/Ui/BadgesUI";
-import CardsUI from "./pages/Ui/CardsUI";
-import TabsUI from "./pages/Ui/TabsUI";
+import ButtonsUI from "./pages/UI/ButtonsUI";
+import BadgesUI from "./pages/UI/BadgesUI";
+import CardsUI from "./pages/UI/CardsUI";
+import TabsUI from "./pages/UI/TabsUI";
 //Forms
 import FormElements from "./pages/forms/FormElements";
 import FormValidation from "./pages/forms/FormValidation";
