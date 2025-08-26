@@ -6,13 +6,25 @@ import Dashborad from "./pages/Dashborad";
 import ECommerce from "./pages/ECommerce";
 import CRM from "./pages/CRM";
 //UI
-import ButtonsUI from "./pages/UI/ButtonsUI";
-import BadgesUI from "./pages/UI/BadgesUI";
-import CardsUI from "./pages/UI/CardsUI";
-import TabsUI from "./pages/UI/TabsUI";
+import ButtonsUI from "./pages/ui/ButtonsUI";
+import BadgesUI from "./pages/ui/BadgesUI";
+import CardsUI from "./pages/ui/CardsUI";
+import TabsUI from "./pages/ui/TabsUI";
+//Forms
+import FormElements from "./pages/forms/FormElements";
+import FormValidation from "./pages/forms/FormValidation";
+import FormWizard from "./pages/forms/FormWizard";
+//Table
+import BasicTables from "./pages/tables/BasicTables";
+import DataTables from "./pages/tables/DataTables";
+//Chart
+import Bar from "./pages/charts/Bar";
+import Donut from "./pages/charts/Donut";
+import Line from "./pages/charts/Line";
+import Pie from "./pages/charts/Pie";
 //Page
 import Profile from "./pages/Profile";
-import Table from "./pages/Table";
+// import Table from "./pages/Table";
 
 export default function App() {
   const [loading, setLoading] = useState(true);
@@ -45,9 +57,20 @@ export default function App() {
         <Route path="/ui/badgesUI" element={<BadgesUI />} />
         <Route path="/ui/cardsUI" element={<CardsUI />} />
         <Route path="/ui/tabsUI" element={<TabsUI />} />
+        {/* Forms */}
+        <Route path="/forms/formelements" element={<FormElements />} />
+        <Route path="/forms/formvalidation" element={<FormValidation />} />
+        <Route path="/forms/formwizard" element={<FormWizard />} />
+        {/* Tables */}
+        <Route path="/tables/basictable" element={<BasicTables />} />
+        <Route path="/tables/datatable" element={<DataTables />} />
+        {/* Charts */}
+        <Route path="/charts/bar" element={<Bar />} />
+        <Route path="/charts/donut" element={<Donut />} />
+        <Route path="/charts/line" element={<Line />} />
+        <Route path="/charts/pie" element={<Pie />} />
         {/* Pages */}
         <Route path="/Profile" element={<Profile />} />
-        <Route path="/Table" element={<Table />} />
       </Routes>
     </>
   );

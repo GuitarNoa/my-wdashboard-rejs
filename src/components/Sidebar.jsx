@@ -223,7 +223,7 @@ export default function Sidebar() {
             <ul className="mt-2 flex flex-col gap-2 pl-6">
               <li>
                 <Link
-                  to="/ui/buttons"
+                  to="/forms/formelements"
                   className="block px-2 py-2 rounded-md hover:bg-[#0a8a94]"
                   onClick={handleLinkClick}
                 >
@@ -232,7 +232,7 @@ export default function Sidebar() {
               </li>
               <li>
                 <Link
-                  to="/ui/badges"
+                  to="/forms/formvalidation"
                   className="block px-2 py-2 rounded-md hover:bg-[#0a8a94]"
                   onClick={handleLinkClick}
                 >
@@ -241,7 +241,7 @@ export default function Sidebar() {
               </li>
               <li>
                 <Link
-                  to="/ui/cards"
+                  to="/forms/formwizard"
                   className="block px-2 py-2 rounded-md hover:bg-[#0a8a94]"
                   onClick={handleLinkClick}
                 >
@@ -251,13 +251,13 @@ export default function Sidebar() {
             </ul>
           </div>
 
-          {/* Tabs */}
+          {/* Tables */}
           <button
             onClick={() => setTable(!openTable)}
             className="w-full flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gradient-to-r hover:from-indigo-500 hover:to-teal-400 transition"
           >
             <TableCellsIcon className="w-6 h-6" />
-            <span>Tabs</span>
+            <span>Tables</span>
             <svg
               className={`w-5 h-5 ml-auto transition-transform ${
                 openTable ? "rotate-180" : ""
@@ -283,7 +283,7 @@ export default function Sidebar() {
             <ul className="mt-2 flex flex-col gap-2 pl-6">
               <li>
                 <Link
-                  to="/ui/buttons"
+                  to="/tables/basictable"
                   className="block px-2 py-2 rounded-md hover:bg-[#0a8a94]"
                   onClick={handleLinkClick}
                 >
@@ -292,11 +292,11 @@ export default function Sidebar() {
               </li>
               <li>
                 <Link
-                  to="/ui/badges"
+                  to="/tables/datatable"
                   className="block px-2 py-2 rounded-md hover:bg-[#0a8a94]"
                   onClick={handleLinkClick}
                 >
-                  DataTables (sortable + searchable)
+                  DataTables
                 </Link>
               </li>
             </ul>
