@@ -67,22 +67,25 @@ export default function Dashborad() {
   };
   return (
     <DefaultLayout>
-      <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="bg-white rounded-2xl shadow p-4">
-          <h3 className="font-semibold mb-2">Pie Chart</h3>
-          <Pie data={pieData} />
-        </div>
+      <main>
+        <h1>Overview</h1>
+        <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="bg-white rounded-2xl shadow p-4">
+            <h3 className="font-semibold mb-2">Pie Chart</h3>
+            <Pie data={pieData} />
+          </div>
 
-        <div className="bg-white rounded-2xl shadow p-4">
-          <h3 className="font-semibold mb-2">Bar Chart</h3>
-          <Bar data={barData} />
-        </div>
+          <div className="bg-white rounded-2xl shadow p-4">
+            <h3 className="font-semibold mb-2">Bar Chart</h3>
+            <Bar data={barData} />
+          </div>
 
-        <div className="bg-white rounded-2xl shadow p-4 md:col-span-2">
-          <h3 className="font-semibold mb-2">Line Chart</h3>
-          <Line data={lineData} />
+          <div className="bg-white rounded-2xl shadow p-4 md:col-span-2">
+            <h3 className="font-semibold mb-2">Line Chart</h3>
+            <Line data={lineData} />
+          </div>
         </div>
-      </div>
+      </main>
     </DefaultLayout>
   );
 }

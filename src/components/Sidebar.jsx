@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import {
   ChartPieIcon,
   UserCircleIcon,
@@ -19,19 +19,88 @@ import {
 import Logo from "../assets/MetreeUI.png";
 
 export default function Sidebar() {
-  const [openDashboard, setOpenDashboard] = useState(false);
-  const [openUI, setOpenUI] = useState(false);
-  const [openForm, setForm] = useState(false);
-  const [openTable, setTable] = useState(false);
-  const [openChart, setChart] = useState(false);
+  const [openMenu, setOpenMenu] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
-  const handleLinkClick = () => {
+
+  const toggleMenu = (menu) => {
+    setOpenMenu(openMenu === menu ? null : menu);
+  };
+
+  const closeSidebar = () => {
     if (window.innerWidth < 768) setIsOpen(false);
   };
 
+  const baseLinkStyle =
+    "flex items-center gap-2 px-3 py-2 rounded-lg transition hover:bg-gradient-to-r hover:from-indigo-500 hover:to-teal-400";
+  const activeLinkStyle = "bg-gradient-to-r from-indigo-600 to-teal-500";
+
+  const menus = [
+    {
+      key: "dashboard",
+      label: "Dashboard",
+      icon: ChartPieIcon,
+      children: [
+        { to: "/", label: "Overview" },
+        { to: "/ECommerce", label: "eCommerce" },
+        { to: "/CRM", label: "CRM" },
+      ],
+    },
+    {
+      key: "ui",
+      label: "UI Elements",
+      icon: SquaresPlusIcon,
+      children: [
+        { to: "/ui/buttonsUI", label: "Buttons" },
+        { to: "/ui/badgesUI", label: "Badges" },
+        { to: "/ui/cardsUI", label: "Cards" },
+        { to: "/ui/tabsUI", label: "Tabs" },
+      ],
+    },
+    {
+      key: "forms",
+      label: "Forms",
+      icon: DocumentTextIcon,
+      children: [
+        { to: "/forms/formelements", label: "Form Elements" },
+        { to: "/forms/formvalidation", label: "Form Validation" },
+        { to: "/forms/formwizard", label: "Form Wizard" },
+      ],
+    },
+    {
+      key: "tables",
+      label: "Tables",
+      icon: TableCellsIcon,
+      children: [
+        { to: "/tables/basictable", label: "Basic Tables" },
+        { to: "/tables/datatable", label: "DataTables" },
+      ],
+    },
+    {
+      key: "charts",
+      label: "Charts",
+      icon: ChartBarSquareIcon,
+      children: [
+        { to: "/charts/line", label: "Line" },
+        { to: "/charts/bar", label: "Bar" },
+        { to: "/charts/pie", label: "Pie" },
+        { to: "/charts/donut", label: "Donut" },
+      ],
+    },
+  ];
+
+  const singleLinks = [
+    { to: "/auth/login", label: "Login", icon: LockClosedIcon },
+    { to: "/auth/register", label: "Register", icon: UserPlusIcon },
+    { to: "/profile", label: "Profile", icon: UserCircleIcon },
+    { to: "/setting", label: "Setting", icon: Cog6ToothIcon },
+    { to: "/error", label: "Error(404/500)", icon: ExclamationCircleIcon },
+    { to: "/pricing", label: "Invoice / Pricing", icon: CurrencyDollarIcon },
+    { to: "/faq", label: "FAQ/Help", icon: QuestionMarkCircleIcon },
+  ];
+
   return (
     <>
-      {/* Hamburger สำหรับมือถือ */}
+      {/* Hamburger Mobile */}
       <button
         className="md:hidden fixed top-4 left-4 z-50 p-3 bg-gradient-to-t from-green-400 to-cyan-400 text-white rounded-lg shadow-lg"
         onClick={() => setIsOpen(!isOpen)}
@@ -62,381 +131,74 @@ export default function Sidebar() {
         </div>
 
         <nav className="space-y-2">
-          {/* Dashboard */}
-          <button
-            onClick={() => setOpenDashboard(!openDashboard)}
-            className="w-full flex items-center gap-2 px-3 py-3 rounded-lg hover:bg-gradient-to-r hover:from-indigo-500 hover:to-teal-400 transition"
-          >
-            <ChartPieIcon className="w-6 h-6" />
-            <span>Dashboard</span>
-            <svg
-              className={`w-5 h-5 ml-auto transition-transform ${
-                openDashboard ? "rotate-180" : ""
-              }`}
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
+          {/* Menus with sub-items */}
+          {menus.map(({ key, label, icon: Icon, children }) => (
+            <div key={key}>
+              <button
+                onClick={() => toggleMenu(key)}
+                className={`${baseLinkStyle} w-full`}
+              >
+                <Icon className="w-6 h-6" />
+                <span>{label}</span>
+                <svg
+                  className={`w-5 h-5 ml-auto transition-transform ${
+                    openMenu === key ? "rotate-180" : ""
+                  }`}
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M19 9l-7 7-7-7"
+                  />
+                </svg>
+              </button>
+              <div
+                className={`transition-[max-height,opacity] duration-300 ease-in-out overflow-hidden ${
+                  openMenu === key
+                    ? "max-h-screen opacity-100"
+                    : "max-h-0 opacity-0"
+                }`}
+              >
+                <ul className="mt-2 flex flex-col gap-2 pl-6">
+                  {children.map(({ to, label }) => (
+                    <li key={to}>
+                      <NavLink
+                        to={to}
+                        onClick={closeSidebar}
+                        className={({ isActive }) =>
+                          `${baseLinkStyle} ${
+                            isActive ? activeLinkStyle : ""
+                          } block px-2 py-2`
+                        }
+                      >
+                        {label}
+                      </NavLink>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          ))}
+
+          {/* Static Pages */}
+          <span className="px-3 py-2 text-sm font-semibold">Pages</span>
+          {singleLinks.map(({ to, label, icon: Icon }) => (
+            <NavLink
+              key={to}
+              to={to}
+              onClick={closeSidebar}
+              className={({ isActive }) =>
+                `${baseLinkStyle} ${isActive ? activeLinkStyle : ""}`
+              }
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M19 9l-7 7-7-7"
-              />
-            </svg>
-          </button>
-
-          <div
-            className={`transition-all duration-300 ease-in-out overflow-hidden ${
-              openDashboard ? "max-h-60 opacity-100" : "max-h-0 opacity-0"
-            }`}
-          >
-            <ul className="mt-2 flex flex-col gap-2 pl-6">
-              <li>
-                <Link
-                  to="/"
-                  onClick={handleLinkClick}
-                  className="block px-2 py-2 rounded-md hover:bg-[#0a8a94]"
-                >
-                  Analytic
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/ECommerce"
-                  onClick={handleLinkClick}
-                  className="block px-2 py-2 rounded-md hover:bg-[#0a8a94]"
-                >
-                  eCommerce
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/CRM"
-                  onClick={handleLinkClick}
-                  className="block px-2 py-2 rounded-md hover:bg-[#0a8a94]"
-                >
-                  CRM
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          {/* UI Elements */}
-          <button
-            onClick={() => setOpenUI(!openUI)}
-            className="w-full flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gradient-to-r hover:from-indigo-500 hover:to-teal-400 transition"
-          >
-            <SquaresPlusIcon className="w-6 h-6" />
-            <span>UI Elements</span>
-            <svg
-              className={`w-5 h-5 ml-auto transition-transform ${
-                openUI ? "rotate-180" : ""
-              }`}
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M19 9l-7 7-7-7"
-              />
-            </svg>
-          </button>
-
-          <div
-            className={`transition-all duration-300 ease-in-out overflow-hidden ${
-              openUI ? "max-h-60 opacity-100" : "max-h-0 opacity-0"
-            }`}
-          >
-            <ul className="mt-2 flex flex-col gap-2 pl-6">
-              <li>
-                <Link
-                  to="/ui/buttonsUI"
-                  className="block px-2 py-2 rounded-md hover:bg-[#0a8a94]"
-                  onClick={handleLinkClick}
-                >
-                  Buttons
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/ui/badgesUI"
-                  className="block px-2 py-2 rounded-md hover:bg-[#0a8a94]"
-                  onClick={handleLinkClick}
-                >
-                  Badges
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/ui/cardsUI"
-                  className="block px-2 py-2 rounded-md hover:bg-[#0a8a94]"
-                  onClick={handleLinkClick}
-                >
-                  Cards
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/ui/tabsUI"
-                  className="block px-2 py-2 rounded-md hover:bg-[#0a8a94]"
-                  onClick={handleLinkClick}
-                >
-                  Tabs
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          {/* Forms */}
-          <button
-            onClick={() => setForm(!openForm)}
-            className="w-full flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gradient-to-r hover:from-indigo-500 hover:to-teal-400 transition"
-          >
-            <DocumentTextIcon className="w-6 h-6" />
-            <span>Forms</span>
-            <svg
-              className={`w-5 h-5 ml-auto transition-transform ${
-                openForm ? "rotate-180" : ""
-              }`}
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M19 9l-7 7-7-7"
-              />
-            </svg>
-          </button>
-
-          <div
-            className={`transition-all duration-300 ease-in-out overflow-hidden ${
-              openForm ? "max-h-60 opacity-100" : "max-h-0 opacity-0"
-            }`}
-          >
-            <ul className="mt-2 flex flex-col gap-2 pl-6">
-              <li>
-                <Link
-                  to="/forms/formelements"
-                  className="block px-2 py-2 rounded-md hover:bg-[#0a8a94]"
-                  onClick={handleLinkClick}
-                >
-                  Form Elements
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/forms/formvalidation"
-                  className="block px-2 py-2 rounded-md hover:bg-[#0a8a94]"
-                  onClick={handleLinkClick}
-                >
-                  Form Validation
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/forms/formwizard"
-                  className="block px-2 py-2 rounded-md hover:bg-[#0a8a94]"
-                  onClick={handleLinkClick}
-                >
-                  Form Wizard
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          {/* Tables */}
-          <button
-            onClick={() => setTable(!openTable)}
-            className="w-full flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gradient-to-r hover:from-indigo-500 hover:to-teal-400 transition"
-          >
-            <TableCellsIcon className="w-6 h-6" />
-            <span>Tables</span>
-            <svg
-              className={`w-5 h-5 ml-auto transition-transform ${
-                openTable ? "rotate-180" : ""
-              }`}
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M19 9l-7 7-7-7"
-              />
-            </svg>
-          </button>
-
-          <div
-            className={`transition-all duration-300 ease-in-out overflow-hidden ${
-              openTable ? "max-h-60 opacity-100" : "max-h-0 opacity-0"
-            }`}
-          >
-            <ul className="mt-2 flex flex-col gap-2 pl-6">
-              <li>
-                <Link
-                  to="/tables/basictable"
-                  className="block px-2 py-2 rounded-md hover:bg-[#0a8a94]"
-                  onClick={handleLinkClick}
-                >
-                  Basic Tables
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/tables/datatable"
-                  className="block px-2 py-2 rounded-md hover:bg-[#0a8a94]"
-                  onClick={handleLinkClick}
-                >
-                  DataTables
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          {/* Charts */}
-          <button
-            onClick={() => setChart(!openChart)}
-            className="w-full flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gradient-to-r hover:from-indigo-500 hover:to-teal-400 transition"
-          >
-            <ChartBarSquareIcon className="w-6 h-6" />
-            <span>Charts</span>
-            <svg
-              className={`w-5 h-5 ml-auto transition-transform ${
-                openChart ? "rotate-180" : ""
-              }`}
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M19 9l-7 7-7-7"
-              />
-            </svg>
-          </button>
-
-          <div
-            className={`transition-all duration-300 ease-in-out overflow-hidden ${
-              openChart ? "max-h-60 opacity-100" : "max-h-0 opacity-0"
-            }`}
-          >
-            <ul className="mt-2 flex flex-col gap-2 pl-6">
-              <li>
-                <Link
-                  to="/charts/line"
-                  className="block px-2 py-2 rounded-md hover:bg-[#0a8a94]"
-                  onClick={handleLinkClick}
-                >
-                  Line
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/charts/bar"
-                  className="block px-2 py-2 rounded-md hover:bg-[#0a8a94]"
-                  onClick={handleLinkClick}
-                >
-                  Bar
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/charts/pie"
-                  className="block px-2 py-2 rounded-md hover:bg-[#0a8a94]"
-                  onClick={handleLinkClick}
-                >
-                  Pie
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/charts/donut"
-                  className="block px-2 py-2 rounded-md hover:bg-[#0a8a94]"
-                  onClick={handleLinkClick}
-                >
-                  Donut
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          {/* Page */}
-          <a>Pages</a>
-
-          {/* Login */}
-          <Link
-            to="/auth/login"
-            className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gradient-to-r hover:from-indigo-500 hover:to-teal-400 transition"
-            onClick={handleLinkClick}
-          >
-            <LockClosedIcon className="w-6 h-6" />
-            Login
-          </Link>
-          {/* Register */}
-          <Link
-            to="/auth/register"
-            className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gradient-to-r hover:from-indigo-500 hover:to-teal-400 transition"
-            onClick={handleLinkClick}
-          >
-            <UserPlusIcon className="w-6 h-6" />
-            Register
-          </Link>
-          {/* Profile */}
-          <Link
-            to="/profile"
-            className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gradient-to-r hover:from-indigo-500 hover:to-teal-400 transition"
-            onClick={handleLinkClick}
-          >
-            <UserCircleIcon className="w-6 h-6" />
-            Profile
-          </Link>
-          {/* Settings */}
-          <Link
-            to="/setting"
-            className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gradient-to-r hover:from-indigo-500 hover:to-teal-400 transition"
-            onClick={handleLinkClick}
-          >
-            <Cog6ToothIcon className="w-6 h-6" />
-            Setting
-          </Link>
-          {/* Error(404/500) */}
-          <Link
-            to="/error"
-            className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gradient-to-r hover:from-indigo-500 hover:to-teal-400 transition"
-            onClick={handleLinkClick}
-          >
-            <ExclamationCircleIcon className="w-6 h-6" />
-            Error(404/500)
-          </Link>
-          {/* Invoice / Pricing */}
-          <Link
-            to="/pricing"
-            className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gradient-to-r hover:from-indigo-500 hover:to-teal-400 transition"
-            onClick={handleLinkClick}
-          >
-            <CurrencyDollarIcon className="w-6 h-6" />
-            Invoice / Pricing
-          </Link>
-          {/* FAQ/Help */}
-          <Link
-            to="/faq"
-            className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gradient-to-r hover:from-indigo-500 hover:to-teal-400 transition"
-            onClick={handleLinkClick}
-          >
-            <QuestionMarkCircleIcon className="w-6 h-6" />
-            FAQ/Help
-          </Link>
+              <Icon className="w-6 h-6" />
+              {label}
+            </NavLink>
+          ))}
         </nav>
       </aside>
     </>
