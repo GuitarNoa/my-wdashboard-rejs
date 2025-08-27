@@ -23,8 +23,13 @@ import Donut from "./pages/charts/Donut";
 import Line from "./pages/charts/Line";
 import Pie from "./pages/charts/Pie";
 //Page
+import Login from "./pages/auth/Login";
+import Register from "./pages/auth/Register";
 import Profile from "./pages/Profile";
-// import Table from "./pages/Table";
+import Setting from "./pages/Setting";
+import Error from "./pages/Error";
+import Pricing from "./pages/Pricing";
+import FAQ from "./pages/FAQ";
 
 export default function App() {
   const [loading, setLoading] = useState(true);
@@ -42,14 +47,7 @@ export default function App() {
     <>
       <Routes>
         {/* Page */}
-        <Route
-          index
-          element={
-            <>
-              <Dashborad />
-            </>
-          }
-        />
+        <Route index element={<Dashborad />} />
         <Route path="/ECommerce" element={<ECommerce />} />
         <Route path="/CRM" element={<CRM />} />
         {/* UI */}
@@ -70,7 +68,15 @@ export default function App() {
         <Route path="/charts/pie" element={<Pie />} />
         <Route path="/charts/donut" element={<Donut />} />
         {/* Pages */}
-        <Route path="/Profile" element={<Profile />} />
+        {/* Auth */}
+        <Route path="/auth/login" element={<Login />} />
+        <Route path="/auth/register" element={<Register />} />
+        {/* Othen */}
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/setting" element={<Setting />} />
+        <Route path="/error" element={<Error />} />
+        <Route path="/pricing" element={<Pricing />} />
+        <Route path="/faq" element={<FAQ />} />
       </Routes>
     </>
   );

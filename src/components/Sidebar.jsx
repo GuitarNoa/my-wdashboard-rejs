@@ -370,11 +370,13 @@ export default function Sidebar() {
               </li>
             </ul>
           </div>
+
+          {/* Page */}
           <a>Pages</a>
 
           {/* Login */}
           <Link
-            to="/profile"
+            to="/auth/login"
             className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gradient-to-r hover:from-indigo-500 hover:to-teal-400 transition"
             onClick={handleLinkClick}
           >
@@ -383,7 +385,7 @@ export default function Sidebar() {
           </Link>
           {/* Register */}
           <Link
-            to="/profile"
+            to="/auth/register"
             className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gradient-to-r hover:from-indigo-500 hover:to-teal-400 transition"
             onClick={handleLinkClick}
           >
@@ -401,7 +403,7 @@ export default function Sidebar() {
           </Link>
           {/* Settings */}
           <Link
-            to="/profile"
+            to="/setting"
             className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gradient-to-r hover:from-indigo-500 hover:to-teal-400 transition"
             onClick={handleLinkClick}
           >
@@ -410,7 +412,7 @@ export default function Sidebar() {
           </Link>
           {/* Error(404/500) */}
           <Link
-            to="/profile"
+            to="/error"
             className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gradient-to-r hover:from-indigo-500 hover:to-teal-400 transition"
             onClick={handleLinkClick}
           >
@@ -419,7 +421,7 @@ export default function Sidebar() {
           </Link>
           {/* Invoice / Pricing */}
           <Link
-            to="/profile"
+            to="/pricing"
             className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gradient-to-r hover:from-indigo-500 hover:to-teal-400 transition"
             onClick={handleLinkClick}
           >
@@ -428,7 +430,7 @@ export default function Sidebar() {
           </Link>
           {/* FAQ/Help */}
           <Link
-            to="/profile"
+            to="/faq"
             className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gradient-to-r hover:from-indigo-500 hover:to-teal-400 transition"
             onClick={handleLinkClick}
           >
