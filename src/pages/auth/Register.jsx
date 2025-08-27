@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 export default function Register() {
   return (
@@ -66,9 +67,12 @@ export default function Register() {
         {/* Footer */}
         <p className="mt-6 text-center text-sm text-gray-500">
           Already have an account?{" "}
-          <a href="/auth/login" className="text-cyan-500 font-medium hover:underline">
+          <Link
+            to="/auth/login"
+            className="text-cyan-500 font-medium hover:underline"
+          >
             Login
-          </a>
+          </Link>
         </p>
       </div>
     </section>
