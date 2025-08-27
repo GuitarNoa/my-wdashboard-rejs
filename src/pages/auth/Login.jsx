@@ -44,8 +44,8 @@ export default function Login() {
         {/* Footer */}
         <p className="mt-6 text-center text-sm text-gray-500">
           Don’t have an account?{" "}
-          <a href="#" className="text-cyan-500 font-medium hover:underline">
-            Sign up
+          <a href="/auth/register" className="text-cyan-500 font-medium hover:underline">
+            Register
           </a>
         </p>
       </div>
