@@ -13,6 +13,8 @@ import {
   PointElement,
 } from "chart.js";
 import { Pie, Bar, Line } from "react-chartjs-2";
+import StatisticsCard from "../components/StatisticsCard";
+import { TvIcon } from "@heroicons/react/24/outline";
 
 ChartJS.register(
   Title,
@@ -69,6 +71,11 @@ export default function Dashborad() {
     <DefaultLayout>
       <main>
         <h1>Overview</h1>
+        <div className="flex flex-row">
+          <StatisticsCard icon={TvIcon} title="ผู้ใช้" value="1,234" />
+          <StatisticsCard icon={TvIcon} title="ยอดขาย" value="5,678" />
+          <StatisticsCard icon={TvIcon} title="รายได้" value="$12,345" />
+        </div>
         <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="bg-white rounded-2xl shadow p-4">
             <h3 className="font-semibold mb-2">Pie Chart</h3>
