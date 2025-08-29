@@ -18,10 +18,15 @@ import FormWizard from "./pages/forms/FormWizard";
 import BasicTables from "./pages/tables/BasicTables";
 import DataTables from "./pages/tables/DataTables";
 //Chart
-import Bar from "./pages/charts/Bar";
-import Donut from "./pages/charts/Donut";
-import Line from "./pages/charts/Line";
-import Pie from "./pages/charts/Pie";
+import AreaCharts from "./pages/charts/Areas";
+import BarCharts from "./pages/charts/Bars";
+import BubbleCharts from "./pages/charts/Bubbles";
+import DonutCharts from "./pages/charts/Donuts";
+import LineCharts from "./pages/charts/Lines";
+import PieCharts from "./pages/charts/Pies";
+import PolarAreaChart from "./pages/charts/PolarAreas";
+import RadarCharts from "./pages/charts/Radars";
+import ScatterCharts from "./pages/charts/Scatters";
 //Page
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
@@ -63,10 +68,15 @@ export default function App() {
         <Route path="/tables/basictable" element={<BasicTables />} />
         <Route path="/tables/datatable" element={<DataTables />} />
         {/* Charts */}
-        <Route path="/charts/line" element={<Line />} />
-        <Route path="/charts/bar" element={<Bar />} />
-        <Route path="/charts/pie" element={<Pie />} />
-        <Route path="/charts/donut" element={<Donut />} />
+        <Route path="/charts/areas" element={<AreaCharts />} />
+        <Route path="/charts/bars" element={<BarCharts />} />
+        <Route path="/charts/bubbles" element={<BubbleCharts />} />
+        <Route path="/charts/donuts" element={<DonutCharts />} />
+        <Route path="/charts/lines" element={<LineCharts />} />
+        <Route path="/charts/pies" element={<PieCharts />} />
+        <Route path="/charts/polararea" element={<PolarAreaChart />} />
+        <Route path="/charts/radars" element={<RadarCharts />} />
+        <Route path="/charts/scatter" element={<ScatterCharts />} />
         {/* Pages */}
         {/* Auth */}
         <Route path="/auth/login" element={<Login />} />

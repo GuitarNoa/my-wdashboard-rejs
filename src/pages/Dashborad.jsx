@@ -12,9 +12,15 @@ import {
   LineElement,
   PointElement,
 } from "chart.js";
-import { Pie, Bar, Line } from "react-chartjs-2";
+import { Pie, Bar, Line, Doughnut } from "react-chartjs-2";
 import StatisticsCard from "../components/StatisticsCard";
-import { TvIcon } from "@heroicons/react/24/outline";
+import {
+  TvIcon,
+  CurrencyDollarIcon,
+  CubeIcon,
+  UsersIcon,
+} from "@heroicons/react/24/outline";
+import { data } from "react-router";
 
 ChartJS.register(
   Title,
@@ -67,14 +73,50 @@ export default function Dashborad() {
       },
     ],
   };
+  // Scatter Chart
+  const DoughnutData = {
+    labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+    datasets: [
+      {
+        label: "# of Votes",
+        data: [12, 19, 3, 5, 2, 3],
+        backgroundColor: [
+          "rgba(255, 99, 132, 0.2)",
+          "rgba(54, 162, 235, 0.2)",
+          "rgba(255, 206, 86, 0.2)",
+          "rgba(75, 192, 192, 0.2)",
+          "rgba(153, 102, 255, 0.2)",
+          "rgba(255, 159, 64, 0.2)",
+        ],
+        borderColor: [
+          "rgba(255, 99, 132, 1)",
+          "rgba(54, 162, 235, 1)",
+          "rgba(255, 206, 86, 1)",
+          "rgba(75, 192, 192, 1)",
+          "rgba(153, 102, 255, 1)",
+          "rgba(255, 159, 64, 1)",
+        ],
+        borderWidth: 1,
+      },
+    ],
+  };
   return (
     <DefaultLayout>
       <main>
         <h1>Overview</h1>
-        <div className="flex flex-row">
-          <StatisticsCard icon={TvIcon} title="ผู้ใช้" value="1,234" />
-          <StatisticsCard icon={TvIcon} title="ยอดขาย" value="5,678" />
-          <StatisticsCard icon={TvIcon} title="รายได้" value="$12,345" />
+        <div className="flex flex-wrap justify-center gap-4">
+          <StatisticsCard icon={UsersIcon} title="ผู้ใช้" value="1,234" />
+          <StatisticsCard icon={CubeIcon} title="ยอดขาย" value="5,678" />
+          <StatisticsCard
+            icon={CurrencyDollarIcon}
+            title="รายได้"
+            value="$12,345"
+          />
+          <StatisticsCard
+            icon={CurrencyDollarIcon}
+            title="ราบจ่าย"
+            value="$2,345"
+          />
         </div>
         <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="bg-white rounded-2xl shadow p-4">
@@ -90,6 +132,10 @@ export default function Dashborad() {
           <div className="bg-white rounded-2xl shadow p-4 md:col-span-2">
             <h3 className="font-semibold mb-2">Line Chart</h3>
             <Line data={lineData} />
+          </div>
+          <div className="bg-white rounded-2xl shadow p-4 md:col-span-2">
+            <h3 className="font-semibold mb-2">Line Chart</h3>
+            <Doughnut data={DoughnutData} />
           </div>
         </div>
       </main>
