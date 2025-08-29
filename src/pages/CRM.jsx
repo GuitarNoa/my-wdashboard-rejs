@@ -3,7 +3,7 @@ import DefaultLayout from "../layouts/DefaultLayout";
 export default function CRM() {
   return (
     <DefaultLayout>
-      <div>CRM</div>
+      <div>CRMs</div>
     </DefaultLayout>
   );
 }
