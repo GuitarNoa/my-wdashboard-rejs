@@ -103,7 +103,7 @@ export default function Dashborad() {
   return (
     <DefaultLayout>
       <main>
-        <h1>Overview</h1>
+        <h1>Overvieww</h1>
         <div className="flex flex-wrap justify-center gap-4">
           <StatisticsCard icon={UsersIcon} title="ผู้ใช้" value="1,234" />
           <StatisticsCard icon={CubeIcon} title="ยอดขาย" value="5,678" />
