@@ -1,11 +1,17 @@
 import React, { useRef, useEffect, useState } from "react";
 import DefaultLayout from "../../layouts/DefaultLayout";
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+import {
+  Chart as ChartJS,
+  ArcElement,
+  Tooltip,
+  Legend,
+  PolarAreaController, // ✅ เพิ่ม PolarAreaController
+} from "chart.js";
 import { Chart } from "react-chartjs-2";
 import { faker } from "@faker-js/faker";
 
-// Register Chart.js modules
-ChartJS.register(ArcElement, Tooltip, Legend);
+// ✅ Register PolarAreaController ด้วย
+ChartJS.register(ArcElement, Tooltip, Legend, PolarAreaController);
 
 const labels = ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"];
 const colors = ["red", "blue", "yellow", "green", "purple", "orange"];

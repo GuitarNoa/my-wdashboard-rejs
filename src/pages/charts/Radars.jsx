@@ -8,6 +8,7 @@ import {
   Filler,
   Tooltip,
   Legend,
+  RadarController, // ✅ เพิ่ม RadarController
 } from "chart.js";
 import { Chart } from "react-chartjs-2";
 
@@ -17,7 +18,8 @@ ChartJS.register(
   LineElement,
   Filler,
   Tooltip,
-  Legend
+  Legend,
+  RadarController // ✅ Register RadarController
 );
 
 const labels = ["Running", "Swimming", "Cycling", "Climbing", "Yoga", "Gym"];

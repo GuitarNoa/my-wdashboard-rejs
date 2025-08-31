@@ -6,24 +6,28 @@ import {
   PointElement,
   Tooltip,
   Legend,
+  ScatterController, // ✅ เพิ่ม ScatterController
 } from "chart.js";
 import { Chart } from "react-chartjs-2";
 import { faker } from "@faker-js/faker";
 
 // Register modules
-ChartJS.register(LinearScale, PointElement, Tooltip, Legend);
+ChartJS.register(LinearScale, PointElement, Tooltip, Legend, ScatterController);
 
 const colors = ["red", "blue", "green", "orange", "purple", "teal"];
 
-// Gradient helper
 function createGradient(ctx, area, color1, color2) {
-  const gradient = ctx.createLinearGradient(area.left, area.bottom, area.right, area.top);
+  const gradient = ctx.createLinearGradient(
+    area.left,
+    area.bottom,
+    area.right,
+    area.top
+  );
   gradient.addColorStop(0, color1);
   gradient.addColorStop(1, color2);
   return gradient;
 }
 
-// Generate random scatter data
 function generateScatterData() {
   return Array.from({ length: 20 }).map(() => ({
     x: faker.number.int({ min: 1, max: 100 }),
@@ -35,7 +39,6 @@ export default function ScatterCharts() {
   const chartRef = useRef(null);
   const [gradientData, setGradientData] = useState({ datasets: [] });
 
-  // Normal Data
   const normalData = {
     datasets: [
       {
@@ -81,12 +84,22 @@ export default function ScatterCharts() {
           {
             label: "Scatter Gradient 1",
             data: generateScatterData(),
-            backgroundColor: createGradient(ctx, chart.chartArea, "red", "orange"),
+            backgroundColor: createGradient(
+              ctx,
+              chart.chartArea,
+              "red",
+              "orange"
+            ),
           },
           {
             label: "Scatter Gradient 2",
             data: generateScatterData(),
-            backgroundColor: createGradient(ctx, chart.chartArea, "blue", "cyan"),
+            backgroundColor: createGradient(
+              ctx,
+              chart.chartArea,
+              "blue",
+              "cyan"
+            ),
           },
         ],
       });
