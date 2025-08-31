@@ -6,12 +6,13 @@ import {
   PointElement,
   Tooltip,
   Legend,
+  BubbleController, // ✅ เพิ่ม BubbleController
 } from "chart.js";
 import { Chart } from "react-chartjs-2";
 import { faker } from "@faker-js/faker";
 
-// Register modules
-ChartJS.register(LinearScale, PointElement, Tooltip, Legend);
+// ✅ Register BubbleController ด้วย
+ChartJS.register(LinearScale, PointElement, Tooltip, Legend, BubbleController);
 
 const colors = ["red", "blue", "green", "orange", "purple", "teal"];
 
@@ -27,7 +28,6 @@ function createGradient(ctx, area, color1, color2) {
   return gradient;
 }
 
-// Generate random bubble data
 function generateBubbleData() {
   return Array.from({ length: 7 }).map(() => ({
     x: faker.number.int({ min: 10, max: 100 }),
@@ -40,7 +40,6 @@ export default function BubbleCharts() {
   const chartRef = useRef(null);
   const [gradientData, setGradientData] = useState({ datasets: [] });
 
-  // Normal Data
   const normalData = {
     datasets: [
       {
