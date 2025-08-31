@@ -12,15 +12,15 @@ import {
   LineElement,
   PointElement,
 } from "chart.js";
-import { Pie, Bar, Line, Doughnut } from "react-chartjs-2";
+import { Line } from "react-chartjs-2";
 import StatisticsCard from "../components/StatisticsCard";
+import { faker } from "@faker-js/faker";
 import {
-  TvIcon,
   CurrencyDollarIcon,
-  CubeIcon,
+  ShoppingCartIcon,
   UsersIcon,
+  UserPlusIcon,
 } from "@heroicons/react/24/outline";
-import { data } from "react-router";
 
 ChartJS.register(
   Title,
@@ -35,37 +35,15 @@ ChartJS.register(
 );
 
 export default function Dashborad() {
-  // ข้อมูล Pie Chart
-  const pieData = {
-    labels: ["A", "B", "C"],
-    datasets: [
-      {
-        label: "Example Pie",
-        data: [30, 40, 30],
-        backgroundColor: ["#10b981", "#3b82f6", "#f59e0b"],
-      },
-    ],
-  };
-
-  // ข้อมูล Bar Chart
-  const barData = {
-    labels: ["Jan", "Feb", "Mar", "Apr", "May"],
-    datasets: [
-      {
-        label: "ยอดขาย",
-        data: [12, 19, 8, 15, 22],
-        backgroundColor: "#3b82f6",
-      },
-    ],
-  };
-
   // ข้อมูล Line Chart
   const lineData = {
-    labels: ["Mon", "Tue", "Wed", "Thu", "Fri"],
+    labels: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
     datasets: [
       {
-        label: "ผู้ใช้เข้าเว็บ",
-        data: [200, 400, 300, 500, 700],
+        label: "Product",
+        data: Array.from({ length: 7 }, () =>
+          faker.number.int({ min: 100, max: 1000 })
+        ),
         borderColor: "#10b981",
         backgroundColor: "rgba(16,185,129,0.2)",
         fill: true,
@@ -73,71 +51,62 @@ export default function Dashborad() {
       },
     ],
   };
-  // Scatter Chart
-  const DoughnutData = {
-    labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
-    datasets: [
-      {
-        label: "# of Votes",
-        data: [12, 19, 3, 5, 2, 3],
-        backgroundColor: [
-          "rgba(255, 99, 132, 0.2)",
-          "rgba(54, 162, 235, 0.2)",
-          "rgba(255, 206, 86, 0.2)",
-          "rgba(75, 192, 192, 0.2)",
-          "rgba(153, 102, 255, 0.2)",
-          "rgba(255, 159, 64, 0.2)",
-        ],
-        borderColor: [
-          "rgba(255, 99, 132, 1)",
-          "rgba(54, 162, 235, 1)",
-          "rgba(255, 206, 86, 1)",
-          "rgba(75, 192, 192, 1)",
-          "rgba(153, 102, 255, 1)",
-          "rgba(255, 159, 64, 1)",
-        ],
-        borderWidth: 1,
-      },
-    ],
-  };
+
   return (
     <DefaultLayout>
       <main>
-        <h1>Overvieww</h1>
-        <div className="flex flex-wrap justify-center gap-4">
-          <StatisticsCard icon={UsersIcon} title="ผู้ใช้" value="1,234" />
-          <StatisticsCard icon={CubeIcon} title="ยอดขาย" value="5,678" />
+        <div className="flex flex-wrap justify-center gap-12">
           <StatisticsCard
-            icon={CurrencyDollarIcon}
-            title="รายได้"
-            value="$12,345"
+            icon={UsersIcon}
+            title="Today's Users"
+            value="1,234"
           />
           <StatisticsCard
             icon={CurrencyDollarIcon}
-            title="ราบจ่าย"
-            value="$2,345"
+            title="Today's Money"
+            value="5,678"
           />
+          <StatisticsCard
+            icon={UserPlusIcon}
+            title="New Clients"
+            value="2,000"
+          />
+          <StatisticsCard icon={ShoppingCartIcon} title="Sales" value="2,000" />
         </div>
-        <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="bg-white rounded-2xl shadow p-4">
-            <h3 className="font-semibold mb-2">Pie Chart</h3>
-            <Pie data={pieData} />
-          </div>
-
-          <div className="bg-white rounded-2xl shadow p-4">
-            <h3 className="font-semibold mb-2">Bar Chart</h3>
-            <Bar data={barData} />
-          </div>
-
-          <div className="bg-white rounded-2xl shadow p-4 md:col-span-2">
-            <h3 className="font-semibold mb-2">Line Chart</h3>
+        <div className="p-6 grid grid-cols-1 md:grid-cols gap-6">
+          <div className="bg-white rounded-2xl grid-cols-1 md:grid-cols shadow p-4">
+            <h3 className="font-semibold mb-2">Sales Overview</h3>
             <Line data={lineData} />
           </div>
-          <div className="bg-white rounded-2xl shadow p-4 md:col-span-2">
-            <h3 className="font-semibold mb-2">Line Chart</h3>
-            <Doughnut data={DoughnutData} />
-          </div>
         </div>
+        <table class="min-w-full divide-y divide-gray-200">
+          <thead class="bg-gray-50">
+            <tr>
+              <th
+                scope="col"
+                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              >
+                Header 1
+              </th>
+              <th
+                scope="col"
+                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              >
+                Header 2
+              </th>
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-200">
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap">Data 1A</td>
+              <td class="px-6 py-4 whitespace-nowrap">Data 1B</td>
+            </tr>
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap">Data 2A</td>
+              <td class="px-6 py-4 whitespace-nowrap">Data 2B</td>
+            </tr>
+          </tbody>
+        </table>
       </main>
     </DefaultLayout>
   );
