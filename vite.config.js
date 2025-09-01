@@ -1,12 +1,15 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
+import history from "connect-history-api-fallback";
 
-// https://vite.dev/config/
 export default defineConfig({
   plugins: [react(), tailwindcss()],
   server: {
-    // fallback ทุก route ไปที่ index.html สำหรับ SPA
-    historyApiFallback: true, // Vite 4+ บางเวอร์ชันอาจต้องติดตั้ง connect-history-api-fallback
+    middlewareMode: true,
+    setupMiddlewares: (middlewares) => {
+      middlewares.use(history());
+      return middlewares;
+    },
   },
 });
