@@ -1,15 +1,20 @@
 import React, { useRef, useEffect, useState } from "react";
 import DefaultLayout from "../../layouts/DefaultLayout";
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+import {
+  Chart as ChartJS,
+  ArcElement,
+  Tooltip,
+  Legend,
+  PieController, // ✅ เพิ่มตรงนี้
+} from "chart.js";
 import { Chart } from "react-chartjs-2";
 import { faker } from "@faker-js/faker";
 
-// Register Chart.js modules
-ChartJS.register(ArcElement, Tooltip, Legend);
+// ✅ ต้อง Register PieController ด้วย
+ChartJS.register(ArcElement, Tooltip, Legend, PieController);
 
 const labels = ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"];
 
-// ข้อมูลพื้นฐาน
 const baseData = {
   labels,
   datasets: [
@@ -29,7 +34,6 @@ const baseData = {
   ],
 };
 
-// ฟังก์ชันสร้าง Gradient
 function createGradient(ctx, area, color1, color2) {
   const gradient = ctx.createLinearGradient(
     area.left,
@@ -83,13 +87,11 @@ export default function PieCharts() {
     <DefaultLayout>
       <div className="text-xl font-bold mb-4">Pie Charts</div>
 
-      {/* Pie ปกติ */}
       <div className="mb-8">
         <h2 className="font-semibold mb-2">Pie Chart - Normal</h2>
         <Chart type="pie" data={baseData} />
       </div>
 
-      {/* Pie Gradient */}
       <div>
         <h2 className="font-semibold mb-2">Pie Chart - Gradient</h2>
         <Chart ref={chartRef} type="pie" data={gradientData} />
