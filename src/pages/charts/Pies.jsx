@@ -44,16 +44,15 @@ function createGradient(ctx, area, color1, color2) {
 
 export default function PieCharts() {
   const chartRef = useRef(null);
-  const [gradientData, setGradientData] = useState({ datasets: [] });
+  const [gradientData, setGradientData] = useState(baseData);
 
   useEffect(() => {
-    const chart = chartRef.current;
-    if (!chart) return;
-
     const updateGradient = () => {
-      if (!chart.chartArea) return;
+      const chartInstance = chartRef.current;
+      if (!chartInstance || !chartInstance.ctx || !chartInstance.chartArea)
+        return;
 
-      const { ctx, chartArea } = chart;
+      const { ctx, chartArea } = chartInstance;
 
       const newData = {
         ...baseData,

@@ -6,13 +6,12 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import { Chart } from "react-chartjs-2";
-
+import { Doughnut } from "react-chartjs-2"; // ✅ ใช้ Doughnut component
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const labels = ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"];
 
-// Donut ปกติ
+// ข้อมูลเริ่มต้น
 const baseData = {
   labels,
   datasets: [
@@ -31,6 +30,14 @@ const baseData = {
     },
   ],
 };
+
+// ฟังก์ชันสร้าง Gradient
+function createGradient(ctx, area, color1, color2) {
+  const gradient = ctx.createLinearGradient(area.left, area.bottom, area.right, area.top);
+  gradient.addColorStop(0, color1);
+  gradient.addColorStop(1, color2);
+  return gradient;
+}
 
 export default function DonutCharts() {
   const chartRef = useRef(null);
@@ -70,22 +77,14 @@ export default function DonutCharts() {
       {/* Donut Chart Normal */}
       <div className="mb-8">
         <h2 className="font-semibold mb-2">Donut Chart - Normal</h2>
-        <Chart type="doughnut" data={baseData} />
+        <Doughnut data={baseData} />
       </div>
 
       {/* Donut Chart Gradient */}
       <div>
         <h2 className="font-semibold mb-2">Donut Chart - Gradient</h2>
-        <Chart ref={chartRef} type="doughnut" data={gradientData} />
+        <Doughnut ref={chartRef} data={gradientData} />
       </div>
     </DefaultLayout>
   );
-}
-
-// ฟังก์ชันสร้าง Gradient
-function createGradient(ctx, area, color1, color2) {
-  const gradient = ctx.createLinearGradient(area.left, area.bottom, area.right, area.top);
-  gradient.addColorStop(0, color1);
-  gradient.addColorStop(1, color2);
-  return gradient;
 }

@@ -9,11 +9,18 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import { Chart } from "react-chartjs-2";
+import { Bar } from "react-chartjs-2"; // ✅ ใช้ Bar Component แทน Chart
 import { faker } from "@faker-js/faker";
 
 // Register modules
-ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
 const labels = ["January", "February", "March", "April", "May", "June", "July"];
 
@@ -39,7 +46,7 @@ function createGradient(ctx, area, color1, color2) {
 
 export default function BarCharts() {
   const chartRef = useRef(null);
-  const [gradientData, setGradientData] = useState({ datasets: [] });
+  const [gradientData, setGradientData] = useState(baseData);
 
   useEffect(() => {
     const chart = chartRef.current;
@@ -55,7 +62,12 @@ export default function BarCharts() {
         datasets: [
           {
             ...baseData.datasets[0],
-            backgroundColor: createGradient(ctx, chartArea, "rgba(75,192,192,0.7)", "rgba(153,102,255,0.7)"),
+            backgroundColor: createGradient(
+              ctx,
+              chartArea,
+              "rgba(75,192,192,0.7)",
+              "rgba(153,102,255,0.7)"
+            ),
           },
         ],
       };
@@ -75,13 +87,13 @@ export default function BarCharts() {
       {/* Bar ปกติ */}
       <div className="mb-8">
         <h2 className="font-semibold mb-2">Bar Chart - Normal</h2>
-        <Chart type="bar" data={baseData} />
+        <Bar data={baseData} />
       </div>
 
       {/* Bar Gradient */}
       <div>
         <h2 className="font-semibold mb-2">Bar Chart - Gradient</h2>
-        <Chart ref={chartRef} type="bar" data={gradientData} />
+        <Bar ref={chartRef} data={gradientData} />
       </div>
     </DefaultLayout>
   );
