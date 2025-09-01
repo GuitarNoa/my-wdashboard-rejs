@@ -127,7 +127,7 @@ export default function Sidebar() {
 
       {/* Sidebar */}
       <aside
-        className={`fixed top-0 left-0 z-50 w-64 h-full bg-gradient-to-t from-green-400 to-cyan-400 text-white p-4 transform transition-transform duration-300 ease-in-out shadow-xl overflow-y-auto
+        className={`fixed top-0 left-0 z-50 w-70 h-full bg-gradient-to-t from-green-400 to-cyan-400 text-white p-4 transform transition-transform duration-300 ease-in-out shadow-xl overflow-y-auto
         ${isOpen ? "translate-x-0" : "-translate-x-full"} md:translate-x-0`}
       >
         {/* Logo */}

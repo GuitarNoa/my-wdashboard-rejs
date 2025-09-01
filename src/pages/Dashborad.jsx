@@ -34,7 +34,7 @@ ChartJS.register(
   PointElement
 );
 
-export default function Dashborad() {
+export default function Dashboard() {
   // ข้อมูล Line Chart
   const lineData = {
     labels: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
@@ -54,8 +54,9 @@ export default function Dashborad() {
 
   return (
     <DefaultLayout>
-      <main>
-        <div className="flex flex-wrap justify-center gap-12">
+      <main className="p-4">
+        {/* Statistics Cards */}
+        <div className="flex flex-wrap justify-center gap-10 mb-6">
           <StatisticsCard
             icon={UsersIcon}
             title="Today's Users"
@@ -73,37 +74,87 @@ export default function Dashborad() {
           />
           <StatisticsCard icon={ShoppingCartIcon} title="Sales" value="2,000" />
         </div>
-        <div className="p-6 grid grid-cols-1 md:grid-cols gap-6">
-          <div className="bg-white rounded-2xl grid-cols-1 md:grid-cols shadow p-4">
+
+        {/* Charts Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+          <div className="bg-white rounded-2xl shadow p-4">
             <h3 className="font-semibold mb-2">Sales Overview</h3>
             <Line data={lineData} />
           </div>
+          <div className="bg-gradient-to-t from-green-400 to-cyan-400 rounded-2xl p-4 flex items-center justify-center">
+            <span className="text-white font-semibold">Additional Info</span>
+          </div>
         </div>
-        <table class="min-w-full divide-y divide-gray-200">
-          <thead class="bg-gray-50">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="bg-gradient-to-t from-green-400 to-cyan-400 rounded-2xl p-4 flex flex-col items-center justify-center">
+            <span className="text-white font-semibold">Team Members</span>
+            <h2>HelloWorld</h2>
+            <h2>WWWWW</h2>
+          </div>
+          <div className="bg-gradient-to-t from-green-400 to-cyan-400 rounded-2xl p-4 flex items-center justify-center">
+            <span className="text-white font-semibold">To do List</span>
+          </div>
+          <div className="bg-gradient-to-t from-green-400 to-cyan-400 rounded-2xl p-4 flex items-center justify-center">
+            <span className="text-white font-semibold">Progress track</span>
+          </div>
+        </div>
+
+        {/* Data Table */}
+        <table className="min-w-full divide-y divide-gray-200">
+          <thead className="bg-gray-50">
             <tr>
               <th
                 scope="col"
-                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
               >
-                Header 1
+                Author
               </th>
               <th
                 scope="col"
-                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
               >
-                Header 2
+                Function
+              </th>
+              <th
+                scope="col"
+                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              >
+                Technology
+              </th>
+              <th
+                scope="col"
+                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              >
+                Employed
+              </th>
+              <th
+                scope="col"
+                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              >
+                Action
               </th>
             </tr>
           </thead>
-          <tbody class="bg-white divide-y divide-gray-200">
+          <tbody className="bg-white divide-y divide-gray-200">
             <tr>
-              <td class="px-6 py-4 whitespace-nowrap">Data 1A</td>
-              <td class="px-6 py-4 whitespace-nowrap">Data 1B</td>
+              <td className="flex flex-row px-6 py-4">
+                <UsersIcon className="w-8" />
+                Noah
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap">Data 1B</td>
+              <td className="px-6 py-4 whitespace-nowrap">Data 1B</td>
+              <td className="px-6 py-4 whitespace-nowrap">Data 1B</td>
+              <td className="px-6 py-4 whitespace-nowrap">Data 1B</td>
             </tr>
             <tr>
-              <td class="px-6 py-4 whitespace-nowrap">Data 2A</td>
-              <td class="px-6 py-4 whitespace-nowrap">Data 2B</td>
+              <td className="flex flex-row px-6 py-4">
+                <UsersIcon className="w-8" />
+                Data 1A
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap">Data 1B</td>
+              <td className="px-6 py-4 whitespace-nowrap">Data 2B</td>
+              <td className="px-6 py-4 whitespace-nowrap">Data 2B</td>
+              <td className="px-6 py-4 whitespace-nowrap">Data 2B</td>
             </tr>
           </tbody>
         </table>
