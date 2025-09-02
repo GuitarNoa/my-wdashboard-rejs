@@ -8,7 +8,7 @@ export default function DefaultLayout({ children }) {
       <Sidebar />
 
       {/* Main Content */}
-      <div className="flex flex-col flex-1 md:ml-64">
+      <div className="flex flex-col flex-1 md:ml-64 p-4">
         {/* Breadcrumb / Header */}
         {/* <header className="bg-white shadow-sm p-4"> */}
           {/* <Breadcrumb /> */}

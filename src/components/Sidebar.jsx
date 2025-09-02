@@ -16,7 +16,8 @@ import {
   CurrencyDollarIcon,
   QuestionMarkCircleIcon,
 } from "@heroicons/react/24/outline";
-import Logo from "../assets/MetreeUI.png";
+// import Logo from "../assets/MetreeUI.png";
+import Logo from "../assets/Logo-v2.png"
 
 export default function Sidebar() {
   const [openMenu, setOpenMenu] = useState(null);
@@ -127,15 +128,15 @@ export default function Sidebar() {
 
       {/* Sidebar */}
       <aside
-        className={`fixed top-0 left-0 z-50 w-64 h-screen 
+        className={`fixed top-0 left-0 z-50 w-68 h-screen 
         bg-gradient-to-t from-green-400/90 to-cyan-400/90 
       text-white p-4 overflow-y-auto backdrop-blur-md rounded-r-xl
         ${isOpen ? "translate-x-0" : "-translate-x-full"} md:translate-x-0`}
       >
         {/* Logo */}
-        {/* <div className="flex justify-center mb-6">
-          <img src={Logo} alt="Logo" className="w-28 h-auto" />
-        </div> */}
+        <div className="flex justify-center mb-6">
+          <img src={Logo} alt="Logo" className="p-4" />
+        </div>
 
         <nav className="space-y-2">
           {/* Menus with sub-items */}
