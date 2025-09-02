@@ -1,33 +1,37 @@
 import React from "react";
+import { FiCheck, FiX, FiAlertTriangle } from "react-icons/fi";
 
 export default function Badges() {
   return (
-    <>
-      <div>BadgesUI</div>
-      <span className="inline-flex items-center rounded-md bg-gray-400/10 px-2 py-1 text-xs font-medium text-gray-400 inset-ring inset-ring-gray-400/20">
-        Badge
-      </span>
-      <span className="inline-flex items-center rounded-md bg-red-400/10 px-2 py-1 text-xs font-medium text-red-400 inset-ring inset-ring-red-400/20">
-        Badge
-      </span>
-      <span className="inline-flex items-center rounded-md bg-yellow-400/10 px-2 py-1 text-xs font-medium text-yellow-500 inset-ring inset-ring-yellow-400/20">
-        Badge
-      </span>
-      <span className="inline-flex items-center rounded-md bg-green-400/10 px-2 py-1 text-xs font-medium text-green-400 inset-ring inset-ring-green-500/20">
-        Badge
-      </span>
-      <span className="inline-flex items-center rounded-md bg-blue-400/10 px-2 py-1 text-xs font-medium text-blue-400 inset-ring inset-ring-blue-400/30">
-        Badge
-      </span>
-      <span className="inline-flex items-center rounded-md bg-indigo-400/10 px-2 py-1 text-xs font-medium text-indigo-400 inset-ring inset-ring-indigo-400/30">
-        Badge
-      </span>
-      <span className="inline-flex items-center rounded-md bg-purple-400/10 px-2 py-1 text-xs font-medium text-purple-400 inset-ring inset-ring-purple-400/30">
-        Badge
-      </span>
-      <span className="inline-flex items-center rounded-md bg-pink-400/10 px-2 py-1 text-xs font-medium text-pink-400 inset-ring inset-ring-pink-400/20">
-        Badge
-      </span>
-    </>
+    <div className="space-y-4">
+      {/* Default Badges */}
+      <div className="flex flex-wrap gap-2">
+        <span className="bg-gray-200 text-gray-800 px-3 py-1 rounded">Default</span>
+        <span className="bg-blue-500 text-white px-3 py-1 rounded">Primary</span>
+        <span className="bg-green-500 text-white px-3 py-1 rounded">Success</span>
+        <span className="bg-yellow-400 text-white px-3 py-1 rounded">Warning</span>
+        <span className="bg-red-500 text-white px-3 py-1 rounded">Danger</span>
+      </div>
+
+      {/* Pill Badges */}
+      <div className="flex flex-wrap gap-2">
+        <span className="bg-blue-500 text-white px-4 py-1 rounded-full">Pill</span>
+        <span className="bg-green-500 text-white px-4 py-1 rounded-full">Success</span>
+        <span className="bg-red-500 text-white px-4 py-1 rounded-full">Danger</span>
+      </div>
+
+      {/* Badges with Icons */}
+      <div className="flex flex-wrap gap-2">
+        <span className="bg-green-500 text-white px-3 py-1 rounded flex items-center gap-1">
+          <FiCheck /> Approved
+        </span>
+        <span className="bg-red-500 text-white px-3 py-1 rounded flex items-center gap-1">
+          <FiX /> Rejected
+        </span>
+        <span className="bg-yellow-400 text-white px-3 py-1 rounded flex items-center gap-1">
+          <FiAlertTriangle /> Pending
+        </span>
+      </div>
+    </div>
   );
 }

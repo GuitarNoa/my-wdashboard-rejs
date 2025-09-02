@@ -35,7 +35,7 @@ ChartJS.register(
 );
 
 export default function Dashboard() {
-  // ข้อมูล Line Chart
+  // Line Chart Data
   const lineData = {
     labels: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
     datasets: [
@@ -54,29 +54,25 @@ export default function Dashboard() {
 
   return (
     <DefaultLayout>
-      <main className="p-4">
+      <main className="p-4 space-y-6">
         {/* Statistics Cards */}
-        <div className="flex flex-wrap justify-center gap-10 mb-6">
-          <StatisticsCard
-            icon={UsersIcon}
-            title="Today's Users"
-            value="1,234"
-          />
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <StatisticsCard icon={UsersIcon} title="Today's Users" value="1,234" />
           <StatisticsCard
             icon={CurrencyDollarIcon}
             title="Today's Money"
             value="5,678"
           />
+          <StatisticsCard icon={UserPlusIcon} title="New Clients" value="2,000" />
           <StatisticsCard
-            icon={UserPlusIcon}
-            title="New Clients"
+            icon={ShoppingCartIcon}
+            title="Sales"
             value="2,000"
           />
-          <StatisticsCard icon={ShoppingCartIcon} title="Sales" value="2,000" />
         </div>
 
-        {/* Charts Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+        {/* Charts */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="bg-white rounded-2xl shadow p-4">
             <h3 className="font-semibold mb-2">Sales Overview</h3>
             <Line data={lineData} />
@@ -85,11 +81,13 @@ export default function Dashboard() {
             <span className="text-white font-semibold">Additional Info</span>
           </div>
         </div>
+
+        {/* 3 Box Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="bg-gradient-to-t from-green-400 to-cyan-400 rounded-2xl p-4 flex flex-col items-center justify-center">
+          <div className="bg-gradient-to-t from-green-400 to-cyan-400 rounded-2xl p-4 flex flex-col items-center justify-center text-center">
             <span className="text-white font-semibold">Team Members</span>
-            <h2>HelloWorld</h2>
-            <h2>WWWWW</h2>
+            <h2 className="text-white">HelloWorld</h2>
+            <h2 className="text-white">WWWWW</h2>
           </div>
           <div className="bg-gradient-to-t from-green-400 to-cyan-400 rounded-2xl p-4 flex items-center justify-center">
             <span className="text-white font-semibold">To do List</span>
@@ -99,65 +97,52 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* Data Table */}
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
-            <tr>
-              <th
-                scope="col"
-                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-              >
-                Author
-              </th>
-              <th
-                scope="col"
-                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-              >
-                Function
-              </th>
-              <th
-                scope="col"
-                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-              >
-                Technology
-              </th>
-              <th
-                scope="col"
-                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-              >
-                Employed
-              </th>
-              <th
-                scope="col"
-                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-              >
-                Action
-              </th>
-            </tr>
-          </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
-            <tr>
-              <td className="flex flex-row px-6 py-4">
-                <UsersIcon className="w-8" />
-                Noah
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap">Data 1B</td>
-              <td className="px-6 py-4 whitespace-nowrap">Data 1B</td>
-              <td className="px-6 py-4 whitespace-nowrap">Data 1B</td>
-              <td className="px-6 py-4 whitespace-nowrap">Data 1B</td>
-            </tr>
-            <tr>
-              <td className="flex flex-row px-6 py-4">
-                <UsersIcon className="w-8" />
-                Data 1A
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap">Data 1B</td>
-              <td className="px-6 py-4 whitespace-nowrap">Data 2B</td>
-              <td className="px-6 py-4 whitespace-nowrap">Data 2B</td>
-              <td className="px-6 py-4 whitespace-nowrap">Data 2B</td>
-            </tr>
-          </tbody>
-        </table>
+        {/* Data Table (Responsive with Scroll) */}
+        <div className="overflow-x-auto">
+          <table className="min-w-full divide-y divide-gray-200 text-sm">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-4 py-3 text-left font-medium text-gray-500 uppercase tracking-wider">
+                  Author
+                </th>
+                <th className="px-4 py-3 text-left font-medium text-gray-500 uppercase tracking-wider">
+                  Function
+                </th>
+                <th className="px-4 py-3 text-left font-medium text-gray-500 uppercase tracking-wider">
+                  Technology
+                </th>
+                <th className="px-4 py-3 text-left font-medium text-gray-500 uppercase tracking-wider">
+                  Employed
+                </th>
+                <th className="px-4 py-3 text-left font-medium text-gray-500 uppercase tracking-wider">
+                  Action
+                </th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              <tr>
+                <td className="flex items-center gap-2 px-4 py-3">
+                  <UsersIcon className="w-6" />
+                  Noah
+                </td>
+                <td className="px-4 py-3 whitespace-nowrap">Data 1B</td>
+                <td className="px-4 py-3 whitespace-nowrap">Data 1B</td>
+                <td className="px-4 py-3 whitespace-nowrap">Data 1B</td>
+                <td className="px-4 py-3 whitespace-nowrap">Data 1B</td>
+              </tr>
+              <tr>
+                <td className="flex items-center gap-2 px-4 py-3">
+                  <UsersIcon className="w-6" />
+                  Data 1A
+                </td>
+                <td className="px-4 py-3 whitespace-nowrap">Data 1B</td>
+                <td className="px-4 py-3 whitespace-nowrap">Data 2B</td>
+                <td className="px-4 py-3 whitespace-nowrap">Data 2B</td>
+                <td className="px-4 py-3 whitespace-nowrap">Data 2B</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </main>
     </DefaultLayout>
   );

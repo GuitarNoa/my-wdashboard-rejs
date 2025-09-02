@@ -1,5 +1,5 @@
 import Sidebar from "../components/Sidebar";
-import Breadcrumb from "../components/Breadcrumb";
+// import Breadcrumb from "../components/Breadcrumb";
 
 export default function DefaultLayout({ children }) {
   return (
@@ -10,12 +10,12 @@ export default function DefaultLayout({ children }) {
       {/* Main Content */}
       <div className="flex flex-col flex-1 md:ml-64">
         {/* Breadcrumb / Header */}
-        <header className="bg-white shadow-sm p-4">
-          <Breadcrumb />
-        </header>
+        {/* <header className="bg-white shadow-sm p-4"> */}
+          {/* <Breadcrumb /> */}
+        {/* </header> */}
 
         {/* Page Content */}
-        <main className="flex-1 p-6">{children}</main>
+        <main className="flex-1 bg-gray-50">{children}</main>
       </div>
     </div>
   );
