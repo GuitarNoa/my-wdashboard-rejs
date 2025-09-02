@@ -129,7 +129,7 @@ export default function Sidebar() {
       <aside
         className={`fixed top-0 left-0 z-50 w-64 h-screen 
         bg-gradient-to-t from-green-400/90 to-cyan-400/90 
-      text-white p-4 overflow-y-auto backdrop-blur-md
+      text-white p-4 overflow-y-auto backdrop-blur-md rounded-r-xl
         ${isOpen ? "translate-x-0" : "-translate-x-full"} md:translate-x-0`}
       >
         {/* Logo */}
