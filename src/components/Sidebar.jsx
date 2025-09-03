@@ -17,7 +17,7 @@ import {
   QuestionMarkCircleIcon,
 } from "@heroicons/react/24/outline";
 // import Logo from "../assets/MetreeUI.png";
-import Logo from "../assets/Logo-v2.png"
+import Logo from "../assets/Logo-v3.png"
 
 export default function Sidebar() {
   const [openMenu, setOpenMenu] = useState(null);
@@ -135,7 +135,7 @@ export default function Sidebar() {
       >
         {/* Logo */}
         <div className="flex justify-center mb-6">
-          <img src={Logo} alt="Logo" className="p-4" />
+          <img src={Logo} alt="Logo"/>
         </div>
 
         <nav className="space-y-2">

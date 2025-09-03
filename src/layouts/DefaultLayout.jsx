@@ -15,7 +15,7 @@ export default function DefaultLayout({ children }) {
         {/* </header> */}
 
         {/* Page Content */}
-        <main className="flex-1 bg-gray-50">{children}</main>
+        <main className="bg-gray-50">{children}</main>
       </div>
     </div>
   );
