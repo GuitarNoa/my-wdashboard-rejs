@@ -24,6 +24,7 @@ import {
 } from "@heroicons/react/24/outline";
 import bgImage from "../assets/Page-g1.png";
 import profileImg from "../assets/my_profile.jpg";
+import InfoStart from "../assets/Infostart-v1.png";
 
 ChartJS.register(
   Title,
@@ -126,8 +127,22 @@ export default function Dashboard() {
               <h3 className="font-semibold mb-2">Sales Overview</h3>
               <Line data={lineData} />
             </div>
-            <div className="bg-gradient-to-t from-green-400 to-cyan-400 rounded-2xl p-4 flex items-center justify-center">
-              <span className="text-white font-semibold">Additional Info</span>
+            <div className="relative bg-gradient-to-tr from-green-400 to-cyan-400 rounded-2xl p-6 overflow-hidden shadow-lg">
+              {/* ข้อความ */}
+              <div className="relative z-10 py-8">
+                <h2 className="text-8xl font-bold text-white">Welcome</h2>
+                <p className="text-white text-6xl">
+                  to
+                  <br />
+                </p>
+                <span className="text-white font-semibold text-7xl">CyanovaUI</span>
+              </div>
+              {/* รูปประกอบ */}
+              <img
+                src={InfoStart}
+                alt="Decoration"
+                className="absolute bottom-0 right-0 opacity-90"
+              />
             </div>
           </div>
           {/* 3 Box Grid */}
