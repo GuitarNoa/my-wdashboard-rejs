@@ -3,7 +3,7 @@ import { BiMenu } from "react-icons/bi";
 
 export default function Header() {
   return (
-    <header className="flex items-center justify-between w-full px-4 py-3 bg-gray-50 border-b">
+    <header className="bg-gradient-to-t from-green-400/90 to-cyan-400/90">
       {/* Left: Breadcrumb + Title (ซ่อนในจอเล็ก) */}
       <div className="hidden md:flex items-center space-x-4">
         <nav className="text-sm text-gray-500 flex items-center space-x-1">
@@ -31,7 +31,7 @@ export default function Header() {
           className="hidden sm:block px-3 py-1 border rounded-md text-sm text-gray-700 focus:outline-none focus:ring focus:ring-blue-200"
         />
         <a
-          href="/login"
+          href="/auth/login"
           className="text-sm font-medium text-gray-600 hover:text-gray-800"
         >
           Sign In
