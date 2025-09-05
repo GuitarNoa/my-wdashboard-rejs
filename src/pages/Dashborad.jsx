@@ -71,33 +71,11 @@ export default function Dashboard() {
             <div className="flex items-center justify-between p-4 bg-white rounded-2xl shadow">
               {/* Title */}
               <h1 className="text-2xl font-bold text-gray-800">Overview</h1>
-
-              {/* Search + Profile */}
-              <div className="flex items-center space-x-4">
-                <div className="relative w-64">
-                  <input
-                    type="text"
-                    placeholder="search here.."
-                    className="w-full border border-gray-300 rounded-full py-2 px-4 pl-10 focus:outline-none focus:ring-2 focus:ring-green-400"
-                  />
-                  <MagnifyingGlassIcon className="w-5 h-5 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
-                </div>
-
-                {/* Profile Avatar */}
-                <img
-                  src={profileImg}
-                  alt="Profile"
-                  className="w-10 h-10 rounded-full object-cover"
-                />
-              </div>
             </div>
-            {/* Overlay */}
-            {/* <div className="absolute inset-0 bg-white/30" /> */}
-
             {/* Content */}
             <div className="relative z-10 p-6 space-y-6">
               {/* Statistics Cards */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="grid grid-cols-1 justify-items-center-safe sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 <StatisticsCard
                   icon={UsersIcon}
                   title="Today's Users"
@@ -121,32 +99,20 @@ export default function Dashboard() {
               </div>
             </div>
           </div>
-          {/* Charts */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="bg-white rounded-2xl shadow p-4">
               <h3 className="font-semibold mb-2">Sales Overview</h3>
               <Line data={lineData} />
             </div>
-            <div className="relative bg-gradient-to-tr from-green-400 to-cyan-400 rounded-2xl p-6 overflow-hidden shadow-lg">
-              {/* ข้อความ */}
-              <div className="relative z-10 py-8">
-                <h2 className="text-8xl font-bold text-white">Welcome</h2>
-                <p className="text-white text-6xl">
-                  to
-                  <br />
-                </p>
-                <span className="text-white font-semibold text-7xl">CyanovaUI</span>
-              </div>
-              {/* รูปประกอบ */}
-              <img
-                src={InfoStart}
-                alt="Decoration"
-                className="absolute bottom-0 right-0 opacity-90"
-              />
+            <div className="bg-white rounded-2xl shadow p-4">
+              <h3 className="font-semibold mb-2">Sales Overview</h3>
+              <Line data={lineData} />
             </div>
           </div>
+          {/* Charts */}
+
           {/* 3 Box Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {/* <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="bg-gradient-to-t from-green-400 to-cyan-400 rounded-2xl p-4 flex flex-col items-center justify-center text-center">
               <span className="text-white font-semibold">Team Members</span>
               <h2 className="text-white">HelloWorld</h2>
@@ -158,8 +124,8 @@ export default function Dashboard() {
             <div className="bg-gradient-to-t from-green-400 to-cyan-400 rounded-2xl p-4 flex items-center justify-center">
               <span className="text-white font-semibold">Progress track</span>
             </div>
-          </div>{" "}
-          F{/* Data Table */}
+          </div>{" "} */}
+          {/* Data Table */}
           <div className="overflow-x-auto rounded-2xl shadow">
             <table className="min-w-full divide-y divide-gray-200 text-sm">
               <thead className="bg-gray-50">
