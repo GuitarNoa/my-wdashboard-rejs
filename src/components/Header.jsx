@@ -5,7 +5,7 @@ export default function Header() {
   return (
     <header className="bg-gradient-to-t from-green-400/90 to-cyan-400/90">
       {/* Left: Breadcrumb + Title (ซ่อนในจอเล็ก) */}
-      <div className="hidden md:flex items-center space-x-4">
+      <div className="flex items-center space-x-4">
         <nav className="text-sm text-gray-500 flex items-center space-x-1">
           <span>🏠</span>
           <span>/</span>
@@ -14,13 +14,6 @@ export default function Header() {
           <span className="text-gray-700 font-medium">CRM</span>
         </nav>
         <h1 className="text-lg font-semibold text-gray-700">CRM</h1>
-      </div>
-
-      {/* Middle: Menu Button (โชว์เฉพาะมือถือ) */}
-      <div className="flex md:hidden">
-        <button className="p-2 rounded hover:bg-gray-100">
-          <BiMenu className="w-6 h-6 text-gray-600" />
-        </button>
       </div>
 
       {/* Right: Search + Sign In */}
