@@ -20,11 +20,8 @@ import {
   ShoppingCartIcon,
   UsersIcon,
   UserPlusIcon,
-  MagnifyingGlassIcon,
 } from "@heroicons/react/24/outline";
 import bgImage from "../assets/Page-g1.png";
-import profileImg from "../assets/my_profile.jpg";
-import InfoStart from "../assets/Infostart-v1.png";
 
 ChartJS.register(
   Title,
@@ -39,6 +36,7 @@ ChartJS.register(
 );
 
 export default function Dashboard() {
+  // Chart data
   const lineData = {
     labels: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
     datasets: [
@@ -58,24 +56,31 @@ export default function Dashboard() {
   return (
     <DefaultLayout>
       <main>
-        <div className="h-full px-2 space-y-2">
-          {/* Hero Section with Background */}
+        <div className="h-full px-2 sm:px-4 space-y-4 sm:space-y-6">
+          {/* Hero Section */}
           <div
-            className="relative w-full rounded-2xl overflow-hidden shadow-lg p-4"
-            style={{
-              backgroundImage: `url(${bgImage})`,
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-            }}
+            className="relative w-full rounded-2xl overflow-hidden shadow-lg 
+                       p-4 sm:p-6 md:p-8
+                       min-h-[180px] sm:min-h-[220px] md:min-h-[280px]
+                       bg-cover bg-center"
+            style={{ backgroundImage: `url(${bgImage})` }}
           >
-            <div className="flex items-center justify-between p-4 bg-white rounded-2xl shadow">
-              {/* Title */}
-              <h1 className="text-2xl font-bold text-gray-800">Overview</h1>
+            {/* Overlay for better text visibility */}
+            <div className="absolute inset-0 bg-black/10"></div>
+
+            {/* Title Bar */}
+            <div
+              className="relative flex flex-col sm:flex-row sm:items-center sm:justify-between 
+                            gap-3 p-4 bg-white rounded-2xl shadow-md"
+            >
+              <h1 className="text-xl sm:text-2xl font-bold text-gray-800">
+                Overview
+              </h1>
             </div>
-            {/* Content */}
-            <div className="relative z-10 p-6 space-y-6">
-              {/* Statistics Cards */}
-              <div className="grid grid-cols-1 justify-items-center-safe sm:grid-cols-2 lg:grid-cols-4 gap-4">
+
+            {/* Statistic Cards */}
+            <div className="relative z-10 mt-4 sm:mt-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 place-items-center">
                 <StatisticsCard
                   icon={UsersIcon}
                   title="Today's Users"
@@ -99,36 +104,27 @@ export default function Dashboard() {
               </div>
             </div>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-white rounded-2xl shadow p-4">
-              <h3 className="font-semibold mb-2">Sales Overview</h3>
+
+          {/* Charts Section */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+            <div className="bg-white rounded-2xl shadow-md p-4 sm:p-6">
+              <h3 className="font-semibold mb-2 text-base md:text-lg">
+                Sales Overview
+              </h3>
               <Line data={lineData} />
             </div>
-            <div className="bg-white rounded-2xl shadow p-4">
-              <h3 className="font-semibold mb-2">Sales Overview</h3>
+            <div className="bg-white rounded-2xl shadow-md p-4 sm:p-6">
+              <h3 className="font-semibold mb-2 text-base md:text-lg">
+                Preview Overview
+              </h3>
               <Line data={lineData} />
             </div>
           </div>
-          {/* Charts */}
 
-          {/* 3 Box Grid */}
-          {/* <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="bg-gradient-to-t from-green-400 to-cyan-400 rounded-2xl p-4 flex flex-col items-center justify-center text-center">
-              <span className="text-white font-semibold">Team Members</span>
-              <h2 className="text-white">HelloWorld</h2>
-              <h2 className="text-white">WWWWW</h2>
-            </div>
-            <div className="bg-gradient-to-t from-green-400 to-cyan-400 rounded-2xl p-4 flex items-center justify-center">
-              <span className="text-white font-semibold">To do List</span>
-            </div>
-            <div className="bg-gradient-to-t from-green-400 to-cyan-400 rounded-2xl p-4 flex items-center justify-center">
-              <span className="text-white font-semibold">Progress track</span>
-            </div>
-          </div>{" "} */}
           {/* Data Table */}
-          <div className="overflow-x-auto rounded-2xl shadow">
+          <div className="overflow-x-auto rounded-2xl shadow-md">
             <table className="min-w-full divide-y divide-gray-200 text-sm">
-              <thead className="bg-gray-50">
+              <thead className="bg-gradient-to-t from-green-400/90 to-cyan-400/90">
                 <tr>
                   {[
                     "Author",
@@ -139,7 +135,8 @@ export default function Dashboard() {
                   ].map((title) => (
                     <th
                       key={title}
-                      className="px-4 py-3 text-left font-medium text-gray-500 uppercase tracking-wider"
+                      className="px-3 sm:px-4 py-3 text-left font-medium text-white 
+                                   uppercase tracking-wider text-xs sm:text-sm"
                     >
                       {title}
                     </th>
@@ -148,24 +145,40 @@ export default function Dashboard() {
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
                 <tr>
-                  <td className="flex items-center gap-2 px-4 py-3">
-                    <UsersIcon className="w-6" />
+                  <td className="flex items-center gap-2 px-3 sm:px-4 py-3 whitespace-nowrap">
+                    <UsersIcon className="w-5 sm:w-6" />
                     Noah
                   </td>
-                  <td className="px-4 py-3 whitespace-nowrap">Data 1B</td>
-                  <td className="px-4 py-3 whitespace-nowrap">Data 1B</td>
-                  <td className="px-4 py-3 whitespace-nowrap">Data 1B</td>
-                  <td className="px-4 py-3 whitespace-nowrap">Data 1B</td>
+                  <td className="px-3 sm:px-4 py-3 whitespace-nowrap">
+                    Data 1B
+                  </td>
+                  <td className="px-3 sm:px-4 py-3 whitespace-nowrap">
+                    Data 1B
+                  </td>
+                  <td className="px-3 sm:px-4 py-3 whitespace-nowrap">
+                    Data 1B
+                  </td>
+                  <td className="px-3 sm:px-4 py-3 whitespace-nowrap">
+                    Data 1B
+                  </td>
                 </tr>
                 <tr>
-                  <td className="flex items-center gap-2 px-4 py-3">
-                    <UsersIcon className="w-6" />
+                  <td className="flex items-center gap-2 px-3 sm:px-4 py-3 whitespace-nowrap">
+                    <UsersIcon className="w-5 sm:w-6" />
                     Data 1A
                   </td>
-                  <td className="px-4 py-3 whitespace-nowrap">Data 1B</td>
-                  <td className="px-4 py-3 whitespace-nowrap">Data 2B</td>
-                  <td className="px-4 py-3 whitespace-nowrap">Data 2B</td>
-                  <td className="px-4 py-3 whitespace-nowrap">Data 2B</td>
+                  <td className="px-3 sm:px-4 py-3 whitespace-nowrap">
+                    Data 1B
+                  </td>
+                  <td className="px-3 sm:px-4 py-3 whitespace-nowrap">
+                    Data 2B
+                  </td>
+                  <td className="px-3 sm:px-4 py-3 whitespace-nowrap">
+                    Data 2B
+                  </td>
+                  <td className="px-3 sm:px-4 py-3 whitespace-nowrap">
+                    Data 2B
+                  </td>
                 </tr>
               </tbody>
             </table>

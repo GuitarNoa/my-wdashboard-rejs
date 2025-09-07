@@ -1,19 +1,21 @@
 // components/Header.tsx
 import { BiMenu } from "react-icons/bi";
+import Breadcrumb from "./Breadcrumb";
 
 export default function Header() {
   return (
-    <header className="bg-gradient-to-t from-green-400/90 to-cyan-400/90">
-      {/* Left: Breadcrumb + Title (ซ่อนในจอเล็ก) */}
+    <header className="bg-gradient-to-t from-green-400/90 to-cyan-400/90 shadow px-4 py-2 flex items-center justify-between">
+      {/* Left: Menu + Breadcrumb */}
       <div className="flex items-center space-x-4">
-        <nav className="text-sm text-gray-500 flex items-center space-x-1">
-          <span>🏠</span>
-          <span>/</span>
-          <span>Pages</span>
-          <span>/</span>
-          <span className="text-gray-700 font-medium">CRM</span>
-        </nav>
-        <h1 className="text-lg font-semibold text-gray-700">CRM</h1>
+        {/* Menu button (แสดงเฉพาะจอเล็ก) */}
+        <button className="sm:hidden p-2 text-gray-800 hover:bg-white/20 rounded-lg">
+          <BiMenu size={24} />
+        </button>
+
+        {/* Breadcrumb (ซ่อนบนจอเล็ก) */}
+        <div className="hidden sm:block">
+          <Breadcrumb />
+        </div>
       </div>
 
       {/* Right: Search + Sign In */}
@@ -25,7 +27,7 @@ export default function Header() {
         />
         <a
           href="/auth/login"
-          className="text-sm font-medium text-gray-600 hover:text-gray-800"
+          className="text-sm font-medium text-gray-800 hover:text-black"
         >
           Sign In
         </a>
