@@ -7,11 +7,6 @@ export default function Header() {
     <header className="bg-gradient-to-t from-green-400/90 to-cyan-400/90 shadow px-4 py-2 flex items-center justify-between">
       {/* Left: Menu + Breadcrumb */}
       <div className="flex items-center space-x-4">
-        {/* Menu button (แสดงเฉพาะจอเล็ก) */}
-        <button className="sm:hidden p-2 text-gray-800 hover:bg-white/20 rounded-lg">
-          <BiMenu size={24} />
-        </button>
-
         {/* Breadcrumb (ซ่อนบนจอเล็ก) */}
         <div className="hidden sm:block">
           <Breadcrumb />

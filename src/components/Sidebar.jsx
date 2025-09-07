@@ -17,7 +17,7 @@ import {
   QuestionMarkCircleIcon,
 } from "@heroicons/react/24/outline";
 // import Logo from "../assets/MetreeUI.png";
-import Logo from "../assets/Logo-v3.png"
+import Logo from "../assets/Logo-v3.png";
 
 export default function Sidebar() {
   const [openMenu, setOpenMenu] = useState(null);
@@ -108,7 +108,7 @@ export default function Sidebar() {
     <>
       {/* Hamburger Mobile */}
       <button
-        className="md:hidden fixed top-4 left-4 z-50 p-3 bg-gradient-to-t from-green-400 to-cyan-400 text-white rounded-lg shadow-lg"
+        className="md:hidden fixed top-4 right-4 z-50 p-3 bg-gradient-to-t from-green-400 to-cyan-400 text-white rounded-lg shadow-lg"
         onClick={() => setIsOpen(!isOpen)}
       >
         {isOpen ? (
@@ -135,7 +135,7 @@ export default function Sidebar() {
       >
         {/* Logo */}
         <div className="flex justify-center mb-6">
-          <img src={Logo} alt="Logo"/>
+          <img src={Logo} alt="Logo" />
         </div>
 
         <nav className="space-y-2">
