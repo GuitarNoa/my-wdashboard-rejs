@@ -4,7 +4,7 @@ import Breadcrumb from "./Breadcrumb";
 
 export default function Header() {
   return (
-    <header className="bg-gradient-to-t from-green-400/90 to-cyan-400/90 shadow px-4 py-2 flex items-center justify-between">
+    <header className="px-4 py-2 flex items-center justify-between">
       {/* Left: Menu + Breadcrumb */}
       <div className="flex items-center space-x-4">
         {/* Breadcrumb (ซ่อนบนจอเล็ก) */}

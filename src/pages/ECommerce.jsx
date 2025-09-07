@@ -1,11 +1,24 @@
 import React, { useState } from "react";
 import DefaultLayout from "../layouts/DefaultLayout";
+import { Doughnut } from "react-chartjs-2";
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+
+// ลงทะเบียน Chart.js
+ChartJS.register(ArcElement, Tooltip, Legend);
 
 export default function ECommerce() {
   const [products, setProducts] = useState([
-    { id: 1, name: "iPhone 15", price: 35000, stock: 10 },
-    { id: 2, name: "MacBook Air M3", price: 48000, stock: 0 },
-    { id: 3, name: "Apple Watch", price: 12000, stock: 5 },
+    { id: 1, name: "iPhone 15", price: 20500, stock: 10 },
+    { id: 2, name: "MacBook Air M3", price: 25500, stock: 0 },
+    { id: 3, name: "Apple Watch Pro", price: 8900, stock: 12 },
+    { id: 4, name: "MacBook Pro M4", price: 55400, stock: 6 },
+    { id: 5, name: "MacBook Air M4", price: 34400, stock: 5 },
+    { id: 6, name: "iPhone 16", price: 26500, stock: 25 },
+    { id: 7, name: "iPhone 16 Pro", price: 34200, stock: 0 },
+    { id: 8, name: "iPhone 16 Plus", price: 28000, stock: 0 },
+    { id: 9, name: "iPhone 16 ProMax", price: 35400, stock: 8 },
+    { id: 10, name: "iPad Air M3", price: 21400, stock: 16 },
+    { id: 11, name: "iPad Pro M3", price: 35400, stock: 12 },
   ]);
 
   const handleDelete = (id) => {
@@ -14,6 +27,20 @@ export default function ECommerce() {
 
   const inStockCount = products.filter((p) => p.stock > 0).length;
   const outOfStockCount = products.filter((p) => p.stock === 0).length;
+
+  // ข้อมูลสำหรับ Doughnut Chart
+  const baseData = {
+    labels: ["In Stock", "Out of Stock"],
+    datasets: [
+      {
+        label: "Stock Status",
+        data: [inStockCount, outOfStockCount],
+        backgroundColor: ["rgba(75, 192, 192, 0.7)", "rgba(255, 99, 132, 0.7)"],
+        borderColor: ["rgba(75, 192, 192, 1)", "rgba(255, 99, 132, 1)"],
+        borderWidth: 1,
+      },
+    ],
+  };
 
   return (
     <DefaultLayout>
@@ -24,6 +51,11 @@ export default function ECommerce() {
           <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
             Add Product
           </button>
+        </div>
+
+        {/* Doughnut Chart */}
+        <div className="mb-8 max-w-sm mx-auto">
+          <Doughnut data={baseData} />
         </div>
 
         {/* Statistics */}

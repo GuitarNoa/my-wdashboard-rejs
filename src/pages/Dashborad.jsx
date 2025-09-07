@@ -65,9 +65,6 @@ export default function Dashboard() {
                        bg-cover bg-center"
             style={{ backgroundImage: `url(${bgImage})` }}
           >
-            {/* Overlay for better text visibility */}
-            <div className="absolute inset-0 bg-black/10"></div>
-
             {/* Title Bar */}
             <div
               className="relative flex flex-col sm:flex-row sm:items-center sm:justify-between 
