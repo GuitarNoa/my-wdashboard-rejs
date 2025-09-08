@@ -10,6 +10,7 @@ export default function Breadcrumb() {
 
   return (
     <nav className="flex items-center text-sm text-gray-600">
+      <HomeIcon className="h-6 w-6 text-gray-400"/><h1>Page</h1><ChevronRightIcon className="mx-2 h-4 w-4 text-gray-400" />
       {items.map((item, index) => (
         <div key={index} className="flex items-center">
           <a

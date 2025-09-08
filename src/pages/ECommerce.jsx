@@ -21,14 +21,10 @@ export default function ECommerce() {
     { id: 11, name: "iPad Pro M3", price: 35400, stock: 12 },
   ]);
 
-  const handleDelete = (id) => {
-    setProducts(products.filter((p) => p.id !== id));
-  };
-
   const inStockCount = products.filter((p) => p.stock > 0).length;
   const outOfStockCount = products.filter((p) => p.stock === 0).length;
+  const totalProducts = products.length;
 
-  // ข้อมูลสำหรับ Doughnut Chart
   const baseData = {
     labels: ["In Stock", "Out of Stock"],
     datasets: [
@@ -42,9 +38,39 @@ export default function ECommerce() {
     ],
   };
 
+  // Plugin สำหรับแสดงเลขตรงกลาง
+  const centerTextPlugin = {
+    id: "centerText",
+    beforeDraw: (chart) => {
+      const {
+        ctx,
+        chartArea: { width, height, left, top },
+      } = chart;
+      ctx.save();
+
+      // ข้อความที่จะแสดง
+      const text = `${totalProducts}`;
+      ctx.font = `${(height / 5).toFixed(0)}px sans-serif`;
+      ctx.fillStyle = "#333";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+
+      // คำนวณตำแหน่งกึ่งกลางจริง
+      const centerX = left + width / 2;
+      const centerY = top + height / 2;
+
+      ctx.fillText(text, centerX, centerY);
+      ctx.restore();
+    },
+  };
+
+  const handleDelete = (id) => {
+    setProducts(products.filter((p) => p.id !== id));
+  };
+
   return (
     <DefaultLayout>
-      <div className="container mx-auto p-4">
+      <div className="container bg-white mx-auto p-4">
         {/* Header */}
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-3xl font-bold">E-Commerce Dashboard</h1>
@@ -54,21 +80,21 @@ export default function ECommerce() {
         </div>
 
         {/* Doughnut Chart */}
-        <div className="mb-8 max-w-sm mx-auto">
-          <Doughnut data={baseData} />
+        <div className="mb-8 bg-white max-w-sm mx-auto p-4 rounded shadow">
+          <Doughnut data={baseData} plugins={[centerTextPlugin]} />
         </div>
 
         {/* Statistics */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-          <div className="bg-gray-100 p-4 rounded shadow text-center">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 text-white">
+          <div className="bg-gradient-to-t from-green-400/90 to-cyan-400/90 p-4 rounded shadow text-center">
             <h2 className="text-xl font-semibold">Total Products</h2>
             <p className="text-2xl font-bold">{products.length}</p>
           </div>
-          <div className="bg-green-100 p-4 rounded shadow text-center">
+          <div className="bg-gradient-to-t from-green-400/90 to-cyan-400/90 p-4 rounded shadow text-center">
             <h2 className="text-xl font-semibold">In Stock</h2>
             <p className="text-2xl font-bold">{inStockCount}</p>
           </div>
-          <div className="bg-red-100 p-4 rounded shadow text-center">
+          <div className="bg-gradient-to-t from-green-400/90 to-cyan-400/90 p-4 rounded shadow text-center">
             <h2 className="text-xl font-semibold">Out of Stock</h2>
             <p className="text-2xl font-bold">{outOfStockCount}</p>
           </div>
@@ -77,8 +103,8 @@ export default function ECommerce() {
         {/* Product Table */}
         <div className="overflow-x-auto">
           <table className="min-w-full bg-white rounded shadow">
-            <thead className="bg-gray-200">
-              <tr>
+            <thead className="bg-gradient-to-t from-green-400/90 to-cyan-400/90">
+              <tr className="text-white">
                 <th className="py-2 px-4 text-left">ID</th>
                 <th className="py-2 px-4 text-left">Product Name</th>
                 <th className="py-2 px-4 text-left">Price (THB)</th>
@@ -86,7 +112,7 @@ export default function ECommerce() {
                 <th className="py-2 px-4 text-left">Actions</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody className="text-gray-500">
               {products.map((product) => (
                 <tr key={product.id} className="border-b hover:bg-gray-50">
                   <td className="py-2 px-4">{product.id}</td>

@@ -6,7 +6,7 @@ import { HeartIcon, ShoppingCartIcon } from "@heroicons/react/16/solid";
 export default function ButtonShowcase() {
   return (
     <DefaultLayout>
-      <div className="container mx-auto p-6">
+      <div className="container mx-auto bg-white p-6">
         <h1 className="text-3xl font-bold mb-6">Button Showcase</h1>
 
         {/* Variants */}
