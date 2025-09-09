@@ -21,6 +21,10 @@ import {
   UsersIcon,
   UserPlusIcon,
 } from "@heroicons/react/24/outline";
+
+import { FaReact, FaVuejs, FaAngular } from "react-icons/fa";
+import { SiNextdotjs } from "react-icons/si";
+
 import bgImage from "../assets/Page-g1.png";
 
 // Register Chart.js Modules
@@ -54,49 +58,86 @@ export default function Dashboard() {
     ],
   };
 
+  // ฟังก์ชันเลือก Icon ตาม Tool
+  const getToolIcon = (tool) => {
+    switch (tool) {
+      case "React":
+        return <FaReact className="text-sky-500 w-5 h-5" />;
+      case "Vue":
+        return <FaVuejs className="text-green-500 w-5 h-5" />;
+      case "Next.JS":
+        return <SiNextdotjs className="text-gray-900 w-5 h-5" />;
+      case "Angular":
+        return <FaAngular className="text-red-500 w-5 h-5" />;
+      default:
+        return null;
+    }
+  };
+  const getProgressBarColor = (tool) => {
+    switch (tool) {
+      case "React":
+        return "bg-gradient-to-r from-sky-500 to-blue-400"; // React → ฟ้า
+      case "Vue":
+        return "bg-gradient-to-r from-green-500 to-emerald-400"; // Vue → เขียว
+      case "Next.JS":
+        return "bg-gradient-to-r from-gray-700 to-gray-400"; // Next.js → เทา
+      case "Angular":
+        return "bg-gradient-to-r from-red-500 to-orange-400"; // Angular → แดง-ส้ม
+      default:
+        return "bg-gradient-to-r from-gray-300 to-gray-200"; // Default → เทาอ่อน
+    }
+  };
+
   // ข้อมูล Project Website
   const [projects, setProjects] = useState([
     {
       id: 1,
-      name: "CyanovaUI",
+      themename: "CyanovaUI",
       website: "Admin Dashboard",
       tool: "React",
       process: "90%",
     },
     {
       id: 2,
-      name: "CyanovaUI",
+      themename: "CyanovaUI",
       website: "Admin Dashboard",
       tool: "Vue",
       process: "20%",
     },
     {
       id: 3,
-      name: "CyanovaUI",
+      themename: "CyanovaUI",
       website: "Admin Dashboard",
       tool: "Next.JS",
       process: "30%",
     },
     {
       id: 4,
-      name: "CyanovaUI",
-      website: "Admin Dashboard",
-      tool: "Next.JS",
+      themename: "CyanovaUI",
+      website: "CRM",
+      tool: "React",
       process: "40%",
     },
     {
       id: 5,
-      name: "CyanovaUI",
-      website: "Admin Dashboard",
-      tool: "Next.JS",
+      themename: "CyanovaUI",
+      website: "Blog",
+      tool: "Vue",
       process: "60%",
     },
     {
       id: 6,
-      name: "CyanovaUI",
-      website: "Admin Dashboard",
+      themename: "CyanovaUI",
+      website: "eCommerce",
       tool: "Next.JS",
       process: "75%",
+    },
+    {
+      id: 7,
+      themename: "CyanovaUI",
+      website: "Admin Dashboard",
+      tool: "Angular",
+      process: "15%",
     },
   ]);
 
@@ -118,10 +159,7 @@ export default function Dashboard() {
             style={{ backgroundImage: `url(${bgImage})` }}
           >
             {/* Title Bar */}
-            <div
-              className="relative flex flex-col sm:flex-row sm:items-center sm:justify-between 
-                            gap-3 p-4 bg-white rounded-2xl shadow-md"
-            >
+            <div className="relative flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 p-4 bg-white rounded-2xl shadow-md">
               <h1 className="text-xl sm:text-2xl font-bold text-gray-800">
                 Overview
               </h1>
@@ -175,7 +213,7 @@ export default function Dashboard() {
             <table className="min-w-full divide-y divide-gray-200 text-sm">
               <thead className="bg-gradient-to-t from-green-400/90 to-cyan-400/90">
                 <tr>
-                  {["Name", "Website", "Tool", "Progress", "Action"].map(
+                  {["Themename", "Website", "Tool", "Progress", "Action"].map(
                     (title) => (
                       <th
                         key={title}
@@ -194,9 +232,8 @@ export default function Dashboard() {
                     className="hover:bg-gray-50 transition-colors duration-200"
                   >
                     {/* Name */}
-                    <td className="flex items-center gap-2 px-3 sm:px-4 py-3 whitespace-nowrap font-medium text-gray-800">
-                      <UsersIcon className="w-5 sm:w-6 text-gray-500" />
-                      {project.name}
+                    <td className="px-3 sm:px-4 py-3 whitespace-nowrap font-medium text-gray-800">
+                      {project.themename}
                     </td>
 
                     {/* Website */}
@@ -204,18 +241,19 @@ export default function Dashboard() {
                       {project.website}
                     </td>
 
-                    {/* Tool */}
-                    <td className="px-3 sm:px-4 py-3 whitespace-nowrap">
-                      <span className="px-2 py-1 text-xs rounded-full bg-green-100 text-green-800">
-                        {project.tool}
-                      </span>
+                    {/* Tool + Icon */}
+                    <td className="px-3 sm:px-4 py-3 whitespace-nowrap flex items-center gap-2">
+                      {getToolIcon(project.tool)}
+                      <span className="text-gray-700">{project.tool}</span>
                     </td>
 
-                    {/* Progress */}
+                    {/* Progress Bar */}
                     <td className="px-3 sm:px-4 py-3 whitespace-nowrap">
                       <div className="w-full bg-gray-200 rounded-full h-2">
                         <div
-                          className="bg-green-500 h-2 rounded-full transition-all duration-300"
+                          className={`h-2 rounded-full transition-all duration-300 ${getProgressBarColor(
+                            project.tool
+                          )}`}
                           style={{ width: project.process }}
                         ></div>
                       </div>
@@ -224,7 +262,7 @@ export default function Dashboard() {
                       </span>
                     </td>
 
-                    {/* Action */}
+                    {/* Action Buttons */}
                     <td className="px-3 sm:px-4 py-3 whitespace-nowrap flex flex-col sm:flex-row gap-2">
                       <button className="text-blue-500 hover:underline">
                         Edit
