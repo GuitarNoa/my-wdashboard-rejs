@@ -12,7 +12,7 @@ export default function DefaultLayout({ children }) {
       <Sidebar />
       {/* Main Content */}
       <div className="flex flex-col flex-1 md:ml-64">
-        <Header className="w=full" />
+        <Header />
         {/* Header */}
         {/* Page Content */}
         <main className="flex-1 p-4 md:p-6 bg-gray-100 rounded-tl-2xl">

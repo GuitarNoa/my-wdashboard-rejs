@@ -13,18 +13,19 @@ import {
   PointElement,
 } from "chart.js";
 import { Line } from "react-chartjs-2";
-import StatisticsCard from "../components/StatisticsCard";
 import { faker } from "@faker-js/faker";
 import {
   CurrencyDollarIcon,
   ShoppingCartIcon,
   UsersIcon,
   UserPlusIcon,
+  PencilSquareIcon,
+  TrashIcon,
 } from "@heroicons/react/24/outline";
-
 import { FaReact, FaVuejs, FaAngular } from "react-icons/fa";
 import { SiNextdotjs } from "react-icons/si";
 
+import StatisticsCard from "../components/StatisticsCard";
 import bgImage from "../assets/Page-g1.png";
 
 // Register Chart.js Modules
@@ -40,6 +41,23 @@ ChartJS.register(
   PointElement
 );
 
+// ─── CONSTANTS ──────────────────────────────────────────────
+const TABLE_HEADERS = ["Themename", "Website", "Tool", "Progress", "Action"];
+const TOOL_ICONS = {
+  React: <FaReact className="text-sky-500 w-5 h-5" />,
+  Vue: <FaVuejs className="text-green-500 w-5 h-5" />,
+  "Next.JS": <SiNextdotjs className="text-gray-900 w-5 h-5" />,
+  Angular: <FaAngular className="text-red-500 w-5 h-5" />,
+};
+const TOOL_COLORS = {
+  React: "bg-gradient-to-r from-sky-500 to-blue-400",
+  Vue: "bg-gradient-to-r from-green-500 to-emerald-400",
+  "Next.JS": "bg-gradient-to-r from-gray-700 to-gray-400",
+  Angular: "bg-gradient-to-r from-red-500 to-orange-400",
+  default: "bg-gradient-to-r from-gray-300 to-gray-200",
+};
+
+// ─── COMPONENT ──────────────────────────────────────────────
 export default function Dashboard() {
   // Chart data
   const lineData = {
@@ -58,37 +76,7 @@ export default function Dashboard() {
     ],
   };
 
-  // ฟังก์ชันเลือก Icon ตาม Tool
-  const getToolIcon = (tool) => {
-    switch (tool) {
-      case "React":
-        return <FaReact className="text-sky-500 w-5 h-5" />;
-      case "Vue":
-        return <FaVuejs className="text-green-500 w-5 h-5" />;
-      case "Next.JS":
-        return <SiNextdotjs className="text-gray-900 w-5 h-5" />;
-      case "Angular":
-        return <FaAngular className="text-red-500 w-5 h-5" />;
-      default:
-        return null;
-    }
-  };
-  const getProgressBarColor = (tool) => {
-    switch (tool) {
-      case "React":
-        return "bg-gradient-to-r from-sky-500 to-blue-400"; // React → ฟ้า
-      case "Vue":
-        return "bg-gradient-to-r from-green-500 to-emerald-400"; // Vue → เขียว
-      case "Next.JS":
-        return "bg-gradient-to-r from-gray-700 to-gray-400"; // Next.js → เทา
-      case "Angular":
-        return "bg-gradient-to-r from-red-500 to-orange-400"; // Angular → แดง-ส้ม
-      default:
-        return "bg-gradient-to-r from-gray-300 to-gray-200"; // Default → เทาอ่อน
-    }
-  };
-
-  // ข้อมูล Project Website
+  // Project data
   const [projects, setProjects] = useState([
     {
       id: 1,
@@ -141,33 +129,35 @@ export default function Dashboard() {
     },
   ]);
 
-  // ฟังก์ชันลบ Project
   const handleDelete = (id) => {
-    setProjects(projects.filter((project) => project.id !== id));
+    setProjects((prev) => prev.filter((p) => p.id !== id));
   };
 
+  // ─── HELPERS ─────────────────────────────────────────────
+  const getToolIcon = (tool) => TOOL_ICONS[tool] || null;
+  const getProgressBarColor = (tool) =>
+    TOOL_COLORS[tool] || TOOL_COLORS.default;
+
+  // ─── RENDER ──────────────────────────────────────────────
   return (
     <DefaultLayout>
       <main>
-        <div className="h-full px-2 sm:px-4 space-y-4 sm:space-y-6">
+        <div className="h-full">
           {/* Hero Section */}
           <div
-            className="relative w-full rounded-2xl overflow-hidden shadow-lg 
-                       p-4 sm:p-6 md:p-8
-                       min-h-[180px] sm:min-h-[220px] md:min-h-[280px]
-                       bg-cover bg-center"
-            style={{ backgroundImage: `url(${bgImage})` }}
+            className="relative rounded-2xl bg-gradient-to-t from-green-400/90 to-cyan-400/90 
+             overflow-hidden shadow-lg p-4 sm:p-6 md:p-8 bg-cover bg-center"
           >
             {/* Title Bar */}
-            <div className="relative flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 p-4 bg-white rounded-2xl shadow-md">
+            <div className="flex items-center justify-between bg-white rounded-2xl shadow-md p-4">
               <h1 className="text-xl sm:text-2xl font-bold text-gray-800">
                 Overview
               </h1>
             </div>
 
             {/* Statistic Cards */}
-            <div className="relative z-10 mt-4 sm:mt-6">
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="mt-6 max-w-7xl mx-auto">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 justify-items-center">
                 <StatisticsCard
                   icon={UsersIcon}
                   title="Today's Users"
@@ -194,18 +184,17 @@ export default function Dashboard() {
 
           {/* Charts Section */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
-            <div className="bg-white rounded-2xl shadow-md p-4 sm:p-6">
-              <h3 className="font-semibold mb-2 text-base md:text-lg">
-                Sales Overview
-              </h3>
-              <Line data={lineData} />
-            </div>
-            <div className="bg-white rounded-2xl shadow-md p-4 sm:p-6">
-              <h3 className="font-semibold mb-2 text-base md:text-lg">
-                Preview Overview
-              </h3>
-              <Line data={lineData} />
-            </div>
+            {["Sales Overview", "Preview Overview"].map((title) => (
+              <div
+                key={title}
+                className="bg-white rounded-2xl shadow-md p-4 sm:p-6"
+              >
+                <h3 className="font-semibold mb-2 text-base md:text-lg">
+                  {title}
+                </h3>
+                <Line data={lineData} />
+              </div>
+            ))}
           </div>
 
           {/* Data Table Section */}
@@ -213,16 +202,14 @@ export default function Dashboard() {
             <table className="min-w-full divide-y divide-gray-200 text-sm">
               <thead className="bg-gradient-to-t from-green-400/90 to-cyan-400/90">
                 <tr>
-                  {["Themename", "Website", "Tool", "Progress", "Action"].map(
-                    (title) => (
-                      <th
-                        key={title}
-                        className="px-3 sm:px-4 py-3 text-left font-medium text-white uppercase tracking-wider text-xs sm:text-sm"
-                      >
-                        {title}
-                      </th>
-                    )
-                  )}
+                  {TABLE_HEADERS.map((header) => (
+                    <th
+                      key={header}
+                      className="px-3 sm:px-4 py-3 text-left font-medium text-white uppercase tracking-wider text-xs sm:text-sm"
+                    >
+                      {header}
+                    </th>
+                  ))}
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
@@ -231,27 +218,20 @@ export default function Dashboard() {
                     key={project.id}
                     className="hover:bg-gray-50 transition-colors duration-200"
                   >
-                    {/* Name */}
                     <td className="px-3 sm:px-4 py-3 whitespace-nowrap font-medium text-gray-800">
                       {project.themename}
                     </td>
-
-                    {/* Website */}
                     <td className="px-3 sm:px-4 py-3 whitespace-nowrap text-gray-600">
                       {project.website}
                     </td>
-
-                    {/* Tool + Icon */}
                     <td className="px-3 sm:px-4 py-3 whitespace-nowrap flex items-center gap-2">
                       {getToolIcon(project.tool)}
                       <span className="text-gray-700">{project.tool}</span>
                     </td>
-
-                    {/* Progress Bar */}
                     <td className="px-3 sm:px-4 py-3 whitespace-nowrap">
                       <div className="w-full bg-gray-200 rounded-full h-2">
                         <div
-                          className={`h-2 rounded-full transition-all duration-300 ${getProgressBarColor(
+                          className={`h-2 rounded-full ${getProgressBarColor(
                             project.tool
                           )}`}
                           style={{ width: project.process }}
@@ -261,17 +241,19 @@ export default function Dashboard() {
                         {project.process}
                       </span>
                     </td>
-
-                    {/* Action Buttons */}
                     <td className="px-3 sm:px-4 py-3 whitespace-nowrap flex flex-col sm:flex-row gap-2">
-                      <button className="text-blue-500 hover:underline">
-                        Edit
+                      <button
+                        className="p-2 rounded-full bg-blue-100 text-blue-600 hover:bg-blue-200 hover:text-blue-800 transition"
+                        title="Edit"
+                      >
+                        <PencilSquareIcon className="w-5 h-5" />
                       </button>
                       <button
-                        className="text-red-500 hover:underline"
+                        className="p-2 rounded-full bg-red-100 text-red-600 hover:bg-red-200 hover:text-red-800 transition"
+                        title="Delete"
                         onClick={() => handleDelete(project.id)}
                       >
-                        Delete
+                        <TrashIcon className="w-5 h-5" />
                       </button>
                     </td>
                   </tr>
