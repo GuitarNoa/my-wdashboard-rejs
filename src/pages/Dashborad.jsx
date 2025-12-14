@@ -42,7 +42,7 @@ ChartJS.register(
 );
 
 // ─── CONSTANTS ──────────────────────────────────────────────
-const TABLE_HEADERS = ["Themename", "Website", "Tool", "Progress", "Action"];
+const TABLE_HEADERS = ["Website", "Tool", "Progress", "Action"];
 const TOOL_ICONS = {
   React: <FaReact className="text-sky-500 w-5 h-5" />,
   Vue: <FaVuejs className="text-green-500 w-5 h-5" />,
@@ -80,49 +80,49 @@ export default function Dashboard() {
   const [projects, setProjects] = useState([
     {
       id: 1,
-      themename: "CyanovaUI",
+
       website: "Admin Dashboard",
       tool: "React",
       process: "90%",
     },
     {
       id: 2,
-      themename: "CyanovaUI",
+
       website: "Admin Dashboard",
       tool: "Vue",
       process: "20%",
     },
     {
       id: 3,
-      themename: "CyanovaUI",
+
       website: "Admin Dashboard",
       tool: "Next.JS",
       process: "30%",
     },
     {
       id: 4,
-      themename: "CyanovaUI",
+
       website: "CRM",
       tool: "React",
       process: "40%",
     },
     {
       id: 5,
-      themename: "CyanovaUI",
+
       website: "Blog",
       tool: "Vue",
       process: "60%",
     },
     {
       id: 6,
-      themename: "CyanovaUI",
+
       website: "eCommerce",
       tool: "Next.JS",
       process: "75%",
     },
     {
       id: 7,
-      themename: "CyanovaUI",
+
       website: "Admin Dashboard",
       tool: "Angular",
       process: "15%",
@@ -149,8 +149,8 @@ export default function Dashboard() {
              overflow-hidden shadow-lg p-4 sm:p-6 md:p-8 bg-cover bg-center"
           >
             {/* Title Bar */}
-            <div className="flex items-center justify-between bg-white rounded-2xl shadow-md p-4">
-              <h1 className="text-xl sm:text-2xl font-bold text-gray-800">
+            <div className="flex items-center justify-between bg-white rounded-2xl shadow-md h-64">
+              <h1 className="text-xl sm:text-7xl font-bold text-gray-800 p-4">
                 Overview
               </h1>
             </div>
@@ -183,7 +183,7 @@ export default function Dashboard() {
           </div>
 
           {/* Charts Section */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6 p-2">
             {["Sales Overview", "Preview Overview"].map((title) => (
               <div
                 key={title}
@@ -218,9 +218,6 @@ export default function Dashboard() {
                     key={project.id}
                     className="hover:bg-gray-50 transition-colors duration-200"
                   >
-                    <td className="px-3 sm:px-4 py-3 whitespace-nowrap font-medium text-gray-800">
-                      {project.themename}
-                    </td>
                     <td className="px-3 sm:px-4 py-3 whitespace-nowrap text-gray-600">
                       {project.website}
                     </td>

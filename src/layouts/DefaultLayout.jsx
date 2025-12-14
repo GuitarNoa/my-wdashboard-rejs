@@ -7,7 +7,7 @@ export default function DefaultLayout({ children }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   return (
-    <div className="flex min-h-screen bg-gray-100">
+    <div className="flex min-h-screen bg-white">
       {/* Sidebar - Desktop */}
       <Sidebar />
       {/* Main Content */}
@@ -15,7 +15,7 @@ export default function DefaultLayout({ children }) {
         <Header />
         {/* Header */}
         {/* Page Content */}
-        <main className="flex-1 p-4 md:p-6 bg-gray-100 rounded-tl-2xl">
+        <main className="flex-1 p-4 md:p-6 rounded-tl-2xl">
           {children}
         </main>
         <Footer />
