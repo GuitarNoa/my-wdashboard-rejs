@@ -26,7 +26,6 @@ import { FaReact, FaVuejs, FaAngular } from "react-icons/fa";
 import { SiNextdotjs } from "react-icons/si";
 
 import StatisticsCard from "../components/StatisticsCard";
-import bgImage from "../assets/Page-g1.png";
 
 // Register Chart.js Modules
 ChartJS.register(
@@ -38,7 +37,7 @@ ChartJS.register(
   LinearScale,
   BarElement,
   LineElement,
-  PointElement
+  PointElement,
 );
 
 // ─── CONSTANTS ──────────────────────────────────────────────
@@ -66,7 +65,7 @@ export default function Dashboard() {
       {
         label: "Product",
         data: Array.from({ length: 7 }, () =>
-          faker.number.int({ min: 100, max: 1000 })
+          faker.number.int({ min: 100, max: 1000 }),
         ),
         borderColor: "#10b981",
         backgroundColor: "rgba(16,185,129,0.2)",
@@ -145,8 +144,8 @@ export default function Dashboard() {
         <div className="h-full">
           {/* Hero Section */}
           <div
-            className="relative rounded-2xl bg-gradient-to-t from-green-400/90 to-cyan-400/90 
-             overflow-hidden shadow-lg p-4 sm:p-6 md:p-8 bg-cover bg-center"
+            className="mx-auto overflow-hidden rounded-xl bg-gradient-to-t from-green-400/90 to-cyan-400/90 
+             shadow-lg p-4 sm:p-6 md:p-8 bg-cover bg-center"
           >
             {/* Title Bar */}
             <div className="flex items-center justify-between bg-white rounded-2xl shadow-md h-64">
@@ -182,9 +181,37 @@ export default function Dashboard() {
             </div>
           </div>
 
+          <div class="mx-auto max-w-md overflow-hidden rounded-xl bg-white shadow-md md:max-w-2xl p-4">
+            <div class="md:flex">
+              <div class="md:shrink-0">
+                <img
+                  class="h-48 w-full object-cover md:h-full md:w-48"
+                  src="src/assets/Logo-website-1.png"
+                  alt="Modern building architecture"
+                />
+              </div>
+              <div class="p-8">
+                <div class="text-sm font-semibold tracking-wide text-indigo-500 uppercase">
+                  Company retreats
+                </div>
+                <a
+                  href="#"
+                  class="mt-1 block text-lg leading-tight font-medium text-black hover:underline"
+                >
+                  Incredible accommodation for your team
+                </a>
+                <p class="mt-2 text-gray-500">
+                  Looking to take your team away on a retreat to enjoy awesome
+                  food and take in some sunshine? We have a list of places to do
+                  just that.
+                </p>
+              </div>
+            </div>
+          </div>
+
           {/* Charts Section */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6 p-2">
-            {["Sales Overview", "Preview Overview"].map((title) => (
+            {["Sales Overview"].map((title) => (
               <div
                 key={title}
                 className="bg-white rounded-2xl shadow-md p-4 sm:p-6"
@@ -229,7 +256,7 @@ export default function Dashboard() {
                       <div className="w-full bg-gray-200 rounded-full h-2">
                         <div
                           className={`h-2 rounded-full ${getProgressBarColor(
-                            project.tool
+                            project.tool,
                           )}`}
                           style={{ width: project.process }}
                         ></div>
