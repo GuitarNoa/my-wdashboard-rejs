@@ -48,6 +48,15 @@ export default function App() {
     setTimeout(() => setLoading(false), 1000);
   }, []);
 
+  // ✅ เพิ่มตรงนี้
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <h1 className="text-xl">Loading...</h1>
+      </div>
+    );
+  }
+
   return (
     <>
       <Routes>
