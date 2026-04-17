@@ -181,22 +181,22 @@ export default function Dashboard() {
             </div>
           </div>
 
-          <div class="mx-auto max-w-md overflow-hidden rounded-xl bg-white shadow-md md:max-w-2xl p-4">
-            <div class="md:flex">
-              <div class="md:shrink-0">
+          <div className="mx-auto max-w-md overflow-hidden rounded-xl bg-white shadow-md md:max-w-2xl p-4">
+            <div className="md:flex">
+              <div className="md:shrink-0">
                 <img
-                  class="h-48 w-full object-cover md:h-full md:w-48"
+                  className="h-48 w-full object-cover md:h-full md:w-48"
                   src="src/assets/Logo-website-1.png"
                   alt="Modern building architecture"
                 />
               </div>
-              <div class="p-8">
-                <div class="text-sm font-semibold tracking-wide text-indigo-500 uppercase">
+              <div className="p-8">
+                <div className="text-sm font-semibold tracking-wide text-indigo-500 uppercase">
                   Company retreats
                 </div>
                 <a
                   href="#"
-                  class="mt-1 block text-lg leading-tight font-medium text-black hover:underline"
+                  className="mt-1 block text-lg leading-tight font-medium text-black hover:underline"
                 >
                   Incredible accommodation for your team
                 </a>
