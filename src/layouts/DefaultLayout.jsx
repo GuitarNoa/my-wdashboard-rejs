@@ -1,54 +1,57 @@
-// DefaultLayout.jsx
 import { useState, useEffect } from "react";
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
 
 export default function DefaultLayout({ children }) {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [collapsed, setCollapsed] = useState(false); // desktop: icon-only
+  const [mobileOpen, setMobileOpen] = useState(false); // mobile: open/close
 
-  // เปิด sidebar อัตโนมัติบน desktop (≥ 1024px)
+  const isMobile = () => window.innerWidth < 1024;
+
+  const toggleSidebar = () => {
+    if (isMobile()) {
+      setMobileOpen((v) => !v);
+    } else {
+      setCollapsed((v) => !v);
+    }
+  };
+
+  // ปิด mobile drawer เมื่อ resize ขึ้น desktop
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth >= 1024) {
-        setIsSidebarOpen(true);
-      } else {
-        setIsSidebarOpen(false);
-      }
+      if (window.innerWidth >= 1024) setMobileOpen(false);
     };
-    handleResize(); // เรียกครั้งแรก
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const toggleSidebar = () => setIsSidebarOpen((prev) => !prev);
-
   return (
     <div className="flex h-screen bg-white overflow-hidden">
-      {/* Overlay สำหรับมือถือ/แท็บเล็ต — กดปิด sidebar */}
-      {isSidebarOpen && (
+      {/* Overlay มือถือ */}
+      {mobileOpen && (
         <div
           className="fixed inset-0 z-40 bg-black/40 lg:hidden"
-          onClick={() => setIsSidebarOpen(false)}
+          onClick={() => setMobileOpen(false)}
         />
       )}
 
-      {/* Sidebar — fixed บนมือถือ, static บน desktop */}
+      {/* Sidebar */}
       <div
         className={`
           fixed lg:static inset-y-0 left-0 z-50
-          transform transition-transform duration-300 ease-in-out
-          ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"}
+          transform transition-all duration-300 ease-in-out
+          ${mobileOpen ? "translate-x-0" : "-translate-x-full"}
           lg:translate-x-0
         `}
       >
-        <Sidebar />
+        <Sidebar collapsed={collapsed} />
       </div>
 
-      {/* Main area */}
+      {/* Main */}
       <div className="flex flex-col flex-1 min-w-0 overflow-hidden">
         <Header
           onToggleSidebar={toggleSidebar}
-          isSidebarOpen={isSidebarOpen}
+          isSidebarOpen={!collapsed}
         />
         <main className="flex-1 bg-gray-50 overflow-y-auto p-4">
           {children}
