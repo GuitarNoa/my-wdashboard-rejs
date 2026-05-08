@@ -1,66 +1,58 @@
-import { useState } from "react";
+// DefaultLayout.jsx
+import { useState, useEffect } from "react";
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
-import Footer from "../components/Footer";
 
 export default function DefaultLayout({ children }) {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const [isMobileOpen, setIsMobileOpen] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  // เปิด sidebar อัตโนมัติบน desktop (≥ 1024px)
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 1024) {
+        setIsSidebarOpen(true);
+      } else {
+        setIsSidebarOpen(false);
+      }
+    };
+    handleResize(); // เรียกครั้งแรก
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const toggleSidebar = () => setIsSidebarOpen((prev) => !prev);
 
   return (
     <div className="flex h-screen bg-white overflow-hidden">
-      
-      {/* ===== Sidebar (Desktop) ===== */}
-      <div className="hidden md:block">
+      {/* Overlay สำหรับมือถือ/แท็บเล็ต — กดปิด sidebar */}
+      {isSidebarOpen && (
         <div
-          className={`fixed top-0 left-0 h-screen w-64 bg-white z-40 transition-transform duration-300 ${
-            isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-          }`}
-        >
-          <Sidebar isOpen={true} />
-        </div>
-      </div>
-
-      {/* ===== Sidebar (Mobile) ===== */}
-      <div
-        className={`fixed inset-0 z-50 md:hidden ${
-          isMobileOpen ? "pointer-events-auto" : "pointer-events-none"
-        }`}
-      >
-        {/* Backdrop */}
-        <div
-          className={`absolute inset-0 bg-black/40 transition-opacity duration-300 ${
-            isMobileOpen ? "opacity-100" : "opacity-0"
-          }`}
-          onClick={() => setIsMobileOpen(false)}
+          className="fixed inset-0 z-40 bg-black/40 lg:hidden"
+          onClick={() => setIsSidebarOpen(false)}
         />
+      )}
 
-        {/* Sidebar */}
-        <div
-          className={`absolute top-0 left-0 h-full w-64 bg-white shadow-lg transform transition-transform duration-300 ${
-            isMobileOpen ? "translate-x-0" : "-translate-x-full"
-          }`}
-        >
-          <Sidebar isOpen={true} />
-        </div>
+      {/* Sidebar — fixed บนมือถือ, static บน desktop */}
+      <div
+        className={`
+          fixed lg:static inset-y-0 left-0 z-50
+          transform transition-transform duration-300 ease-in-out
+          ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"}
+          lg:translate-x-0
+        `}
+      >
+        <Sidebar />
       </div>
 
-      {/* ===== Main ===== */}
-      <div
-        className={`flex flex-col flex-1 transition-all duration-300 ${
-          isSidebarOpen ? "md:ml-64" : "md:ml-0"
-        }`}
-      >
+      {/* Main area */}
+      <div className="flex flex-col flex-1 min-w-0 overflow-hidden">
         <Header
-          onToggleSidebar={() => setIsSidebarOpen((p) => !p)}
-          onToggleMobile={() => setIsMobileOpen((p) => !p)}
+          onToggleSidebar={toggleSidebar}
+          isSidebarOpen={isSidebarOpen}
         />
-
-        <main className="flex-1 bg-gray-50 overflow-y-auto">
+        <main className="flex-1 bg-gray-50 overflow-y-auto p-4">
           {children}
         </main>
-
-        <Footer />
       </div>
     </div>
   );

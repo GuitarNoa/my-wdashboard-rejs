@@ -17,7 +17,7 @@ import {
 
 import Logo from "../assets/Logo-v3.png";
 
-export default function Sidebar({ isOpen }) {
+export default function Sidebar() {
   const [openMenu, setOpenMenu] = useState(null);
 
   const toggleMenu = (menu) => {
@@ -99,15 +99,7 @@ export default function Sidebar({ isOpen }) {
   ];
 
   return (
-    <aside
-      className={`
-        top-0 left-0 z-50 h-screen w-64
-        bg-gradient-to-t from-green-400/90 to-cyan-400/90
-        text-white overflow-hidden
-        transform transition-transform duration-300 ease-in-out
-        ${isOpen ? "translate-x-0" : "-translate-x-full"}
-      `}
-    >
+    <aside className="h-screen w-64 bg-gradient-to-t from-green-400/90 to-cyan-400/90 text-white overflow-hidden">
       <div className="h-full flex flex-col overflow-y-auto p-4">
         {/* Logo */}
         <div className="flex justify-center mb-6">
