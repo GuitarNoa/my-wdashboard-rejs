@@ -1,36 +1,39 @@
+// DefaultLayout.jsx
 import { useState, useEffect } from "react";
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
 
-export default function DefaultLayout({ children }) {
-  const [collapsed, setCollapsed] = useState(false); // desktop: icon-only
-  const [mobileOpen, setMobileOpen] = useState(false); // mobile: open/close
+const BREAKPOINT = 768; // md — iPad portrait ถือเป็น mobile, landscape ถือเป็น desktop
 
-  const isMobile = () => window.innerWidth < 1024;
+export default function DefaultLayout({ children }) {
+  const [collapsed, setCollapsed] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   const toggleSidebar = () => {
-    if (isMobile()) {
+    if (window.innerWidth < BREAKPOINT) {
       setMobileOpen((v) => !v);
     } else {
       setCollapsed((v) => !v);
     }
   };
 
-  // ปิด mobile drawer เมื่อ resize ขึ้น desktop
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth >= 1024) setMobileOpen(false);
+      if (window.innerWidth >= BREAKPOINT) setMobileOpen(false);
     };
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  const isSidebarOpen =
+    window.innerWidth < BREAKPOINT ? mobileOpen : !collapsed;
+
   return (
-    <div className="flex h-screen bg-white overflow-hidden">
-      {/* Overlay มือถือ */}
+    <div className="flex h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 overflow-hidden">
+      {/* Overlay — portrait (mobile + iPad portrait) */}
       {mobileOpen && (
         <div
-          className="fixed inset-0 z-40 bg-black/40 lg:hidden"
+          className="fixed inset-0 z-40 bg-black/40 md:hidden"
           onClick={() => setMobileOpen(false)}
         />
       )}
@@ -38,24 +41,21 @@ export default function DefaultLayout({ children }) {
       {/* Sidebar */}
       <div
         className={`
-          fixed lg:static inset-y-0 left-0 z-50
+          fixed md:static inset-y-0 left-0 z-50
           transform transition-all duration-300 ease-in-out
           ${mobileOpen ? "translate-x-0" : "-translate-x-full"}
-          lg:translate-x-0
+          md:translate-x-0
         `}
       >
         <Sidebar collapsed={collapsed} />
       </div>
 
-      {/* Main */}
+      {/* Content */}
       <div className="flex flex-col flex-1 min-w-0 overflow-hidden">
-        <Header
-          onToggleSidebar={toggleSidebar}
-          isSidebarOpen={!collapsed}
-        />
-        <main className="flex-1 bg-gray-50 overflow-y-auto p-4">
+        <Header onToggleSidebar={toggleSidebar} isSidebarOpen={isSidebarOpen} />
+        <div className="flex-1 overflow-y-auto bg-gray-50 dark:bg-gray-900">
           {children}
-        </main>
+        </div>
       </div>
     </div>
   );
