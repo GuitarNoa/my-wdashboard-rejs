@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import DefaultLayout from "../layouts/DefaultLayout";
 import { Doughnut } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+import { useTheme } from "../context/ThemeContext";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -23,7 +24,7 @@ const INITIAL_PRODUCTS = [
 
 // ─── Chart plugin ────────────────────────────────────────────────────────────
 
-const makeCenterTextPlugin = (total) => ({
+const makeCenterTextPlugin = (total, textColor) => ({
   id: "centerText",
   beforeDraw: (chart) => {
     const {
@@ -32,7 +33,7 @@ const makeCenterTextPlugin = (total) => ({
     } = chart;
     ctx.save();
     ctx.font = `700 ${(height / 5).toFixed(0)}px "DM Sans", sans-serif`;
-    ctx.fillStyle = "#0f172a";
+    ctx.fillStyle = textColor;
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
     ctx.fillText(`${total}`, left + width / 2, top + height / 2);
@@ -42,12 +43,12 @@ const makeCenterTextPlugin = (total) => ({
 
 // ─── Sub-components ──────────────────────────────────────────────────────────
 
-function StatCard({ label, value, accent }) {
+function StatCard({ label, value, accent, c }) {
   return (
     <div
       style={{
-        background: "#fff",
-        border: "1px solid #e2e8f0",
+        background: c.card,
+        border: `1px solid ${c.border}`,
         borderRadius: 16,
         padding: "20px 24px",
         display: "flex",
@@ -72,7 +73,7 @@ function StatCard({ label, value, accent }) {
       <span
         style={{
           fontSize: 13,
-          color: "#94a3b8",
+          color: c.textMuted,
           fontWeight: 500,
           letterSpacing: "0.04em",
           textTransform: "uppercase",
@@ -84,7 +85,7 @@ function StatCard({ label, value, accent }) {
         style={{
           fontSize: 32,
           fontWeight: 700,
-          color: "#0f172a",
+          color: c.textPrimary,
           lineHeight: 1,
         }}
       >
@@ -94,7 +95,7 @@ function StatCard({ label, value, accent }) {
   );
 }
 
-function StockBadge({ stock }) {
+function StockBadge({ stock, isDark }) {
   if (stock > 0) {
     return (
       <span
@@ -106,8 +107,8 @@ function StockBadge({ stock }) {
           borderRadius: 20,
           fontSize: 12,
           fontWeight: 600,
-          background: "#dcfce7",
-          color: "#15803d",
+          background: isDark ? "rgba(34,197,94,0.15)" : "#dcfce7",
+          color: isDark ? "#4ade80" : "#15803d",
         }}
       >
         <span
@@ -133,8 +134,8 @@ function StockBadge({ stock }) {
         borderRadius: 20,
         fontSize: 12,
         fontWeight: 600,
-        background: "#fee2e2",
-        color: "#dc2626",
+        background: isDark ? "rgba(239,68,68,0.15)" : "#fee2e2",
+        color: isDark ? "#f87171" : "#dc2626",
       }}
     >
       <span
@@ -154,6 +155,23 @@ function StockBadge({ stock }) {
 // ─── Main component ──────────────────────────────────────────────────────────
 
 export default function ECommerce() {
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
+
+  // ── Color palette (light / dark) ──
+  const c = {
+    pageBg: isDark ? "#0b1220" : "#f8fafc",
+    card: isDark ? "#1e293b" : "#fff",
+    border: isDark ? "#334155" : "#e2e8f0",
+    textPrimary: isDark ? "#f1f5f9" : "#0f172a",
+    textSecondary: isDark ? "#cbd5e1" : "#334155",
+    textMuted: isDark ? "#64748b" : "#94a3b8",
+    headerBorder: isDark ? "#1e293b" : "#f1f5f9",
+    rowAlt: isDark ? "#172033" : "#fafafa",
+    rowHover: isDark ? "#16332a" : "#f0fdf4",
+    inputBg: isDark ? "#0f172a" : "#fff",
+  };
+
   const [products, setProducts] = useState(INITIAL_PRODUCTS);
   const [search, setSearch] = useState("");
 
@@ -185,7 +203,7 @@ export default function ECommerce() {
         position: "bottom",
         labels: {
           font: { family: "DM Sans, sans-serif", size: 13, weight: "500" },
-          color: "#64748b",
+          color: c.textMuted,
           padding: 16,
           usePointStyle: true,
           pointStyleWidth: 8,
@@ -211,7 +229,7 @@ export default function ECommerce() {
         style={{
           fontFamily: "'DM Sans', sans-serif",
           padding: "28px 32px",
-          background: "#f8fafc",
+          background: c.pageBg,
           minHeight: "100vh",
         }}
       >
@@ -229,13 +247,13 @@ export default function ECommerce() {
               style={{
                 fontSize: 26,
                 fontWeight: 700,
-                color: "#0f172a",
+                color: c.textPrimary,
                 margin: 0,
               }}
             >
               E-Commerce
             </h1>
-            <p style={{ fontSize: 14, color: "#94a3b8", margin: "4px 0 0" }}>
+            <p style={{ fontSize: 14, color: c.textMuted, margin: "4px 0 0" }}>
               Product inventory overview
             </p>
           </div>
@@ -279,18 +297,26 @@ export default function ECommerce() {
               label="Total Products"
               value={products.length}
               accent="linear-gradient(90deg,#34d399,#22d3ee)"
+              c={c}
             />
-            <StatCard label="In Stock" value={inStockCount} accent="#4ade80" />
+            <StatCard
+              label="In Stock"
+              value={inStockCount}
+              accent="#4ade80"
+              c={c}
+            />
             <StatCard
               label="Out of Stock"
               value={outOfStockCount}
               accent="#f87171"
+              c={c}
             />
             <div style={{ gridColumn: "1/-1" }}>
               <StatCard
                 label="Total Inventory Value"
                 value={`฿${totalValue.toLocaleString()}`}
                 accent="linear-gradient(90deg,#818cf8,#c084fc)"
+                c={c}
               />
             </div>
           </div>
@@ -298,8 +324,8 @@ export default function ECommerce() {
           {/* Doughnut chart */}
           <div
             style={{
-              background: "#fff",
-              border: "1px solid #e2e8f0",
+              background: c.card,
+              border: `1px solid ${c.border}`,
               borderRadius: 16,
               padding: "20px 16px",
             }}
@@ -308,7 +334,7 @@ export default function ECommerce() {
               style={{
                 fontSize: 12,
                 fontWeight: 600,
-                color: "#94a3b8",
+                color: c.textMuted,
                 textTransform: "uppercase",
                 letterSpacing: "0.05em",
                 margin: "0 0 12px",
@@ -319,7 +345,7 @@ export default function ECommerce() {
             <Doughnut
               data={chartData}
               options={chartOptions}
-              plugins={[makeCenterTextPlugin(products.length)]}
+              plugins={[makeCenterTextPlugin(products.length, c.textPrimary)]}
             />
           </div>
         </div>
@@ -327,8 +353,8 @@ export default function ECommerce() {
         {/* ── Table card ── */}
         <div
           style={{
-            background: "#fff",
-            border: "1px solid #e2e8f0",
+            background: c.card,
+            border: `1px solid ${c.border}`,
             borderRadius: 16,
             overflow: "hidden",
           }}
@@ -340,10 +366,12 @@ export default function ECommerce() {
               justifyContent: "space-between",
               alignItems: "center",
               padding: "16px 20px",
-              borderBottom: "1px solid #f1f5f9",
+              borderBottom: `1px solid ${c.headerBorder}`,
             }}
           >
-            <span style={{ fontWeight: 600, fontSize: 15, color: "#0f172a" }}>
+            <span
+              style={{ fontWeight: 600, fontSize: 15, color: c.textPrimary }}
+            >
               Products
             </span>
             <input
@@ -351,11 +379,12 @@ export default function ECommerce() {
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search product…"
               style={{
-                border: "1px solid #e2e8f0",
+                border: `1px solid ${c.border}`,
                 borderRadius: 8,
                 padding: "7px 14px",
                 fontSize: 13,
-                color: "#0f172a",
+                color: c.textPrimary,
+                background: c.inputBg,
                 outline: "none",
                 fontFamily: "inherit",
                 width: 200,
@@ -372,7 +401,7 @@ export default function ECommerce() {
               }}
             >
               <thead>
-                <tr style={{ background: "#f8fafc" }}>
+                <tr style={{ background: c.rowAlt }}>
                   {[
                     "ID",
                     "Product Name",
@@ -387,7 +416,7 @@ export default function ECommerce() {
                         textAlign: "left",
                         fontWeight: 600,
                         fontSize: 12,
-                        color: "#94a3b8",
+                        color: c.textMuted,
                         textTransform: "uppercase",
                         letterSpacing: "0.05em",
                         whiteSpace: "nowrap",
@@ -403,22 +432,22 @@ export default function ECommerce() {
                   <tr
                     key={product.id}
                     style={{
-                      borderTop: "1px solid #f1f5f9",
-                      background: i % 2 === 0 ? "#fff" : "#fafafa",
+                      borderTop: `1px solid ${c.headerBorder}`,
+                      background: i % 2 === 0 ? c.card : c.rowAlt,
                       transition: "background 0.15s",
                     }}
                     onMouseEnter={(e) =>
-                      (e.currentTarget.style.background = "#f0fdf4")
+                      (e.currentTarget.style.background = c.rowHover)
                     }
                     onMouseLeave={(e) =>
                       (e.currentTarget.style.background =
-                        i % 2 === 0 ? "#fff" : "#fafafa")
+                        i % 2 === 0 ? c.card : c.rowAlt)
                     }
                   >
                     <td
                       style={{
                         padding: "12px 20px",
-                        color: "#94a3b8",
+                        color: c.textMuted,
                         fontWeight: 500,
                       }}
                     >
@@ -427,7 +456,7 @@ export default function ECommerce() {
                     <td
                       style={{
                         padding: "12px 20px",
-                        color: "#0f172a",
+                        color: c.textPrimary,
                         fontWeight: 500,
                       }}
                     >
@@ -436,14 +465,14 @@ export default function ECommerce() {
                     <td
                       style={{
                         padding: "12px 20px",
-                        color: "#334155",
+                        color: c.textSecondary,
                         fontVariantNumeric: "tabular-nums",
                       }}
                     >
                       ฿{product.price.toLocaleString()}
                     </td>
                     <td style={{ padding: "12px 20px" }}>
-                      <StockBadge stock={product.stock} />
+                      <StockBadge stock={product.stock} isDark={isDark} />
                     </td>
                     <td style={{ padding: "12px 20px" }}>
                       <div style={{ display: "flex", gap: 8 }}>
@@ -451,9 +480,9 @@ export default function ECommerce() {
                           style={{
                             padding: "5px 14px",
                             borderRadius: 7,
-                            border: "1px solid #e2e8f0",
-                            background: "#fff",
-                            color: "#334155",
+                            border: `1px solid ${c.border}`,
+                            background: c.inputBg,
+                            color: c.textSecondary,
                             fontSize: 12,
                             fontWeight: 600,
                             cursor: "pointer",
@@ -467,9 +496,11 @@ export default function ECommerce() {
                           style={{
                             padding: "5px 14px",
                             borderRadius: 7,
-                            border: "1px solid #fee2e2",
-                            background: "#fff5f5",
-                            color: "#dc2626",
+                            border: `1px solid ${
+                              isDark ? "#7f1d1d" : "#fee2e2"
+                            }`,
+                            background: isDark ? "#2a1212" : "#fff5f5",
+                            color: isDark ? "#f87171" : "#dc2626",
                             fontSize: 12,
                             fontWeight: 600,
                             cursor: "pointer",
@@ -489,7 +520,7 @@ export default function ECommerce() {
                       style={{
                         padding: "40px 20px",
                         textAlign: "center",
-                        color: "#94a3b8",
+                        color: c.textMuted,
                       }}
                     >
                       No products found
@@ -504,9 +535,9 @@ export default function ECommerce() {
           <div
             style={{
               padding: "12px 20px",
-              borderTop: "1px solid #f1f5f9",
+              borderTop: `1px solid ${c.headerBorder}`,
               fontSize: 13,
-              color: "#94a3b8",
+              color: c.textMuted,
             }}
           >
             Showing {filtered.length} of {products.length} products
