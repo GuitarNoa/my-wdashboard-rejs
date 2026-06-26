@@ -1,129 +1,197 @@
-import React, { useRef, useEffect, useState } from "react";
+// BubbleCharts.jsx
+import { useRef, useEffect, useState, useMemo } from "react";
 import DefaultLayout from "../../layouts/DefaultLayout";
+import { useTheme } from "../../context/ThemeContext";
 import {
   Chart as ChartJS,
   LinearScale,
   PointElement,
   Tooltip,
   Legend,
-  BubbleController, // ✅ เพิ่ม BubbleController
+  BubbleController,
 } from "chart.js";
 import { Chart } from "react-chartjs-2";
 import { faker } from "@faker-js/faker";
 
-// ✅ Register BubbleController ด้วย
 ChartJS.register(LinearScale, PointElement, Tooltip, Legend, BubbleController);
 
-const colors = ["red", "blue", "green", "orange", "purple", "teal"];
+// ─── CONSTANTS ───────────────────────────────────────────────
+const SERIES = [
+  {
+    label: "Product A",
+    flat: "rgba(239,68,68,0.65)",
+    hoverFlat: "rgba(239,68,68,0.9)",
+    gradientFrom: "rgba(239,68,68,0.85)",
+    gradientTo: "rgba(251,146,60,0.85)",
+  },
+  {
+    label: "Product B",
+    flat: "rgba(59,130,246,0.65)",
+    hoverFlat: "rgba(59,130,246,0.9)",
+    gradientFrom: "rgba(59,130,246,0.85)",
+    gradientTo: "rgba(34,211,238,0.85)",
+  },
+];
 
-function createGradient(ctx, area, color1, color2) {
-  const gradient = ctx.createLinearGradient(
+// ─── HELPERS ─────────────────────────────────────────────────
+const randomBubbles = () =>
+  Array.from({ length: 10 }, () => ({
+    x: faker.number.int({ min: 10, max: 90 }),
+    y: faker.number.int({ min: 10, max: 90 }),
+    r: faker.number.int({ min: 5, max: 18 }),
+  }));
+
+function makeGradient(ctx, area, from, to) {
+  const g = ctx.createLinearGradient(
     area.left,
     area.bottom,
     area.right,
-    area.top
+    area.top,
   );
-  gradient.addColorStop(0, color1);
-  gradient.addColorStop(1, color2);
-  return gradient;
+  g.addColorStop(0, from);
+  g.addColorStop(1, to);
+  return g;
 }
 
-function generateBubbleData() {
-  return Array.from({ length: 7 }).map(() => ({
-    x: faker.number.int({ min: 10, max: 100 }),
-    y: faker.number.int({ min: 10, max: 100 }),
-    r: faker.number.int({ min: 5, max: 15 }),
-  }));
+function buildOptions(dark) {
+  const gridColor = dark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.05)";
+  const tickColor = dark ? "#64748b" : "#94a3b8";
+  return {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        position: "top",
+        align: "end",
+        labels: {
+          color: tickColor,
+          boxWidth: 10,
+          boxHeight: 10,
+          borderRadius: 3,
+          useBorderRadius: true,
+          padding: 16,
+          font: { size: 12 },
+        },
+      },
+      tooltip: {
+        backgroundColor: dark ? "#0f172a" : "#1e293b",
+        titleColor: "#f1f5f9",
+        bodyColor: "#94a3b8",
+        padding: 10,
+        cornerRadius: 8,
+        callbacks: {
+          label: (ctx) =>
+            ` ${ctx.dataset.label}: (${ctx.raw.x}, ${ctx.raw.y}) — size ${ctx.raw.r}`,
+        },
+      },
+    },
+    scales: {
+      x: {
+        grid: { color: gridColor },
+        border: { color: "transparent" },
+        ticks: { color: tickColor, font: { size: 12 } },
+        // padding รอบขอบ ป้องกัน bubble ถูกตัด
+        min: 0,
+        max: 100,
+      },
+      y: {
+        grid: { color: gridColor },
+        border: { color: "transparent" },
+        ticks: { color: tickColor, font: { size: 12 } },
+        min: 0,
+        max: 100,
+      },
+    },
+  };
 }
 
+// ─── CARD ─────────────────────────────────────────────────────
+function ChartCard({ title, children }) {
+  return (
+    <div className="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl p-5">
+      <h2 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-4">
+        {title}
+      </h2>
+      <div style={{ height: 300 }}>{children}</div>
+    </div>
+  );
+}
+
+// ─── COMPONENT ───────────────────────────────────────────────
 export default function BubbleCharts() {
+  const { dark } = useTheme();
   const chartRef = useRef(null);
-  const [gradientData, setGradientData] = useState({ datasets: [] });
+  const [gradientDatasets, setGradientDatasets] = useState([]);
 
-  const normalData = {
-    datasets: [
-      {
-        label: "Bubble Dataset 1",
-        data: generateBubbleData(),
-        backgroundColor: colors[0] + "99",
-      },
-      {
-        label: "Bubble Dataset 2",
-        data: generateBubbleData(),
-        backgroundColor: colors[1] + "99",
-      },
-    ],
+  // generate ครั้งเดียว
+  const staticData = useMemo(() => SERIES.map(() => randomBubbles()), []);
+
+  const normalData = useMemo(
+    () => ({
+      datasets: SERIES.map((s, i) => ({
+        label: s.label,
+        data: staticData[i],
+        backgroundColor: s.flat,
+        hoverBackgroundColor: s.hoverFlat,
+        borderWidth: 0,
+      })),
+    }),
+    [staticData],
+  );
+
+  const buildGradientDatasets = () => {
+    const chart = chartRef.current;
+    if (!chart?.chartArea) return;
+    const { ctx, chartArea } = chart;
+
+    setGradientDatasets(
+      SERIES.map((s, i) => ({
+        label: s.label,
+        data: staticData[i],
+        backgroundColor: makeGradient(
+          ctx,
+          chartArea,
+          s.gradientFrom,
+          s.gradientTo,
+        ),
+        borderWidth: 0,
+      })),
+    );
   };
 
   useEffect(() => {
-    const chart = chartRef.current;
-    if (!chart) return;
-    const { ctx, chartArea } = chart;
-    if (!chartArea) return;
-
-    const newData = {
-      datasets: [
-        {
-          label: "Bubble Gradient 1",
-          data: generateBubbleData(),
-          backgroundColor: createGradient(ctx, chartArea, "red", "orange"),
-        },
-        {
-          label: "Bubble Gradient 2",
-          data: generateBubbleData(),
-          backgroundColor: createGradient(ctx, chartArea, "blue", "cyan"),
-        },
-      ],
-    };
-
-    setGradientData(newData);
-
-    const handleResize = () => {
-      if (!chart.chartArea) return;
-      setGradientData({
-        datasets: [
-          {
-            label: "Bubble Gradient 1",
-            data: generateBubbleData(),
-            backgroundColor: createGradient(
-              ctx,
-              chart.chartArea,
-              "red",
-              "orange"
-            ),
-          },
-          {
-            label: "Bubble Gradient 2",
-            data: generateBubbleData(),
-            backgroundColor: createGradient(
-              ctx,
-              chart.chartArea,
-              "blue",
-              "cyan"
-            ),
-          },
-        ],
-      });
-    };
-
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
+    buildGradientDatasets();
+    window.addEventListener("resize", buildGradientDatasets);
+    return () => window.removeEventListener("resize", buildGradientDatasets);
   }, []);
+
+  const gradientData = { datasets: gradientDatasets };
+  const options = buildOptions(dark);
 
   return (
     <DefaultLayout>
-      <div className="text-xl font-bold mb-4">Bubble Charts</div>
+      <div className="p-4 sm:p-6 space-y-6">
+        <div>
+          <h1 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
+            Bubble Charts
+          </h1>
+          <p className="text-sm text-gray-400 dark:text-gray-500 mt-1">
+            Bubble chart variants with flat and gradient fill
+          </p>
+        </div>
 
-      {/* Bubble Normal */}
-      <div className="mb-8">
-        <h2 className="font-semibold mb-2">Bubble - Normal</h2>
-        <Chart type="bubble" data={normalData} />
-      </div>
+        <ChartCard title="Normal fill">
+          <Chart type="bubble" data={normalData} options={options} />
+        </ChartCard>
 
-      {/* Bubble Gradient */}
-      <div>
-        <h2 className="font-semibold mb-2">Bubble - Gradient</h2>
-        <Chart ref={chartRef} type="bubble" data={gradientData} />
+        <ChartCard title="Gradient fill">
+          <Chart
+            ref={chartRef}
+            type="bubble"
+            data={gradientData}
+            options={options}
+          />
+        </ChartCard>
       </div>
     </DefaultLayout>
   );
