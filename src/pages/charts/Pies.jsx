@@ -1,100 +1,236 @@
-import React, { useRef, useEffect, useState } from "react";
+// PieCharts.jsx
+import { useRef, useEffect, useState, useMemo } from "react";
 import DefaultLayout from "../../layouts/DefaultLayout";
+import { useTheme } from "../../context/ThemeContext";
 import {
   Chart as ChartJS,
   ArcElement,
   Tooltip,
   Legend,
-  PieController, // ✅ เพิ่มตรงนี้
+  PieController,
 } from "chart.js";
 import { Chart } from "react-chartjs-2";
 import { faker } from "@faker-js/faker";
 
-// ✅ ต้อง Register PieController ด้วย
 ChartJS.register(ArcElement, Tooltip, Legend, PieController);
 
-const labels = ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"];
+// ─── CONSTANTS ───────────────────────────────────────────────
+const SEGMENTS = [
+  {
+    label: "Electronics",
+    flat: "rgba(59,130,246,0.75)",
+    from: "rgba(59,130,246,0.9)",
+    to: "rgba(34,211,238,0.9)",
+  },
+  {
+    label: "Clothing",
+    flat: "rgba(139,92,246,0.75)",
+    from: "rgba(139,92,246,0.9)",
+    to: "rgba(236,72,153,0.9)",
+  },
+  {
+    label: "Food",
+    flat: "rgba(251,146,60,0.75)",
+    from: "rgba(251,146,60,0.9)",
+    to: "rgba(251,191,36,0.9)",
+  },
+  {
+    label: "Books",
+    flat: "rgba(20,184,166,0.75)",
+    from: "rgba(20,184,166,0.9)",
+    to: "rgba(59,130,246,0.9)",
+  },
+  {
+    label: "Sports",
+    flat: "rgba(239,68,68,0.75)",
+    from: "rgba(239,68,68,0.9)",
+    to: "rgba(251,146,60,0.9)",
+  },
+  {
+    label: "Beauty",
+    flat: "rgba(251,113,133,0.75)",
+    from: "rgba(251,113,133,0.9)",
+    to: "rgba(139,92,246,0.9)",
+  },
+];
 
-const baseData = {
-  labels,
-  datasets: [
-    {
-      label: "Votes",
-      data: labels.map(() => faker.number.int({ min: 10, max: 100 })),
-      backgroundColor: [
-        "rgba(255, 99, 132, 0.7)",
-        "rgba(54, 162, 235, 0.7)",
-        "rgba(255, 206, 86, 0.7)",
-        "rgba(75, 192, 192, 0.7)",
-        "rgba(153, 102, 255, 0.7)",
-        "rgba(255, 159, 64, 0.7)",
-      ],
-      borderWidth: 1,
-    },
-  ],
-};
+const LABELS = SEGMENTS.map((s) => s.label);
+const TOTAL = (values) => values.reduce((a, b) => a + b, 0);
 
-function createGradient(ctx, area, color1, color2) {
-  const gradient = ctx.createLinearGradient(
+// ─── HELPERS ─────────────────────────────────────────────────
+function makeGradient(ctx, area, from, to) {
+  const g = ctx.createLinearGradient(
     area.left,
     area.top,
     area.right,
-    area.bottom
+    area.bottom,
   );
-  gradient.addColorStop(0, color1);
-  gradient.addColorStop(1, color2);
-  return gradient;
+  g.addColorStop(0, from);
+  g.addColorStop(1, to);
+  return g;
 }
 
+function buildOptions(dark, values) {
+  const total = TOTAL(values);
+  const textColor = dark ? "#94a3b8" : "#64748b";
+  return {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        position: "right",
+        labels: {
+          color: textColor,
+          boxWidth: 10,
+          boxHeight: 10,
+          borderRadius: 3,
+          useBorderRadius: true,
+          padding: 14,
+          font: { size: 12 },
+        },
+      },
+      tooltip: {
+        backgroundColor: dark ? "#0f172a" : "#1e293b",
+        titleColor: "#f1f5f9",
+        bodyColor: "#94a3b8",
+        padding: 10,
+        cornerRadius: 8,
+        callbacks: {
+          label: (ctx) => {
+            const pct = ((ctx.raw / total) * 100).toFixed(1);
+            return ` ${ctx.label}: ${ctx.raw} (${pct}%)`;
+          },
+        },
+      },
+    },
+  };
+}
+
+// ─── CUSTOM LEGEND (mobile) ───────────────────────────────────
+function CustomLegend({ values }) {
+  const total = TOTAL(values);
+  return (
+    <div className="grid grid-cols-2 gap-x-6 gap-y-2 mt-4 sm:hidden">
+      {SEGMENTS.map((s, i) => (
+        <div key={s.label} className="flex items-center gap-2">
+          <span
+            className="w-2.5 h-2.5 rounded-sm flex-shrink-0"
+            style={{ background: s.flat }}
+          />
+          <span className="text-xs text-gray-500 dark:text-gray-400 truncate">
+            {s.label}
+          </span>
+          <span className="text-xs font-medium text-gray-700 dark:text-gray-300 ml-auto">
+            {((values[i] / total) * 100).toFixed(0)}%
+          </span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// ─── CARD ─────────────────────────────────────────────────────
+function ChartCard({ title, children }) {
+  return (
+    <div className="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl p-5">
+      <h2 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-4">
+        {title}
+      </h2>
+      {children}
+    </div>
+  );
+}
+
+// ─── COMPONENT ───────────────────────────────────────────────
 export default function PieCharts() {
+  const { dark } = useTheme();
   const chartRef = useRef(null);
-  const [gradientData, setGradientData] = useState(baseData);
+  const [gradientBg, setGradientBg] = useState(SEGMENTS.map((s) => s.flat));
+
+  // generate ครั้งเดียว
+  const values = useMemo(
+    () => SEGMENTS.map(() => faker.number.int({ min: 10, max: 100 })),
+    [],
+  );
+
+  const buildGradients = () => {
+    const chart = chartRef.current;
+    if (!chart?.chartArea) return;
+    const { ctx, chartArea } = chart;
+    setGradientBg(
+      SEGMENTS.map((s) => makeGradient(ctx, chartArea, s.from, s.to)),
+    );
+  };
 
   useEffect(() => {
-    const updateGradient = () => {
-      const chartInstance = chartRef.current;
-      if (!chartInstance || !chartInstance.ctx || !chartInstance.chartArea)
-        return;
-
-      const { ctx, chartArea } = chartInstance;
-
-      const newData = {
-        ...baseData,
-        datasets: [
-          {
-            ...baseData.datasets[0],
-            backgroundColor: [
-              createGradient(ctx, chartArea, "red", "orange"),
-              createGradient(ctx, chartArea, "blue", "cyan"),
-              createGradient(ctx, chartArea, "yellow", "lime"),
-              createGradient(ctx, chartArea, "green", "teal"),
-              createGradient(ctx, chartArea, "purple", "pink"),
-              createGradient(ctx, chartArea, "orange", "gold"),
-            ],
-          },
-        ],
-      };
-
-      setGradientData(newData);
-    };
-
-    updateGradient();
-    window.addEventListener("resize", updateGradient);
-    return () => window.removeEventListener("resize", updateGradient);
+    buildGradients();
+    window.addEventListener("resize", buildGradients);
+    return () => window.removeEventListener("resize", buildGradients);
   }, []);
+
+  const baseDataset = {
+    label: "Sales",
+    data: values,
+    borderWidth: 0,
+    hoverOffset: 6,
+  };
+
+  const normalData = useMemo(
+    () => ({
+      labels: LABELS,
+      datasets: [
+        { ...baseDataset, backgroundColor: SEGMENTS.map((s) => s.flat) },
+      ],
+    }),
+    [values],
+  );
+
+  const gradientData = {
+    labels: LABELS,
+    datasets: [{ ...baseDataset, backgroundColor: gradientBg }],
+  };
+
+  const isMobile = window.innerWidth < 640;
+  const options = buildOptions(dark, values);
+  const mobileOptions = {
+    ...options,
+    plugins: { ...options.plugins, legend: { display: false } },
+  };
 
   return (
     <DefaultLayout>
-      <div className="text-xl font-bold mb-4">Pie Charts</div>
+      <div className="p-4 sm:p-6 space-y-6">
+        <div>
+          <h1 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
+            Pie Charts
+          </h1>
+          <p className="text-sm text-gray-400 dark:text-gray-500 mt-1">
+            Pie chart variants with flat and gradient fill
+          </p>
+        </div>
 
-      <div className="mb-8">
-        <h2 className="font-semibold mb-2">Pie Chart - Normal</h2>
-        <Chart type="pie" data={baseData} />
-      </div>
+        <ChartCard title="Normal fill">
+          <div style={{ height: 280 }}>
+            <Chart
+              type="pie"
+              data={normalData}
+              options={isMobile ? mobileOptions : options}
+            />
+          </div>
+          <CustomLegend values={values} />
+        </ChartCard>
 
-      <div>
-        <h2 className="font-semibold mb-2">Pie Chart - Gradient</h2>
-        <Chart ref={chartRef} type="pie" data={gradientData} />
+        <ChartCard title="Gradient fill">
+          <div style={{ height: 280 }}>
+            <Chart
+              ref={chartRef}
+              type="pie"
+              data={gradientData}
+              options={isMobile ? mobileOptions : options}
+            />
+          </div>
+          <CustomLegend values={values} />
+        </ChartCard>
       </div>
     </DefaultLayout>
   );
