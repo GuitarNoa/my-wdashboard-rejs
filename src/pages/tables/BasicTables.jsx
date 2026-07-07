@@ -10,7 +10,7 @@ export default function BasicTables() {
   ];
 
   return (
-    <DefaultLayout>
+    <main>
       <div className="container mx-auto p-6">
         <h1 className="text-3xl font-bold mb-6">Basic Tables</h1>
         <div className="overflow-x-auto">
@@ -87,6 +87,6 @@ export default function BasicTables() {
           </table>
         </div>
       </div>
-    </DefaultLayout>
+    </main>
   );
 }

@@ -1,6 +1,8 @@
 import "./index.css";
 import { useState, useEffect } from "react";
 import { Route, Routes, useLocation } from "react-router-dom";
+
+import DefaultLayout from "./layouts/DefaultLayout";
 //Dashborad
 import Dashborad from "./pages/Dashborad";
 import ECommerce from "./pages/ECommerce";
@@ -45,10 +47,10 @@ export default function App() {
   }, [pathname]);
 
   useEffect(() => {
-    setTimeout(() => setLoading(false), 1000);
+    const timer = setTimeout(() => setLoading(false), 1000);
+    return () => clearTimeout(timer);
   }, []);
 
-  // ✅ เพิ่มตรงนี้
   if (loading) {
     return (
       <div className="flex items-center justify-center h-screen">
@@ -58,8 +60,9 @@ export default function App() {
   }
 
   return (
-    <>
-      <Routes>
+    <Routes>
+      {/* Layout route: ทุก route ลูกจะ render ผ่าน <Outlet /> ใน DefaultLayout */}
+      <Route element={<DefaultLayout />}>
         {/* Page */}
         <Route index element={<Dashborad />} />
         <Route path="/ECommerce" element={<ECommerce />} />
@@ -86,17 +89,20 @@ export default function App() {
         <Route path="/charts/polararea" element={<PolarAreaChart />} />
         <Route path="/charts/radars" element={<RadarCharts />} />
         <Route path="/charts/scatter" element={<ScatterCharts />} />
-        {/* Pages */}
-        {/* Auth */}
-        <Route path="/auth/login" element={<Login />} />
-        <Route path="/auth/register" element={<Register />} />
         {/* Othen */}
         <Route path="/profile" element={<Profile />} />
         <Route path="/setting" element={<Setting />} />
-        <Route path="/error" element={<Error />} />
         <Route path="/pricing" element={<Pricing />} />
         <Route path="/faq" element={<FAQ />} />
-      </Routes>
-    </>
+      </Route>
+
+      {/* Auth: ไม่ควรมี Sidebar/Header ของ DefaultLayout ครอบ */}
+      <Route path="/auth/login" element={<Login />} />
+      <Route path="/auth/register" element={<Register />} />
+
+      {/* Error: แสดงแบบ standalone ไม่ต้องมี layout */}
+      <Route path="/error" element={<Error />} />
+      <Route path="*" element={<Error />} />
+    </Routes>
   );
 }

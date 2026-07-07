@@ -176,7 +176,7 @@ export default function LineCharts() {
   const options = buildOptions(dark);
 
   return (
-    <DefaultLayout>
+    <main>
       <div className="p-4 sm:p-6 space-y-6">
         <div>
           <h1 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
@@ -200,6 +200,6 @@ export default function LineCharts() {
           />
         </ChartCard>
       </div>
-    </DefaultLayout>
+    </main>
   );
 }

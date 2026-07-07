@@ -1,6 +1,5 @@
 // Dashboard.jsx
 import { useState, useMemo } from "react";
-import DefaultLayout from "../layouts/DefaultLayout";
 import { useTheme } from "../context/ThemeContext";
 import {
   Chart as ChartJS,
@@ -26,6 +25,7 @@ import {
 } from "@heroicons/react/24/outline";
 import { FaReact, FaVuejs, FaAngular } from "react-icons/fa";
 import { SiNextdotjs } from "react-icons/si";
+import MetreeUI from "../assets/Infostart.png";
 import StatisticsCard from "../components/StatisticsCard";
 
 ChartJS.register(
@@ -198,189 +198,186 @@ export default function Dashboard() {
   const barOptions = buildChartOptions(dark, "bar");
 
   return (
-    <DefaultLayout>
-      <main className="p-4 sm:p-6 space-y-6">
-        {/* Hero */}
-        <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-teal-500 via-cyan-500 to-emerald-500 p-6 sm:p-8">
-          <div className="pointer-events-none absolute -top-10 -right-10 w-48 h-48 rounded-full bg-white/10" />
-          <div className="pointer-events-none absolute -bottom-8 -left-8 w-32 h-32 rounded-full bg-white/10" />
-          <div className="relative z-10">
-            <p className="text-sm font-medium text-white/70 uppercase tracking-widest mb-1">
-              Welcome back
-            </p>
-            <h1 className="text-3xl sm:text-4xl font-bold text-white mb-6">
-              Overview
-            </h1>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              <StatisticsCard
-                icon={UsersIcon}
-                title="Today's Users"
-                value="1,234"
-              />
-              <StatisticsCard
-                icon={CurrencyDollarIcon}
-                title="Revenue"
-                value="$5,678"
-              />
-              <StatisticsCard
-                icon={UserPlusIcon}
-                title="New Clients"
-                value="2,000"
-              />
-              <StatisticsCard
-                icon={ShoppingCartIcon}
-                title="Sales"
-                value="2,000"
-              />
-            </div>
-          </div>
-        </div>
-
-        {/* Banner */}
-        <div className="overflow-hidden rounded-2xl bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 flex flex-col md:flex-row">
-          <div className="md:w-48 flex-shrink-0">
-            <img
-              className="h-40 w-full object-cover md:h-full"
-              src="src/assets/Logo-website-1.png"
-              alt="Company logo"
+    <main className="p-4 sm:p-6 space-y-6">
+      {/* Hero */}
+      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-teal-500 via-cyan-500 to-emerald-500 p-6 sm:p-8">
+        <div className="pointer-events-none absolute -top-10 -right-10 w-48 h-48 rounded-full bg-white/10" />
+        <div className="pointer-events-none absolute -bottom-8 -left-8 w-32 h-32 rounded-full bg-white/10" />
+        <div className="relative z-10">
+          <p className="text-sm font-medium text-white/70 uppercase tracking-widest mb-1">
+            Welcome back
+          </p>
+          <h1 className="text-3xl sm:text-4xl font-bold text-white mb-6">
+            Overview
+          </h1>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <StatisticsCard
+              icon={UsersIcon}
+              title="Today's Users"
+              value="1,234"
+            />
+            <StatisticsCard
+              icon={CurrencyDollarIcon}
+              title="Revenue"
+              value="$5,678"
+            />
+            <StatisticsCard
+              icon={UserPlusIcon}
+              title="New Clients"
+              value="2,000"
+            />
+            <StatisticsCard
+              icon={ShoppingCartIcon}
+              title="Sales"
+              value="2,000"
             />
           </div>
-          <div className="p-6 flex flex-col justify-center">
-            <span className="text-xs font-semibold uppercase tracking-widest text-teal-500 mb-1">
-              Company Retreats
-            </span>
-            <a
-              href="#"
-              className="text-lg font-semibold text-gray-800 dark:text-gray-100 hover:text-teal-600 dark:hover:text-teal-400 transition-colors leading-snug mb-2"
-            >
-              Incredible accommodation for your team
-            </a>
-            <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">
-              Looking to take your team away on a retreat to enjoy awesome food
-              and take in some sunshine? We have a list of places to do just
-              that.
-            </p>
-          </div>
         </div>
+      </div>
 
-        {/* Charts */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 p-5">
-            <div className="flex items-center justify-between mb-4">
-              <div>
-                <h3 className="font-semibold text-gray-800 dark:text-gray-100">
-                  Sales Overview
-                </h3>
-                <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5">
-                  Weekly revenue trend
-                </p>
-              </div>
-              <span className="text-xs text-teal-600 dark:text-teal-400 bg-teal-50 dark:bg-teal-900/30 ring-1 ring-teal-200 dark:ring-teal-800 px-2.5 py-1 rounded-full font-medium">
-                This Week
-              </span>
-            </div>
-            <Line data={lineData} options={lineOptions} />
-          </div>
-
-          <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 p-5">
-            <div className="flex items-center justify-between mb-4">
-              <div>
-                <h3 className="font-semibold text-gray-800 dark:text-gray-100">
-                  Top Categories
-                </h3>
-                <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5">
-                  Sales by product category
-                </p>
-              </div>
-              <span className="text-xs text-violet-600 dark:text-violet-400 bg-violet-50 dark:bg-violet-900/30 ring-1 ring-violet-200 dark:ring-violet-800 px-2.5 py-1 rounded-full font-medium">
-                This Month
-              </span>
-            </div>
-            <Bar data={barData} options={barOptions} />
-          </div>
+      {/* Banner */}
+      <div className="overflow-hidden rounded-2xl bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 flex flex-col md:flex-row">
+        <div className="md:w-48 flex-shrink-0">
+          <img
+            className="h-40 w-full object-cover md:h-full"
+            src={MetreeUI}
+            alt="Company logo"
+          />
         </div>
+        <div className="p-6 flex flex-col justify-center">
+          <span className="text-xs font-semibold uppercase tracking-widest text-teal-500 mb-1">
+            Company Retreats
+          </span>
+          <a
+            href="#"
+            className="text-lg font-semibold text-gray-800 dark:text-gray-100 hover:text-teal-600 dark:hover:text-teal-400 transition-colors leading-snug mb-2"
+          >
+            Incredible accommodation for your team
+          </a>
+          <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">
+            Looking to take your team away on a retreat to enjoy awesome food
+            and take in some sunshine? We have a list of places to do just that.
+          </p>
+        </div>
+      </div>
 
-        {/* Table */}
-        <div className="rounded-2xl border border-gray-100 dark:border-gray-700 overflow-hidden bg-white dark:bg-gray-800">
-          <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100 dark:border-gray-700">
-            <h3 className="font-semibold text-gray-800 dark:text-gray-100">
-              Projects
-            </h3>
-            <span className="text-xs text-gray-400 dark:text-gray-500">
-              {projects.length} total
+      {/* Charts */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 p-5">
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <h3 className="font-semibold text-gray-800 dark:text-gray-100">
+                Sales Overview
+              </h3>
+              <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5">
+                Weekly revenue trend
+              </p>
+            </div>
+            <span className="text-xs text-teal-600 dark:text-teal-400 bg-teal-50 dark:bg-teal-900/30 ring-1 ring-teal-200 dark:ring-teal-800 px-2.5 py-1 rounded-full font-medium">
+              This Week
             </span>
           </div>
+          <Line data={lineData} options={lineOptions} />
+        </div>
 
-          <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-100 dark:divide-gray-700 text-sm">
-              <thead className="bg-gray-50 dark:bg-gray-700/50">
-                <tr>
-                  {TABLE_HEADERS.map((h) => (
-                    <th
-                      key={h}
-                      className="px-5 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"
-                    >
-                      {h}
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-100 dark:divide-gray-700">
-                {projects.map((project) => (
-                  <tr
-                    key={project.id}
-                    className="hover:bg-gray-50/60 dark:hover:bg-gray-700/40 transition-colors duration-150"
+        <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 p-5">
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <h3 className="font-semibold text-gray-800 dark:text-gray-100">
+                Top Categories
+              </h3>
+              <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5">
+                Sales by product category
+              </p>
+            </div>
+            <span className="text-xs text-violet-600 dark:text-violet-400 bg-violet-50 dark:bg-violet-900/30 ring-1 ring-violet-200 dark:ring-violet-800 px-2.5 py-1 rounded-full font-medium">
+              This Month
+            </span>
+          </div>
+          <Bar data={barData} options={barOptions} />
+        </div>
+      </div>
+
+      {/* Table */}
+      <div className="rounded-2xl border border-gray-100 dark:border-gray-700 overflow-hidden bg-white dark:bg-gray-800">
+        <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100 dark:border-gray-700">
+          <h3 className="font-semibold text-gray-800 dark:text-gray-100">
+            Projects
+          </h3>
+          <span className="text-xs text-gray-400 dark:text-gray-500">
+            {projects.length} total
+          </span>
+        </div>
+
+        <div className="overflow-x-auto">
+          <table className="min-w-full divide-y divide-gray-100 dark:divide-gray-700 text-sm">
+            <thead className="bg-gray-50 dark:bg-gray-700/50">
+              <tr>
+                {TABLE_HEADERS.map((h) => (
+                  <th
+                    key={h}
+                    className="px-5 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"
                   >
-                    <td className="px-5 py-3.5 whitespace-nowrap font-medium text-gray-700 dark:text-gray-200">
-                      {project.website}
-                    </td>
-                    <td className="px-5 py-3.5 whitespace-nowrap">
-                      <span
-                        className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium ${getToolBadge(project.tool)}`}
-                      >
-                        {getToolIcon(project.tool)}
-                        {project.tool}
-                      </span>
-                    </td>
-                    <td className="px-5 py-3.5 whitespace-nowrap">
-                      <div className="flex items-center gap-3">
-                        <div className="w-28 bg-gray-100 dark:bg-gray-700 rounded-full h-1.5 overflow-hidden">
-                          <div
-                            className={`h-full rounded-full ${getProgressColor(project.tool)}`}
-                            style={{ width: project.process }}
-                          />
-                        </div>
-                        <span className="text-xs text-gray-500 dark:text-gray-400 w-8 text-right">
-                          {project.process}
-                        </span>
-                      </div>
-                    </td>
-                    <td className="px-5 py-3.5 whitespace-nowrap">
-                      <div className="flex items-center gap-2">
-                        <button
-                          type="button"
-                          title="Edit"
-                          className="p-1.5 rounded-lg text-gray-400 hover:text-sky-600 hover:bg-sky-50 dark:hover:bg-sky-900/30 transition-colors"
-                        >
-                          <PencilSquareIcon className="w-4 h-4" />
-                        </button>
-                        <button
-                          type="button"
-                          title="Delete"
-                          onClick={() => handleDelete(project.id)}
-                          className="p-1.5 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 transition-colors"
-                        >
-                          <TrashIcon className="w-4 h-4" />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
+                    {h}
+                  </th>
                 ))}
-              </tbody>
-            </table>
-          </div>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-100 dark:divide-gray-700">
+              {projects.map((project) => (
+                <tr
+                  key={project.id}
+                  className="hover:bg-gray-50/60 dark:hover:bg-gray-700/40 transition-colors duration-150"
+                >
+                  <td className="px-5 py-3.5 whitespace-nowrap font-medium text-gray-700 dark:text-gray-200">
+                    {project.website}
+                  </td>
+                  <td className="px-5 py-3.5 whitespace-nowrap">
+                    <span
+                      className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium ${getToolBadge(project.tool)}`}
+                    >
+                      {getToolIcon(project.tool)}
+                      {project.tool}
+                    </span>
+                  </td>
+                  <td className="px-5 py-3.5 whitespace-nowrap">
+                    <div className="flex items-center gap-3">
+                      <div className="w-28 bg-gray-100 dark:bg-gray-700 rounded-full h-1.5 overflow-hidden">
+                        <div
+                          className={`h-full rounded-full ${getProgressColor(project.tool)}`}
+                          style={{ width: project.process }}
+                        />
+                      </div>
+                      <span className="text-xs text-gray-500 dark:text-gray-400 w-8 text-right">
+                        {project.process}
+                      </span>
+                    </div>
+                  </td>
+                  <td className="px-5 py-3.5 whitespace-nowrap">
+                    <div className="flex items-center gap-2">
+                      <button
+                        type="button"
+                        title="Edit"
+                        className="p-1.5 rounded-lg text-gray-400 hover:text-sky-600 hover:bg-sky-50 dark:hover:bg-sky-900/30 transition-colors"
+                      >
+                        <PencilSquareIcon className="w-4 h-4" />
+                      </button>
+                      <button
+                        type="button"
+                        title="Delete"
+                        onClick={() => handleDelete(project.id)}
+                        className="p-1.5 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 transition-colors"
+                      >
+                        <TrashIcon className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
-      </main>
-    </DefaultLayout>
+      </div>
+    </main>
   );
 }

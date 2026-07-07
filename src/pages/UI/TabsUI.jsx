@@ -1,6 +1,5 @@
 "use client";
 import React, { useState } from "react";
-import DefaultLayout from "../../layouts/DefaultLayout";
 
 const tabs = [
   { id: "users", label: "Users" },
@@ -12,7 +11,7 @@ export default function TabsUI() {
   const [activeTab, setActiveTab] = useState("users");
 
   return (
-    <DefaultLayout>
+    <main>
       <div className="w-full max-w-2xl mx-auto mt-10">
         {/* Tab Buttons */}
         <div className="flex border-b border-gray-200 rounded-t-xl overflow-hidden">
@@ -50,6 +49,6 @@ export default function TabsUI() {
           )}
         </div>
       </div>
-    </DefaultLayout>
+    </main>
   );
 }

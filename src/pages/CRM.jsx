@@ -1,6 +1,5 @@
 // CRM.jsx
 import { useState } from "react";
-import DefaultLayout from "../layouts/DefaultLayout";
 
 const EMPTY_FORM = { name: "", email: "", phone: "", status: "Active" };
 
@@ -125,7 +124,7 @@ export default function CRM() {
   const labelCls = "block text-xs font-medium text-gray-600 mb-1";
 
   return (
-    <DefaultLayout>
+    <main>
       <div className="p-6 max-w-5xl mx-auto">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
@@ -323,6 +322,6 @@ export default function CRM() {
           </div>
         </Modal>
       )}
-    </DefaultLayout>
+    </main>
   );
 }

@@ -1,5 +1,4 @@
 import React from "react";
-import DefaultLayout from "../../layouts/DefaultLayout";
 
 export default function CardsUI() {
   const cards = [
@@ -36,7 +35,7 @@ export default function CardsUI() {
   ];
 
   return (
-    <DefaultLayout>
+    <main>
       <div className="container mx-auto p-6">
         <h1 className="text-3xl font-bold mb-6">Cards UI</h1>
 
@@ -81,6 +80,6 @@ export default function CardsUI() {
           ))}
         </div>
       </div>
-    </DefaultLayout>
+    </main>
   );
 }

@@ -1,5 +1,4 @@
 import React from "react";
-import DefaultLayout from "../layouts/DefaultLayout";
 
 export default function InvoicePricing() {
   const plans = [
@@ -27,7 +26,7 @@ export default function InvoicePricing() {
   ];
 
   return (
-    <DefaultLayout>
+    <main>
       <div className="container mx-auto p-6">
         <h1 className="text-3xl font-bold mb-6">Pricing Plans</h1>
 
@@ -81,6 +80,6 @@ export default function InvoicePricing() {
           ))}
         </div>
       </div>
-    </DefaultLayout>
+    </main>
   );
 }

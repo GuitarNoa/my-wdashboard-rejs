@@ -1,9 +1,8 @@
 import React from "react";
-import DefaultLayout from "../layouts/DefaultLayout";
 
 export default function Profile() {
   return (
-    <DefaultLayout>
+    <main>
       <div className="container mx-auto px-4 mt-8">
         {/* Header */}
         <div className="relative h-80 bg-gradient-to-t from-green-400 to-cyan-400 rounded-xl">
@@ -63,6 +62,6 @@ export default function Profile() {
           </div>
         </div>
       </div>
-    </DefaultLayout>
+    </main>
   );
 }

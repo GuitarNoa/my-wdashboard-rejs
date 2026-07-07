@@ -1,10 +1,9 @@
 import React from "react";
-import DefaultLayout from "../../layouts/DefaultLayout";
 import { FiCheck, FiX, FiAlertTriangle } from "react-icons/fi";
 
 export default function BadgesUI() {
   return (
-    <DefaultLayout>
+    <main>
       <div className="container mx-auto p-6">
         <h1 className="text-3xl font-bold mb-6">Badges UI</h1>
         <p className="mb-4 text-gray-600">
@@ -62,6 +61,6 @@ export default function BadgesUI() {
           </div>
         </div>
       </div>
-    </DefaultLayout>
+    </main>
   );
 }

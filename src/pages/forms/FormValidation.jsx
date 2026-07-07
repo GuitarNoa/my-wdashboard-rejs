@@ -47,7 +47,7 @@ export default function FormValidation() {
   };
 
   return (
-    <DefaultLayout>
+    <main>
       <div className="container mx-auto p-6">
         <h1 className="text-3xl font-bold mb-6">Form Validation</h1>
         <form className="space-y-6" onSubmit={handleSubmit} noValidate>
@@ -108,6 +108,6 @@ export default function FormValidation() {
           </button>
         </form>
       </div>
-    </DefaultLayout>
+    </main>
   );
 }

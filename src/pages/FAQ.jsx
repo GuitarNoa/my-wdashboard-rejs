@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import DefaultLayout from "../layouts/DefaultLayout";
+
 
 const faqs = [
   {
@@ -27,7 +27,7 @@ export default function FAQ() {
   };
 
   return (
-    <DefaultLayout>
+    <main>
       <div className="container mx-auto p-6 max-w-3xl">
         <h1 className="text-3xl font-bold mb-6">Frequently Asked Questions</h1>
 
@@ -55,6 +55,6 @@ export default function FAQ() {
           ))}
         </div>
       </div>
-    </DefaultLayout>
+    </main>
   );
 }

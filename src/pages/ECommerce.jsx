@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import DefaultLayout from "../layouts/DefaultLayout";
 import { Doughnut } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { useTheme } from "../context/ThemeContext";
@@ -221,7 +220,7 @@ export default function ECommerce() {
     setProducts((prev) => prev.filter((p) => p.id !== id));
 
   return (
-    <DefaultLayout>
+    <main>
       {/* Google Font */}
       <style>{`@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap');`}</style>
 
@@ -544,6 +543,6 @@ export default function ECommerce() {
           </div>
         </div>
       </div>
-    </DefaultLayout>
+  </main>
   );
 }

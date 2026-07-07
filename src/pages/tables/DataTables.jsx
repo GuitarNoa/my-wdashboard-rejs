@@ -67,7 +67,7 @@ export default function DataTables() {
   };
 
   return (
-    <DefaultLayout>
+    <main>
       <div className="container mx-auto p-6">
         <h1 className="text-3xl font-bold mb-6">DataTables</h1>
 
@@ -164,6 +164,6 @@ export default function DataTables() {
           </button>
         </div>
       </div>
-    </DefaultLayout>
+    </main>
   );
 }

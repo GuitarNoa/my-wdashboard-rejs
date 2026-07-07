@@ -1,16 +1,20 @@
 // DefaultLayout.jsx
 import { useState, useEffect } from "react";
+import { Outlet } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
 
 const BREAKPOINT = 768; // md — iPad portrait ถือเป็น mobile, landscape ถือเป็น desktop
 
-export default function DefaultLayout({ children }) {
+export default function DefaultLayout() {
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [isDesktop, setIsDesktop] = useState(
+    () => typeof window !== "undefined" && window.innerWidth >= BREAKPOINT,
+  );
 
   const toggleSidebar = () => {
-    if (window.innerWidth < BREAKPOINT) {
+    if (!isDesktop) {
       setMobileOpen((v) => !v);
     } else {
       setCollapsed((v) => !v);
@@ -19,14 +23,16 @@ export default function DefaultLayout({ children }) {
 
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth >= BREAKPOINT) setMobileOpen(false);
+      const desktop = window.innerWidth >= BREAKPOINT;
+      setIsDesktop(desktop);
+      if (desktop) setMobileOpen(false);
     };
+    handleResize(); // sync ค่าตอน mount ด้วย (กัน mismatch ถ้า render แรกยังไม่มี window)
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const isSidebarOpen =
-    window.innerWidth < BREAKPOINT ? mobileOpen : !collapsed;
+  const isSidebarOpen = isDesktop ? !collapsed : mobileOpen;
 
   return (
     <div className="flex h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 overflow-hidden">
@@ -54,7 +60,7 @@ export default function DefaultLayout({ children }) {
       <div className="flex flex-col flex-1 min-w-0 overflow-hidden">
         <Header onToggleSidebar={toggleSidebar} isSidebarOpen={isSidebarOpen} />
         <div className="flex-1 overflow-y-auto bg-gray-50 dark:bg-gray-900">
-          {children}
+          <Outlet />
         </div>
       </div>
     </div>

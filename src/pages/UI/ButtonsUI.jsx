@@ -1,8 +1,6 @@
 // ButtonShowcase.jsx
-import DefaultLayout from "../../layouts/DefaultLayout";
 import { HeartIcon, ShoppingCartIcon } from "@heroicons/react/16/solid";
 
-// Spinner แยกออกมาใช้ซ้ำได้
 function Spinner({ className = "h-4 w-4" }) {
   return (
     <svg
@@ -29,7 +27,6 @@ function Spinner({ className = "h-4 w-4" }) {
   );
 }
 
-// Section wrapper ลด markup ซ้ำ
 function Section({ title, children }) {
   return (
     <section className="mb-10">
@@ -43,7 +40,7 @@ function Section({ title, children }) {
 
 export default function ButtonShowcase() {
   return (
-    <DefaultLayout>
+    <main>
       <div className="p-6 max-w-3xl">
         <div className="mb-8">
           <h1 className="text-xl font-semibold text-gray-900">
@@ -181,6 +178,6 @@ export default function ButtonShowcase() {
           </button>
         </Section>
       </div>
-    </DefaultLayout>
+    </main>
   );
 }

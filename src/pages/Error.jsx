@@ -1,6 +1,5 @@
 import React from "react";
 import { useNavigate } from "react-router-dom"; // สำหรับ React Router
-import DefaultLayout from "../layouts/DefaultLayout";
 
 export default function Error() {
   const navigate = useNavigate();
