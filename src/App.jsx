@@ -53,8 +53,17 @@ export default function App() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-screen">
-        <h1 className="text-xl">Loading...</h1>
+      <div className="flex h-screen flex-col items-center justify-center gap-4 bg-[#f0f7f8]">
+        <div className="relative h-14 w-14">
+          <div className="absolute inset-0 animate-spin rounded-full border-4 border-[rgba(0,181,200,0.15)] border-t-[#00b5c8]" />
+          <div
+            className="absolute inset-0 animate-spin rounded-full border-4 border-transparent border-b-[#1a6bb5]"
+            style={{ animationDuration: "1.2s", animationDirection: "reverse" }}
+          />
+        </div>
+        <p className="text-sm font-medium tracking-wide text-[#2a5060]">
+          กำลังโหลดข้อมูล...
+        </p>
       </div>
     );
   }
