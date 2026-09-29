@@ -49,10 +49,11 @@ export default function DataTables() {
   }, [search, sortedUsers]);
 
   // Pagination
-  const totalPages = Math.ceil(filteredUsers.length / pageSize);
+  const totalPages = Math.max(1, Math.ceil(filteredUsers.length / pageSize));
+  const page = Math.min(currentPage, totalPages);
   const paginatedUsers = filteredUsers.slice(
-    (currentPage - 1) * pageSize,
-    currentPage * pageSize
+    (page - 1) * pageSize,
+    page * pageSize
   );
 
   const requestSort = (key) => {
@@ -64,6 +65,7 @@ export default function DataTables() {
 
   const handleDelete = (id) => {
     setUsers(users.filter((u) => u.id !== id));
+    setCurrentPage(1);
   };
 
   return (
@@ -77,7 +79,8 @@ export default function DataTables() {
             type="text"
             placeholder="Search..."
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            aria-label="Search users"
+            onChange={(e) => { setSearch(e.target.value); setCurrentPage(1); }}
             className="border border-gray-300 px-3 py-2 rounded w-full md:w-1/3 focus:outline-none focus:ring-2 focus:ring-blue-400"
           />
         </div>
@@ -105,6 +108,7 @@ export default function DataTables() {
               </tr>
             </thead>
             <tbody>
+              {paginatedUsers.length === 0 && <tr><td colSpan={5} className="p-8 text-center">No users found. Try another search.</td></tr>}
               {paginatedUsers.map((user, index) => (
                 <tr
                   key={user.id}
@@ -119,9 +123,6 @@ export default function DataTables() {
                   <td className="py-3 px-6">{user.email}</td>
                   <td className="py-3 px-6">{user.role}</td>
                   <td className="py-3 px-6 space-x-2">
-                    <button className="text-blue-500 hover:underline">
-                      Edit
-                    </button>
                     <button
                       className="text-red-500 hover:underline"
                       onClick={() => handleDelete(user.id)}
@@ -138,10 +139,10 @@ export default function DataTables() {
         {/* Pagination */}
         <div className="flex justify-between mt-4">
           <button
-            disabled={currentPage === 1}
-            onClick={() => setCurrentPage(currentPage - 1)}
+            disabled={page === 1}
+            onClick={() => setCurrentPage(page - 1)}
             className={`px-4 py-2 rounded ${
-              currentPage === 1
+              page === 1
                 ? "bg-gray-200 cursor-not-allowed"
                 : "bg-blue-500 text-white hover:bg-blue-600"
             }`}
@@ -149,13 +150,13 @@ export default function DataTables() {
             Previous
           </button>
           <span className="self-center">
-            Page {currentPage} of {totalPages}
+            Page {page} of {totalPages}
           </span>
           <button
-            disabled={currentPage === totalPages}
-            onClick={() => setCurrentPage(currentPage + 1)}
+            disabled={page === totalPages}
+            onClick={() => setCurrentPage(page + 1)}
             className={`px-4 py-2 rounded ${
-              currentPage === totalPages
+              page === totalPages
                 ? "bg-gray-200 cursor-not-allowed"
                 : "bg-blue-500 text-white hover:bg-blue-600"
             }`}

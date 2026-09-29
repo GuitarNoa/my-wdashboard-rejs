@@ -26,8 +26,7 @@ export default function FormElements() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(formData);
-    alert("Form submitted! Check console for data.");
+    alert("Demo form validated. No data was sent.");
   };
 
   return (

@@ -38,8 +38,7 @@ export default function FormWizard() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    alert("Form submitted successfully!");
-    console.log(formData);
+    alert("Demo form validated. No data was sent.");
   };
 
   return (

@@ -6,6 +6,7 @@ export default function SettingUI() {
     name: "John Doe",
     email: "john@example.com",
     password: "",
+    confirmPassword: "",
     notifications: true,
   });
 
@@ -19,8 +20,11 @@ export default function SettingUI() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    alert("Settings saved successfully!");
-    console.log(formData);
+    if (formData.password !== formData.confirmPassword) {
+      alert("Passwords do not match.");
+      return;
+    }
+    alert("Demo settings validated. Changes are not saved to a server.");
   };
 
   return (
@@ -80,6 +84,8 @@ export default function SettingUI() {
                 <input
                   type="password"
                   name="confirmPassword"
+                  value={formData.confirmPassword}
+                  onChange={handleChange}
                   placeholder="••••••••"
                   className="w-full border border-gray-300 px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-green-400"
                 />

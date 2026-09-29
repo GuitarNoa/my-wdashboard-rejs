@@ -39,8 +39,7 @@ export default function FormValidation() {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (validate()) {
-      alert("Form submitted successfully!");
-      console.log(formData);
+      alert("Demo form validated. No data was sent.");
       setFormData({ name: "", email: "", password: "" });
       setErrors({});
     }

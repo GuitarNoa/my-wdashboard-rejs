@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import {
   ChartPieIcon,
   UserCircleIcon,
@@ -103,6 +103,8 @@ function MenuDropdown({ menu, isExpanded, isOpen, onToggle }) {
   return (
     <div>
       <button
+        aria-label={label}
+        aria-expanded={isExpanded && isOpen}
         onClick={() => onToggle(key)}
         title={!isExpanded ? label : undefined}
         className={`flex items-center gap-2 px-3 py-2 rounded-lg w-full transition
@@ -118,7 +120,7 @@ function MenuDropdown({ menu, isExpanded, isOpen, onToggle }) {
         )}
       </button>
 
-      {isExpanded && (
+      {isExpanded && isOpen && (
         <div
           className={`overflow-hidden transition-all duration-300 ${
             isOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
@@ -144,7 +146,8 @@ function MenuDropdown({ menu, isExpanded, isOpen, onToggle }) {
   );
 }
 
-function SingleLink({ to, label, icon: Icon, isExpanded }) {
+function SingleLink({ to, label, icon, isExpanded }) {
+  const Icon = icon;
   return (
     <NavLink
       to={to}
@@ -163,20 +166,20 @@ function SingleLink({ to, label, icon: Icon, isExpanded }) {
 
 // ─── Main component ────────────────────────────────────────────────────────
 
-export default function Sidebar({ collapsed = false }) {
-  const [openMenu, setOpenMenu] = useState(null);
+export default function Sidebar({ collapsed = false, onNavigate }) {
+  const { pathname } = useLocation();
+  const [openMenu, setOpenMenu] = useState(() => MENUS.find(menu => menu.children.some(child => child.to.toLowerCase() === pathname.toLowerCase()))?.key ?? null);
   const [isHovered, setIsHovered] = useState(false);
 
   const isExpanded = !collapsed || isHovered;
 
   const toggleMenu = (key) => {
-    if (!isExpanded) return;
+    if (!isExpanded) setIsHovered(true);
     setOpenMenu((prev) => (prev === key ? null : key));
   };
 
   const handleMouseLeave = () => {
     setIsHovered(false);
-    setOpenMenu(null);
   };
 
   return (
@@ -197,7 +200,7 @@ export default function Sidebar({ collapsed = false }) {
           />
         </div>
 
-        <nav className="space-y-1 flex-1">
+        <nav aria-label="Main navigation" onClick={(event) => { if (event.target.closest("a")) onNavigate?.(); }} className="space-y-1 flex-1">
           {/* Dropdown menus */}
           {MENUS.map((menu) => (
             <MenuDropdown

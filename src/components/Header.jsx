@@ -8,12 +8,27 @@ import {
   MoonIcon,
 } from "@heroicons/react/24/outline";
 import { useTheme } from "../context/ThemeContext";
+import { Link } from "react-router-dom";
 
 function SearchInput({ autoFocus = false, className = "" }) {
+  const [query, setQuery] = useState("");
+  const pages = [
+    ["Overview", "/"], ["eCommerce", "/ECommerce"], ["CRM", "/CRM"],
+    ["DataTables", "/tables/datatable"], ["Basic Tables", "/tables/basictable"],
+    ["Profile", "/profile"], ["Settings", "/setting"], ["Pricing", "/pricing"], ["FAQ", "/faq"],
+    ...["Buttons", "Badges", "Cards", "Tabs"].map(name => [name, `/ui/${name.toLowerCase()}UI`]),
+    ...["Elements", "Validation", "Wizard"].map(name => [`Form ${name}`, `/forms/form${name.toLowerCase()}`]),
+    ...["Areas", "Bars", "Bubbles", "Donuts", "Lines", "Pies", "PolarArea", "Radars", "Scatter"].map(name => [`${name} Chart`, `/charts/${name.toLowerCase()}`]),
+  ];
+  const matches = pages.filter(([name]) => name.toLowerCase().includes(query.trim().toLowerCase()));
   return (
+    <div className={`relative w-full ${className}`} onKeyDown={(event) => { if (event.key === "Escape") setQuery(""); }}>
     <input
-      type="text"
-      placeholder="Search..."
+      type="search"
+      aria-label="Find a page"
+      placeholder="Find a page..."
+      value={query}
+      onChange={(event) => setQuery(event.target.value)}
       autoFocus={autoFocus}
       className={`w-full px-4 py-2 border border-gray-200 dark:border-gray-700
         bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100
@@ -21,6 +36,11 @@ function SearchInput({ autoFocus = false, className = "" }) {
         rounded-lg text-sm focus:outline-none focus:ring-2
         focus:ring-blue-200 dark:focus:ring-blue-800 transition ${className}`}
     />
+    {query.trim() && <ul className="absolute left-0 right-0 top-full z-50 mt-2 max-h-72 overflow-y-auto rounded-lg border border-gray-200 bg-white p-2 shadow-lg dark:border-gray-700 dark:bg-gray-800">
+      {matches.map(([name, path]) => <li key={path}><Link to={path} onClick={() => setQuery("")} className="block rounded px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-700">{name}</Link></li>)}
+      {matches.length === 0 && <li role="status" className="px-3 py-2">No matching pages.</li>}
+    </ul>}
+    </div>
   );
 }
 
@@ -50,6 +70,8 @@ export default function Header({ onToggleSidebar, isSidebarOpen }) {
           onClick={onToggleSidebar}
           className="p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition flex-shrink-0"
           aria-label={isSidebarOpen ? "Close sidebar" : "Open sidebar"}
+          aria-expanded={isSidebarOpen}
+          aria-controls="sidebar"
         >
           {isSidebarOpen ? (
             <XMarkIcon className="w-6 h-6 text-gray-700 dark:text-gray-300" />
@@ -96,13 +118,13 @@ export default function Header({ onToggleSidebar, isSidebarOpen }) {
               <MagnifyingGlassIcon className="w-5 h-5 text-gray-600 dark:text-gray-300" />
             )}
           </button>
-          <a
-            href="/auth/login"
+          <Link
+            to="/auth/login"
             className="text-sm font-medium text-gray-700 dark:text-gray-300
               hover:text-black dark:hover:text-white transition px-2 py-1"
           >
             Sign In
-          </a>
+          </Link>
         </div>
       </div>
 
