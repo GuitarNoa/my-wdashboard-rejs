@@ -8,21 +8,16 @@ import {
   MoonIcon,
 } from "@heroicons/react/24/outline";
 import { useTheme } from "../context/ThemeContext";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+
+import { PAGES } from "../navigation";
 
 function SearchInput({ autoFocus = false, className = "" }) {
   const [query, setQuery] = useState("");
-  const pages = [
-    ["Overview", "/"], ["eCommerce", "/ECommerce"], ["CRM", "/CRM"],
-    ["DataTables", "/tables/datatable"], ["Basic Tables", "/tables/basictable"],
-    ["Profile", "/profile"], ["Settings", "/setting"], ["Pricing", "/pricing"], ["FAQ", "/faq"],
-    ...["Buttons", "Badges", "Cards", "Tabs"].map(name => [name, `/ui/${name.toLowerCase()}UI`]),
-    ...["Elements", "Validation", "Wizard"].map(name => [`Form ${name}`, `/forms/form${name.toLowerCase()}`]),
-    ...["Areas", "Bars", "Bubbles", "Donuts", "Lines", "Pies", "PolarArea", "Radars", "Scatter"].map(name => [`${name} Chart`, `/charts/${name.toLowerCase()}`]),
-  ];
+  const pages = PAGES.map(page => [page.label, page.to]);
   const matches = pages.filter(([name]) => name.toLowerCase().includes(query.trim().toLowerCase()));
   return (
-    <div className={`relative w-full ${className}`} onKeyDown={(event) => { if (event.key === "Escape") setQuery(""); }}>
+    <div className={`relative w-full ${className}`} onBlur={event => { if (!event.currentTarget.contains(event.relatedTarget)) setQuery(""); }} onKeyDown={(event) => { if (event.key === "Escape") setQuery(""); }}>
     <input
       type="search"
       aria-label="Find a page"
@@ -45,8 +40,15 @@ function SearchInput({ autoFocus = false, className = "" }) {
 }
 
 export default function Header({ onToggleSidebar, isSidebarOpen }) {
+  const { pathname } = useLocation();
+  const title = PAGES.find(page => page.to.toLowerCase() === pathname.toLowerCase())?.label || "Workspace";
   const { dark, toggle } = useTheme();
   const [showSearch, setShowSearch] = useState(false);
+
+  useEffect(() => {
+    setShowSearch(false);
+    document.title = title + " · Cyanova";
+  }, [pathname, title]);
 
   useEffect(() => {
     const mq = window.matchMedia("(min-width: 768px)");
@@ -81,12 +83,12 @@ export default function Header({ onToggleSidebar, isSidebarOpen }) {
         </button>
 
         <span className="hidden sm:block text-sm text-gray-500 dark:text-gray-400 flex-shrink-0">
-          Dashboard
+          {title}
         </span>
 
         {/* Search — desktop */}
         <div className="hidden md:flex flex-1 justify-center px-4">
-          <SearchInput className="max-w-md" />
+          <SearchInput key={pathname} className="max-w-md" />
         </div>
 
         <div className="flex items-center gap-2 flex-shrink-0">
@@ -119,11 +121,11 @@ export default function Header({ onToggleSidebar, isSidebarOpen }) {
             )}
           </button>
           <Link
-            to="/auth/login"
+            to="/profile"
             className="text-sm font-medium text-gray-700 dark:text-gray-300
               hover:text-black dark:hover:text-white transition px-2 py-1"
           >
-            Sign In
+            My profile
           </Link>
         </div>
       </div>

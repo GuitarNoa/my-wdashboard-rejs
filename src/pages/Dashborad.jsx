@@ -14,18 +14,18 @@ import {
   PointElement,
 } from "chart.js";
 import { Line, Bar } from "react-chartjs-2";
-import { faker } from "@faker-js/faker";
+import { Link } from "react-router-dom";
 import {
   CurrencyDollarIcon,
   ShoppingCartIcon,
   UsersIcon,
   UserPlusIcon,
-  PencilSquareIcon,
+
   TrashIcon,
 } from "@heroicons/react/24/outline";
 import { FaReact, FaVuejs, FaAngular } from "react-icons/fa";
 import { SiNextdotjs } from "react-icons/si";
-import MetreeUI from "../assets/Infostart.png";
+
 import StatisticsCard from "../components/StatisticsCard";
 
 ChartJS.register(
@@ -126,9 +126,7 @@ export default function Dashboard() {
       datasets: [
         {
           label: "Revenue",
-          data: Array.from({ length: 7 }, () =>
-            faker.number.int({ min: 100, max: 1000 }),
-          ),
+          data: [420, 680, 540, 820, 610, 940, 780],
           borderColor: "#10b981",
           backgroundColor: "rgba(16,185,129,0.08)",
           fill: true,
@@ -149,9 +147,7 @@ export default function Dashboard() {
       datasets: [
         {
           label: "Sales",
-          data: Array.from({ length: 6 }, () =>
-            faker.number.int({ min: 200, max: 1200 }),
-          ),
+          data: [1080, 820, 610, 430, 760, 520],
           backgroundColor: [
             "rgba(20,184,166,0.85)",
             "rgba(139,92,246,0.85)",
@@ -185,8 +181,11 @@ export default function Dashboard() {
     { id: 7, website: "Admin Dashboard", tool: "Angular", process: "15%" },
   ]);
 
-  const handleDelete = (id) =>
-    setProjects((prev) => prev.filter((p) => p.id !== id));
+  const [deleted, setDeleted] = useState(null);
+  const handleDelete = (id) => {
+    setDeleted(projects.find(project => project.id === id));
+    setProjects(prev => prev.filter(project => project.id !== id));
+  };
 
   const getToolIcon = (tool) => TOOL_ICONS[tool] || null;
   const getProgressColor = (tool) => TOOL_COLORS[tool] || TOOL_COLORS.default;
@@ -200,16 +199,17 @@ export default function Dashboard() {
   return (
     <main className="p-4 sm:p-6 space-y-6">
       {/* Hero */}
-      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-teal-500 via-cyan-500 to-emerald-500 p-6 sm:p-8">
+      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-slate-900 via-teal-950 to-teal-800 p-6 sm:p-8">
         <div className="pointer-events-none absolute -top-10 -right-10 w-48 h-48 rounded-full bg-white/10" />
         <div className="pointer-events-none absolute -bottom-8 -left-8 w-32 h-32 rounded-full bg-white/10" />
         <div className="relative z-10">
           <p className="text-sm font-medium text-white/70 uppercase tracking-widest mb-1">
-            Welcome back
+            Workspace analytics
           </p>
           <h1 className="text-3xl sm:text-4xl font-bold text-white mb-6">
             Overview
           </h1>
+          <p className="mb-6 text-sm text-teal-100">A snapshot of your workspace. Sample data for exploration.</p>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <StatisticsCard
               icon={UsersIcon}
@@ -235,31 +235,9 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* Banner */}
-      <div className="overflow-hidden rounded-2xl bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 flex flex-col md:flex-row">
-        <div className="md:w-48 flex-shrink-0">
-          <img
-            className="h-40 w-full object-cover md:h-full"
-            src={MetreeUI}
-            alt="Company logo"
-          />
-        </div>
-        <div className="p-6 flex flex-col justify-center">
-          <span className="text-xs font-semibold uppercase tracking-widest text-teal-500 mb-1">
-            Company Retreats
-          </span>
-          <a
-            href="#"
-            className="text-lg font-semibold text-gray-800 dark:text-gray-100 hover:text-teal-600 dark:hover:text-teal-400 transition-colors leading-snug mb-2"
-          >
-            Incredible accommodation for your team
-          </a>
-          <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">
-            Looking to take your team away on a retreat to enjoy awesome food
-            and take in some sunshine? We have a list of places to do just that.
-          </p>
-        </div>
-      </div>
+      <section aria-label="Quick actions" className="grid gap-4 sm:grid-cols-3">
+        {[{ to: "/CRM", title: "Manage customers", text: "Explore contacts and customer records." }, { to: "/ECommerce", title: "Track inventory", text: "Review products, stock and value." }, { to: "/profile", title: "Make it yours", text: "Update your profile and skills." }].map(item => <Link key={item.to} to={item.to} className="rounded-2xl border border-slate-200 bg-white p-5 transition hover:border-teal-500 dark:border-slate-700 dark:bg-gray-800 dark:hover:border-teal-500"><h2 className="font-semibold">{item.title} <span aria-hidden="true" className="float-right text-teal-600">↗</span></h2><p className="mt-2 text-sm leading-6 text-slate-500 dark:text-slate-400">{item.text}</p></Link>)}
+      </section>
 
       {/* Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -298,6 +276,7 @@ export default function Dashboard() {
         </div>
       </div>
 
+      {deleted && <p role="status" className="rounded-xl bg-teal-50 p-4 text-sm text-teal-800 dark:bg-teal-950 dark:text-teal-200">Project removed from this demo. <button type="button" className="ml-2 font-semibold underline" onClick={() => { setProjects(current => [...current, deleted].sort((a, b) => a.id - b.id)); setDeleted(null); }}>Undo</button></p>}
       {/* Table */}
       <div className="rounded-2xl border border-gray-100 dark:border-gray-700 overflow-hidden bg-white dark:bg-gray-800">
         <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100 dark:border-gray-700">
@@ -324,6 +303,7 @@ export default function Dashboard() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100 dark:divide-gray-700">
+              {projects.length === 0 && <tr><td colSpan={4} className="p-8 text-center text-slate-500">No projects left in this demo. Refresh to restore sample data.</td></tr>}
               {projects.map((project) => (
                 <tr
                   key={project.id}
@@ -355,16 +335,10 @@ export default function Dashboard() {
                   </td>
                   <td className="px-5 py-3.5 whitespace-nowrap">
                     <div className="flex items-center gap-2">
-                      <button
-                        type="button"
-                        title="Edit"
-                        className="p-1.5 rounded-lg text-gray-400 hover:text-sky-600 hover:bg-sky-50 dark:hover:bg-sky-900/30 transition-colors"
-                      >
-                        <PencilSquareIcon className="w-4 h-4" />
-                      </button>
-                      <button
+<button
                         type="button"
                         title="Delete"
+                        aria-label={"Delete " + project.website + " (" + project.tool + ")"}
                         onClick={() => handleDelete(project.id)}
                         className="p-1.5 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 transition-colors"
                       >

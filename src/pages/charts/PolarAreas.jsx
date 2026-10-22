@@ -1,6 +1,6 @@
 // PolarAreaCharts.jsx
-import { useRef, useEffect, useState, useMemo } from "react";
-import DefaultLayout from "../../layouts/DefaultLayout";
+import { useMemo } from "react";
+import { chartGradient, useCompactChartLegend } from "./chartUtils";
 import { useTheme } from "../../context/ThemeContext";
 import {
   Chart as ChartJS,
@@ -11,7 +11,6 @@ import {
   RadialLinearScale,
 } from "chart.js";
 import { Chart } from "react-chartjs-2";
-import { faker } from "@faker-js/faker";
 
 ChartJS.register(
   ArcElement,
@@ -79,7 +78,7 @@ function makeGradient(ctx, area, from, to) {
 
 function buildOptions(dark) {
   const gridColor = dark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.06)";
-  const tickColor = dark ? "#64748b" : "#94a3b8";
+  const tickColor = dark ? "#94a3b8" : "#64748b";
   const textColor = dark ? "#94a3b8" : "#64748b";
   return {
     responsive: true,
@@ -166,52 +165,39 @@ function ChartCard({ title, children }) {
 // ─── COMPONENT ───────────────────────────────────────────────
 export default function PolarAreaCharts() {
   const { dark } = useTheme();
-  const chartRef = useRef(null);
-  const [gradientBg, setGradientBg] = useState(SEGMENTS.map((s) => s.flat));
 
   // generate ครั้งเดียว
   const values = useMemo(
-    () => SEGMENTS.map(() => faker.number.int({ min: 10, max: 100 })),
+    () => [32, 24, 18, 12, 8, 6],
     [],
   );
 
-  const buildGradients = () => {
-    const chart = chartRef.current;
-    if (!chart?.chartArea) return;
-    const { ctx, chartArea } = chart;
-    setGradientBg(
-      SEGMENTS.map((s) => makeGradient(ctx, chartArea, s.from, s.to)),
-    );
-  };
-
-  useEffect(() => {
-    buildGradients();
-    window.addEventListener("resize", buildGradients);
-    return () => window.removeEventListener("resize", buildGradients);
-  }, []);
-
-  const baseDataset = {
-    label: "Sales",
-    data: values,
-    borderWidth: 0,
-  };
-
-  const normalData = useMemo(
-    () => ({
-      labels: LABELS,
-      datasets: [
-        { ...baseDataset, backgroundColor: SEGMENTS.map((s) => s.flat) },
-      ],
-    }),
-    [values],
-  );
-
-  const gradientData = {
+  const normalData = useMemo(() => ({
     labels: LABELS,
-    datasets: [{ ...baseDataset, backgroundColor: gradientBg }],
-  };
+    datasets: [{
+      label: "Sales",
+      data: values,
+      borderWidth: 0,
+      hoverOffset: 6,
+      backgroundColor: SEGMENTS.map((segment) => segment.flat),
+    }],
+  }), [values]);
 
-  const isMobile = window.innerWidth < 640;
+  const gradientData = useMemo(() => {
+    const colors = SEGMENTS.map((segment) => chartGradient(
+      (ctx, area) => makeGradient(ctx, area, segment.from, segment.to),
+      segment.flat,
+    ));
+    return {
+      ...normalData,
+      datasets: normalData.datasets.map((dataset) => ({
+        ...dataset,
+        backgroundColor: (context) => colors[context.dataIndex % colors.length]?.(context) ?? SEGMENTS[0].flat,
+      })),
+    };
+  }, [normalData]);
+
+  const isMobile = useCompactChartLegend();
   const options = buildOptions(dark);
   const mobileOptions = {
     ...options,
@@ -225,7 +211,7 @@ export default function PolarAreaCharts() {
           <h1 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
             Polar Area Charts
           </h1>
-          <p className="text-sm text-gray-400 dark:text-gray-500 mt-1">
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
             Polar area chart variants with flat and gradient fill
           </p>
         </div>
@@ -244,7 +230,6 @@ export default function PolarAreaCharts() {
         <ChartCard title="Gradient fill">
           <div style={{ height: 300 }}>
             <Chart
-              ref={chartRef}
               type="polarArea"
               data={gradientData}
               options={isMobile ? mobileOptions : options}

@@ -1,6 +1,6 @@
 // AreaCharts.jsx
-import { useRef, useEffect, useState, useMemo } from "react";
-import DefaultLayout from "../../layouts/DefaultLayout";
+import { useMemo } from "react";
+import { chartGradient } from "./chartUtils";
 import { useTheme } from "../../context/ThemeContext";
 import {
   Chart as ChartJS,
@@ -8,18 +8,19 @@ import {
   LinearScale,
   PointElement,
   LineElement,
+  LineController,
   Filler,
   Tooltip,
   Legend,
 } from "chart.js";
 import { Chart } from "react-chartjs-2";
-import { faker } from "@faker-js/faker";
 
 ChartJS.register(
   CategoryScale,
   LinearScale,
   PointElement,
   LineElement,
+  LineController,
   Filler,
   Tooltip,
   Legend,
@@ -46,8 +47,8 @@ const SERIES = [
 ];
 
 // ─── HELPERS ─────────────────────────────────────────────────
-const randomData = () =>
-  LABELS.map(() => faker.number.int({ min: 10, max: 100 }));
+const sampleData = (series) =>
+  LABELS.map((_, index) => 10 + ((index * 23 + series * 37) % 91));
 
 function makeGradient(ctx, area, from, to) {
   const g = ctx.createLinearGradient(0, area.top, 0, area.bottom);
@@ -58,7 +59,7 @@ function makeGradient(ctx, area, from, to) {
 
 function buildChartOptions(dark) {
   const gridColor = dark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.05)";
-  const tickColor = dark ? "#64748b" : "#94a3b8";
+  const tickColor = dark ? "#94a3b8" : "#64748b";
   return {
     responsive: true,
     maintainAspectRatio: false,
@@ -117,11 +118,8 @@ function ChartCard({ title, children }) {
 // ─── COMPONENT ───────────────────────────────────────────────
 export default function AreaCharts() {
   const { dark } = useTheme();
-  const chartRef = useRef(null);
-  const [gradientDatasets, setGradientDatasets] = useState([]);
 
-  // สร้าง data ครั้งเดียว ไม่ generate ใหม่ทุก render
-  const staticData = useMemo(() => SERIES.map(() => randomData()), []);
+  const staticData = useMemo(() => SERIES.map((_, index) => sampleData(index)), []);
 
   // Normal datasets
   const normalData = useMemo(
@@ -144,41 +142,17 @@ export default function AreaCharts() {
     [staticData],
   );
 
-  // Gradient datasets — สร้างหลัง chart mount
-  const buildGradientDatasets = () => {
-    const chart = chartRef.current;
-    if (!chart?.chartArea) return;
-    const { ctx, chartArea } = chart;
+  const gradientData = useMemo(() => ({
+    ...normalData,
+    datasets: normalData.datasets.map((dataset, index) => {
+      const series = SERIES[index];
+      return {
+        ...dataset,
+        backgroundColor: chartGradient((ctx, area) => makeGradient(ctx, area, series.gradientFrom, series.gradientTo), series.flat),
+      };
+    }),
+  }), [normalData]);
 
-    setGradientDatasets(
-      SERIES.map((s, i) => ({
-        label: s.label,
-        data: staticData[i],
-        borderColor: s.border,
-        backgroundColor: makeGradient(
-          ctx,
-          chartArea,
-          s.gradientFrom,
-          s.gradientTo,
-        ),
-        borderWidth: 2,
-        fill: true,
-        tension: 0.4,
-        pointRadius: 3,
-        pointBackgroundColor: s.border,
-        pointBorderColor: "#fff",
-        pointBorderWidth: 2,
-      })),
-    );
-  };
-
-  useEffect(() => {
-    buildGradientDatasets();
-    window.addEventListener("resize", buildGradientDatasets);
-    return () => window.removeEventListener("resize", buildGradientDatasets);
-  }, []);
-
-  const gradientData = { labels: LABELS, datasets: gradientDatasets };
   const options = buildChartOptions(dark);
 
   return (
@@ -188,7 +162,7 @@ export default function AreaCharts() {
           <h1 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
             Area Charts
           </h1>
-          <p className="text-sm text-gray-400 dark:text-gray-500 mt-1">
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
             Line chart with filled area variants
           </p>
         </div>
@@ -199,7 +173,6 @@ export default function AreaCharts() {
 
         <ChartCard title="Gradient fill">
           <Chart
-            ref={chartRef}
             type="line"
             data={gradientData}
             options={options}

@@ -1,228 +1,37 @@
 import { useState } from "react";
-import { NavLink, useLocation } from "react-router-dom";
-import {
-  ChartPieIcon,
-  UserCircleIcon,
-  SquaresPlusIcon,
-  DocumentTextIcon,
-  TableCellsIcon,
-  ChartBarSquareIcon,
-  LockClosedIcon,
-  UserPlusIcon,
-  Cog6ToothIcon,
-  ExclamationCircleIcon,
-  CurrencyDollarIcon,
-  QuestionMarkCircleIcon,
-} from "@heroicons/react/24/outline";
+import { Link, NavLink, useLocation } from "react-router-dom";
+import { ChevronDownIcon, Squares2X2Icon, XMarkIcon } from "@heroicons/react/24/outline";
+import { MENUS, SINGLE_LINKS } from "../navigation";
 
-import Logo from "../assets/Logo-v3.png";
+const linkStyle = ({ isActive }) => "flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition " + (isActive ? "bg-teal-50 text-teal-800 dark:bg-teal-900/40 dark:text-teal-200" : "text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-gray-800");
 
-// ─── ย้ายข้อมูลออกนอก component เพื่อไม่ให้ re-create ทุก render ───────────
-
-const MENUS = [
-  {
-    key: "dashboard",
-    label: "Dashboard",
-    icon: ChartPieIcon,
-    children: [
-      { to: "/", label: "Overview" },
-      { to: "/ECommerce", label: "eCommerce" },
-      { to: "/CRM", label: "CRM" },
-    ],
-  },
-  {
-    key: "ui",
-    label: "UI Elements",
-    icon: SquaresPlusIcon,
-    children: [
-      { to: "/ui/buttonsUI", label: "Buttons" },
-      { to: "/ui/badgesUI", label: "Badges" },
-      { to: "/ui/cardsUI", label: "Cards" },
-      { to: "/ui/tabsUI", label: "Tabs" },
-    ],
-  },
-  {
-    key: "forms",
-    label: "Forms",
-    icon: DocumentTextIcon,
-    children: [
-      { to: "/forms/formelements", label: "Form Elements" },
-      { to: "/forms/formvalidation", label: "Form Validation" },
-      { to: "/forms/formwizard", label: "Form Wizard" },
-    ],
-  },
-  {
-    key: "tables",
-    label: "Tables",
-    icon: TableCellsIcon,
-    children: [
-      { to: "/tables/basictable", label: "Basic Tables" },
-      { to: "/tables/datatable", label: "DataTables" },
-    ],
-  },
-  {
-    key: "charts",
-    label: "Charts",
-    icon: ChartBarSquareIcon,
-    children: [
-      { to: "/charts/areas", label: "Area" },
-      { to: "/charts/bars", label: "Bar" },
-      { to: "/charts/bubbles", label: "Bubble" },
-      { to: "/charts/donuts", label: "Donut" },
-      { to: "/charts/lines", label: "Line" },
-      { to: "/charts/pies", label: "Pie" },
-      { to: "/charts/polararea", label: "PolarArea" },
-      { to: "/charts/radars", label: "Radar" },
-      { to: "/charts/scatter", label: "Scatter" },
-    ],
-  },
-];
-
-const SINGLE_LINKS = [
-  { to: "/auth/login", label: "Login", icon: LockClosedIcon },
-  { to: "/auth/register", label: "Register", icon: UserPlusIcon },
-  { to: "/profile", label: "Profile", icon: UserCircleIcon },
-  { to: "/setting", label: "Setting", icon: Cog6ToothIcon },
-  { to: "/error", label: "Error", icon: ExclamationCircleIcon },
-  { to: "/pricing", label: "Pricing", icon: CurrencyDollarIcon },
-  { to: "/faq", label: "FAQ", icon: QuestionMarkCircleIcon },
-];
-
-// ─── styles constant ───────────────────────────────────────────────────────
-
-const styles = {
-  link: "flex items-center gap-2 px-3 py-2 rounded-lg transition hover:bg-gradient-to-r hover:from-indigo-500 hover:to-teal-400",
-  activeLink: "bg-gradient-to-r from-indigo-600 to-teal-500",
-};
-
-// ─── Sub-components ────────────────────────────────────────────────────────
-
-function MenuDropdown({ menu, isExpanded, isOpen, onToggle }) {
-  const { key, label, icon: Icon, children } = menu;
-
-  return (
-    <div>
-      <button
-        aria-label={label}
-        aria-expanded={isExpanded && isOpen}
-        onClick={() => onToggle(key)}
-        title={!isExpanded ? label : undefined}
-        className={`flex items-center gap-2 px-3 py-2 rounded-lg w-full transition
-          hover:bg-gradient-to-r hover:from-indigo-500 hover:to-teal-400
-          ${!isExpanded ? "justify-center" : ""}`}
-      >
-        <Icon className="w-6 h-6 flex-shrink-0" />
-        {isExpanded && (
-          <>
-            <span>{label}</span>
-            <span className="ml-auto">{isOpen ? "▲" : "▼"}</span>
-          </>
-        )}
-      </button>
-
-      {isExpanded && isOpen && (
-        <div
-          className={`overflow-hidden transition-all duration-300 ${
-            isOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
-          }`}
-        >
-          <ul className="mt-1 flex flex-col gap-1 pl-6">
-            {children.map(({ to, label: childLabel }) => (
-              <li key={to}>
-                <NavLink
-                  to={to}
-                  className={({ isActive }) =>
-                    `${styles.link} ${isActive ? styles.activeLink : ""} text-sm`
-                  }
-                >
-                  {childLabel}
-                </NavLink>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
-    </div>
-  );
-}
-
-function SingleLink({ to, label, icon, isExpanded }) {
-  const Icon = icon;
-  return (
-    <NavLink
-      to={to}
-      title={!isExpanded ? label : undefined}
-      className={({ isActive }) =>
-        `${styles.link} ${isActive ? styles.activeLink : ""} ${
-          !isExpanded ? "justify-center" : ""
-        }`
-      }
-    >
-      <Icon className="w-6 h-6 flex-shrink-0" />
-      {isExpanded && label}
-    </NavLink>
-  );
-}
-
-// ─── Main component ────────────────────────────────────────────────────────
-
-export default function Sidebar({ collapsed = false, onNavigate }) {
+export default function Sidebar({ collapsed = false, onNavigate, onExpand, onClose }) {
   const { pathname } = useLocation();
-  const [openMenu, setOpenMenu] = useState(() => MENUS.find(menu => menu.children.some(child => child.to.toLowerCase() === pathname.toLowerCase()))?.key ?? null);
-  const [isHovered, setIsHovered] = useState(false);
-
-  const isExpanded = !collapsed || isHovered;
-
-  const toggleMenu = (key) => {
-    if (!isExpanded) setIsHovered(true);
-    setOpenMenu((prev) => (prev === key ? null : key));
-  };
-
-  const handleMouseLeave = () => {
-    setIsHovered(false);
-  };
-
-  return (
-    <aside
-      onMouseEnter={() => collapsed && setIsHovered(true)}
-      onMouseLeave={handleMouseLeave}
-      className={`h-screen bg-gradient-to-t from-green-400/90 to-cyan-400/90 text-white
-        transition-all duration-300 ease-in-out
-        ${isExpanded ? "w-64 overflow-hidden" : "w-16 overflow-visible"}`}
-    >
-      <div className="h-full flex flex-col overflow-y-auto overflow-x-visible p-2">
-        {/* Logo */}
-        <div className="flex justify-center mb-6 mt-2">
-          <img
-            src={Logo}
-            alt="Logo"
-            className={isExpanded ? "w-32" : "w-8 h-8 object-contain"}
-          />
-        </div>
-
-        <nav aria-label="Main navigation" onClick={(event) => { if (event.target.closest("a")) onNavigate?.(); }} className="space-y-1 flex-1">
-          {/* Dropdown menus */}
-          {MENUS.map((menu) => (
-            <MenuDropdown
-              key={menu.key}
-              menu={menu}
-              isExpanded={isExpanded}
-              isOpen={openMenu === menu.key}
-              onToggle={toggleMenu}
-            />
-          ))}
-
-          {/* Pages heading */}
-          {isExpanded && (
-            <span className="px-3 py-2 text-sm font-semibold block">Pages</span>
-          )}
-
-          {/* Single links */}
-          {SINGLE_LINKS.map((link) => (
-            <SingleLink key={link.to} {...link} isExpanded={isExpanded} />
-          ))}
-        </nav>
-      </div>
-    </aside>
-  );
+  const [openMenu, setOpenMenu] = useState(() => MENUS.find(menu => menu.children.some(child => child.to.toLowerCase() === pathname.toLowerCase()))?.key);
+  return <aside className={"flex h-full flex-col border-r border-slate-200 bg-white dark:border-slate-700 dark:bg-gray-900 " + (collapsed ? "w-20" : "w-64")}>
+    <div className="flex h-[76px] shrink-0 items-center justify-between px-5">
+      <Link to="/" onClick={onNavigate} aria-label="Cyanova home" className="flex items-center gap-3">
+        <span className="rounded-xl bg-teal-700 p-2 text-white"><Squares2X2Icon className="h-5 w-5" /></span>
+        {!collapsed && <span className="text-lg font-bold tracking-tight">Cyanova<span className="text-teal-600">.</span></span>}
+      </Link>
+      <button type="button" onClick={onClose} aria-label="Close navigation" className="rounded-lg p-2 md:hidden"><XMarkIcon className="h-5 w-5" /></button>
+    </div>
+    <nav aria-label="Main navigation" className="flex-1 space-y-1 overflow-y-auto px-3 pb-6" onClick={event => { if (event.target.closest("a")) onNavigate?.(); }}>
+      {!collapsed && <p className="px-3 pb-3 pt-5 text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-500">Workspace</p>}
+      {MENUS.map(menu => {
+        const Icon = menu.icon;
+        const active = menu.children.some(child => child.to.toLowerCase() === pathname.toLowerCase());
+        const open = !collapsed && openMenu === menu.key;
+        return <div key={menu.key}>
+          <button type="button" aria-label={menu.label} title={collapsed ? menu.label : undefined} aria-expanded={open} aria-controls={"menu-" + menu.key} onClick={() => { if (collapsed) onExpand?.(); setOpenMenu(open ? null : menu.key); }} className={"flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium hover:bg-slate-50 dark:hover:bg-gray-800 " + (active ? "text-teal-700 dark:text-teal-300" : "text-slate-600 dark:text-slate-300")}>
+            <Icon className="h-5 w-5 shrink-0" />{!collapsed && <><span>{menu.label}</span><ChevronDownIcon className={"ml-auto h-3.5 w-3.5 transition " + (open ? "rotate-180" : "")} /></>}
+          </button>
+          <ul id={"menu-" + menu.key} hidden={!open} className="ml-5 space-y-1 border-l border-slate-200 py-1 pl-3 dark:border-slate-700">{menu.children.map(child => <li key={child.to}><NavLink end to={child.to} className={linkStyle}>{child.label}</NavLink></li>)}</ul>
+        </div>;
+      })}
+      {!collapsed && <p className="px-3 pb-2 pt-7 text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-500">Account & resources</p>}
+      {SINGLE_LINKS.map(link => { const Icon = link.icon; return <NavLink key={link.to} to={link.to} aria-label={link.label} title={collapsed ? link.label : undefined} className={linkStyle}><Icon className="h-5 w-5 shrink-0" />{!collapsed && link.label}</NavLink>; })}
+    </nav>
+    {!collapsed && <div className="m-4 rounded-xl bg-slate-50 p-4 text-xs leading-5 text-slate-500 dark:bg-gray-800 dark:text-slate-400"><p className="font-semibold text-slate-700 dark:text-slate-200">Explore the demo</p>Sample data · No live account connected</div>}
+  </aside>;
 }

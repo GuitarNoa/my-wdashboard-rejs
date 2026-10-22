@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from "react";
-import DefaultLayout from "../../layouts/DefaultLayout";
+
 
 export default function DataTables() {
   const initialUsers = [
@@ -19,6 +19,7 @@ export default function DataTables() {
 
   const [users, setUsers] = useState(initialUsers);
   const [search, setSearch] = useState("");
+  const [deleted, setDeleted] = useState(null);
   const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 5;
@@ -42,9 +43,9 @@ export default function DataTables() {
   const filteredUsers = useMemo(() => {
     return sortedUsers.filter(
       (u) =>
-        u.name.toLowerCase().includes(search.toLowerCase()) ||
-        u.email.toLowerCase().includes(search.toLowerCase()) ||
-        u.role.toLowerCase().includes(search.toLowerCase())
+        u.name.toLowerCase().includes(search.trim().toLowerCase()) ||
+        u.email.toLowerCase().includes(search.trim().toLowerCase()) ||
+        u.role.toLowerCase().includes(search.trim().toLowerCase())
     );
   }, [search, sortedUsers]);
 
@@ -64,6 +65,7 @@ export default function DataTables() {
   };
 
   const handleDelete = (id) => {
+    setDeleted(users.find(user => user.id === id));
     setUsers(users.filter((u) => u.id !== id));
     setCurrentPage(1);
   };
@@ -76,32 +78,36 @@ export default function DataTables() {
         {/* Search */}
         <div className="mb-4">
           <input
-            type="text"
+            type="search"
             placeholder="Search..."
             value={search}
             aria-label="Search users"
             onChange={(e) => { setSearch(e.target.value); setCurrentPage(1); }}
-            className="border border-gray-300 px-3 py-2 rounded w-full md:w-1/3 focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className="border border-slate-300 dark:border-slate-600 bg-white dark:bg-gray-800 px-3 py-2 rounded-xl w-full md:w-1/3 focus:outline-none focus:ring-2 focus:ring-blue-400"
           />
         </div>
 
+        {deleted && <p role="status" className="mb-4 rounded-xl bg-teal-50 p-3 text-sm text-teal-800 dark:bg-teal-950 dark:text-teal-200">User removed from this demo. <button type="button" className="font-semibold underline" onClick={() => { setUsers(current => [...current, deleted].sort((a, b) => a.id - b.id)); setDeleted(null); }}>Undo</button></p>}
         {/* Table */}
         <div className="overflow-x-auto">
-          <table className="min-w-full border border-gray-200 rounded-lg overflow-hidden">
-            <thead className="bg-gray-100">
+          <table className="min-w-full border border-slate-200 dark:border-slate-700 rounded-lg overflow-hidden">
+            <thead className="bg-slate-100 dark:bg-slate-800">
               <tr>
                 {["id", "name", "email", "role"].map((key) => (
                   <th
                     key={key}
                     className="py-3 px-6 text-left cursor-pointer"
-                    onClick={() => requestSort(key)}
+                    scope="col"
+                    aria-sort={sortConfig.key === key ? (sortConfig.direction === "asc" ? "ascending" : "descending") : "none"}
                   >
+                    <button type="button" className="flex items-center gap-2" onClick={() => requestSort(key)}>
                     {key.charAt(0).toUpperCase() + key.slice(1)}
                     {sortConfig.key === key
                       ? sortConfig.direction === "asc"
                         ? " ▲"
                         : " ▼"
                       : ""}
+                    </button>
                   </th>
                 ))}
                 <th className="py-3 px-6 text-left">Actions</th>
@@ -114,8 +120,8 @@ export default function DataTables() {
                   key={user.id}
                   className={
                     index % 2 === 0
-                      ? "bg-white hover:bg-gray-50"
-                      : "bg-gray-50 hover:bg-gray-100"
+                      ? "bg-white hover:bg-slate-50 dark:bg-gray-900 dark:hover:bg-gray-800"
+                      : "bg-slate-50 hover:bg-slate-100 dark:bg-gray-800 dark:hover:bg-gray-700"
                   }
                 >
                   <td className="py-3 px-6">{user.id}</td>
@@ -125,6 +131,7 @@ export default function DataTables() {
                   <td className="py-3 px-6 space-x-2">
                     <button
                       className="text-red-500 hover:underline"
+                      aria-label={"Delete " + user.name}
                       onClick={() => handleDelete(user.id)}
                     >
                       Delete
@@ -137,14 +144,14 @@ export default function DataTables() {
         </div>
 
         {/* Pagination */}
-        <div className="flex justify-between mt-4">
+        <div className="flex flex-wrap gap-3 justify-between mt-4">
           <button
             disabled={page === 1}
             onClick={() => setCurrentPage(page - 1)}
             className={`px-4 py-2 rounded ${
               page === 1
-                ? "bg-gray-200 cursor-not-allowed"
-                : "bg-blue-500 text-white hover:bg-blue-600"
+                ? "bg-slate-200 text-slate-500 dark:bg-slate-800 dark:text-slate-500 cursor-not-allowed"
+                : "bg-teal-700 text-white hover:bg-teal-800"
             }`}
           >
             Previous
@@ -157,8 +164,8 @@ export default function DataTables() {
             onClick={() => setCurrentPage(page + 1)}
             className={`px-4 py-2 rounded ${
               page === totalPages
-                ? "bg-gray-200 cursor-not-allowed"
-                : "bg-blue-500 text-white hover:bg-blue-600"
+                ? "bg-slate-200 text-slate-500 dark:bg-slate-800 dark:text-slate-500 cursor-not-allowed"
+                : "bg-teal-700 text-white hover:bg-teal-800"
             }`}
           >
             Next

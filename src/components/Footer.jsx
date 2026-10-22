@@ -1,25 +1,11 @@
-// src/components/Footer.jsx
-import React from "react";
+import { Link } from "react-router-dom";
 
 export default function Footer() {
   return (
-    <footer className="bg-gradient-to-t from-green-400 to-cyan-400 text-white py-4 mt-auto">
-      <div className="container mx-auto px-4 flex flex-col md:flex-row justify-center md:justify-between items-center space-y-2 md:space-y-0">
-        {/* ข้อความ */}
-        <div className="text-sm text-center md:text-left">
-          &copy; {new Date().getFullYear()} AdminDashboard. All rights reserved.
-        </div>
-        {/* หากต้องการเพิ่ม element อื่น ๆ เช่น ลิงก์ */}
-        <div className="text-sm text-center md:text-right">
-          {/* ตัวอย่างลิงก์ */}
-          <a href="#" className="hover:underline mx-1">
-            Privacy
-          </a>
-          |
-          <a href="#" className="hover:underline mx-1">
-            Terms
-          </a>
-        </div>
+    <footer className="mt-auto border-t border-slate-200 bg-white px-5 py-5 text-xs text-slate-500 sm:px-8 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-400">
+      <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3">
+        <p>&copy; {new Date().getFullYear()} Metree workspace</p>
+        <div className="flex items-center gap-4"><span>Demo workspace</span><Link to="/faq" className="font-medium text-teal-700 hover:underline dark:text-teal-300">Help center</Link></div>
       </div>
     </footer>
   );

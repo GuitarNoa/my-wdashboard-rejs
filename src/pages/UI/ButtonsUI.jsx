@@ -1,181 +1,35 @@
-// ButtonShowcase.jsx
-import { HeartIcon, ShoppingCartIcon } from "@heroicons/react/16/solid";
+import { useState } from "react";
+import { HeartIcon, PlusIcon, ArrowPathIcon } from "@heroicons/react/24/outline";
+import Buttons from "../../components/Buttons";
 
-function Spinner({ className = "h-4 w-4" }) {
-  return (
-    <svg
-      className={`animate-spin ${className}`}
-      xmlns="http://www.w3.org/2000/svg"
-      fill="none"
-      viewBox="0 0 24 24"
-      aria-hidden="true"
-    >
-      <circle
-        className="opacity-25"
-        cx="12"
-        cy="12"
-        r="10"
-        stroke="currentColor"
-        strokeWidth="4"
-      />
-      <path
-        className="opacity-75"
-        fill="currentColor"
-        d="M4 12a8 8 0 018-8v8z"
-      />
-    </svg>
-  );
+function Section({ title, description, children }) {
+  return <section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-700 dark:bg-slate-900"><h2 className="font-semibold">{title}</h2><p className="mb-5 mt-2 text-sm leading-6 text-slate-500 dark:text-slate-400">{description}</p>{children}</section>;
 }
 
-function Section({ title, children }) {
+export default function ButtonsUI() {
+  const [liked, setLiked] = useState(false);
+  const [count, setCount] = useState(0);
+  const [size, setSize] = useState("");
   return (
-    <section className="mb-10">
-      <h2 className="text-sm font-medium text-gray-400 uppercase tracking-widest mb-4">
-        {title}
-      </h2>
-      <div className="flex flex-wrap gap-3 items-center">{children}</div>
-    </section>
-  );
-}
-
-export default function ButtonShowcase() {
-  return (
-    <main>
-      <div className="p-6 max-w-3xl">
-        <div className="mb-8">
-          <h1 className="text-xl font-semibold text-gray-900">
-            Button Showcase
-          </h1>
-          <p className="text-sm text-gray-400 mt-1">
-            All button variants, sizes, and states
-          </p>
-        </div>
-
-        {/* Variants */}
-        <Section title="Variants">
-          <button
-            type="button"
-            className="bg-blue-500 hover:bg-blue-600 text-white text-sm font-medium px-4 py-2 rounded-lg transition"
-          >
-            Primary
-          </button>
-          <button
-            type="button"
-            className="bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-medium px-4 py-2 rounded-lg transition"
-          >
-            Secondary
-          </button>
-          <button
-            type="button"
-            className="border border-blue-500 text-blue-500 hover:bg-blue-50 text-sm font-medium px-4 py-2 rounded-lg transition"
-          >
-            Outline
-          </button>
-          <button
-            type="button"
-            className="text-gray-600 hover:bg-gray-100 text-sm font-medium px-4 py-2 rounded-lg transition"
-          >
-            Ghost
-          </button>
-          <button
-            type="button"
-            className="bg-red-500 hover:bg-red-600 text-white text-sm font-medium px-4 py-2 rounded-lg transition"
-          >
-            Danger
-          </button>
+    <main className="mx-auto max-w-5xl space-y-7 p-4 text-slate-900 sm:p-6 lg:p-8 dark:text-slate-100">
+      <header><p className="text-xs font-semibold uppercase tracking-widest text-teal-700 dark:text-teal-300">Component library</p><h1 className="mt-2 text-3xl font-bold tracking-tight">Buttons</h1><p className="mt-3 text-sm text-slate-500 dark:text-slate-400">Clear actions, consistent states, and useful feedback. Try the interactive examples.</p></header>
+      <Section title="Variants" description="Use a clear visual hierarchy to make the next action easy to find."><Buttons /></Section>
+      <div className="grid gap-5 lg:grid-cols-2">
+        <Section title="Sizes" description="Choose a size that fits the context and remains easy to use.">
+          <div className="flex flex-wrap items-center gap-3">{[["Small", "px-3 py-2 text-xs"], ["Medium", "px-4 py-2.5 text-sm"], ["Large", "px-5 py-3 text-base"]].map(([label, style]) => <button key={label} type="button" onClick={() => setSize(label)} className={`rounded-xl bg-teal-700 font-semibold text-white hover:bg-teal-800 ${style}`}>{label}</button>)}</div>
+          <p role="status" className="mt-4 text-xs text-slate-500 dark:text-slate-400">{size ? `${size} button clicked.` : "Select any size to try it."}</p>
         </Section>
-
-        {/* Sizes */}
-        <Section title="Sizes">
-          <button
-            type="button"
-            className="bg-blue-500 hover:bg-blue-600 text-white text-xs font-medium px-3 py-1.5 rounded-md transition"
-          >
-            Small
-          </button>
-          <button
-            type="button"
-            className="bg-blue-500 hover:bg-blue-600 text-white text-sm font-medium px-4 py-2 rounded-lg transition"
-          >
-            Medium
-          </button>
-          <button
-            type="button"
-            className="bg-blue-500 hover:bg-blue-600 text-white text-base font-medium px-5 py-2.5 rounded-lg transition"
-          >
-            Large
-          </button>
+        <Section title="With icons" description="Combine a familiar icon with a clear text label.">
+          <div className="flex flex-wrap gap-3"><button type="button" aria-pressed={liked} onClick={() => setLiked(value => !value)} className="inline-flex items-center gap-2 rounded-xl border border-rose-200 bg-rose-50 px-4 py-2.5 text-sm font-semibold text-rose-700 dark:border-rose-800 dark:bg-rose-950 dark:text-rose-200"><HeartIcon aria-hidden="true" className={`h-4 w-4 ${liked ? "fill-current" : ""}`} />{liked ? "Liked" : "Like"}</button><button type="button" onClick={() => setCount(value => value + 1)} className="inline-flex items-center gap-2 rounded-xl bg-teal-700 px-4 py-2.5 text-sm font-semibold text-white hover:bg-teal-800"><PlusIcon aria-hidden="true" className="h-4 w-4" />Add item</button></div>
+          <p role="status" className="mt-4 text-xs text-slate-500 dark:text-slate-400">{count} sample {count === 1 ? "item" : "items"} added for this visit.</p>
         </Section>
-
-        {/* Icon Buttons */}
-        <Section title="Icon Buttons">
-          <button
-            type="button"
-            className="flex items-center gap-2 bg-red-500 hover:bg-red-600 text-white text-sm font-medium px-4 py-2 rounded-lg transition"
-          >
-            <HeartIcon className="h-4 w-4" aria-hidden="true" />
-            Like
-          </button>
-          <button
-            type="button"
-            className="flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white text-sm font-medium px-4 py-2 rounded-lg transition"
-          >
-            <ShoppingCartIcon className="h-4 w-4" aria-hidden="true" />
-            Add to Cart
-          </button>
-          {/* Icon-only — ต้องมี aria-label */}
-          <button
-            type="button"
-            aria-label="Like"
-            className="flex items-center justify-center bg-red-500 hover:bg-red-600 text-white w-9 h-9 rounded-full transition"
-          >
-            <HeartIcon className="h-4 w-4" aria-hidden="true" />
-          </button>
+        <Section title="Disabled" description="Unavailable actions are disabled and explained.">
+          <button type="button" disabled className="cursor-not-allowed rounded-xl bg-slate-100 px-4 py-2.5 text-sm font-semibold text-slate-500 dark:bg-slate-800 dark:text-slate-400">Action unavailable</button>
+          <p className="mt-4 text-xs text-slate-500 dark:text-slate-400">This example cannot be activated.</p>
         </Section>
-
-        {/* Disabled */}
-        <Section title="Disabled">
-          <button
-            type="button"
-            disabled
-            className="bg-blue-500 text-white text-sm font-medium px-4 py-2 rounded-lg opacity-40 cursor-not-allowed"
-          >
-            Primary
-          </button>
-          <button
-            type="button"
-            disabled
-            className="border border-blue-500 text-blue-500 text-sm font-medium px-4 py-2 rounded-lg opacity-40 cursor-not-allowed"
-          >
-            Outline
-          </button>
-          <button
-            type="button"
-            disabled
-            className="bg-gray-100 text-gray-500 text-sm font-medium px-4 py-2 rounded-lg opacity-40 cursor-not-allowed"
-          >
-            Secondary
-          </button>
-        </Section>
-
-        {/* Loading */}
-        <Section title="Loading">
-          <button
-            type="button"
-            disabled
-            className="flex items-center gap-2 bg-blue-500 text-white text-sm font-medium px-4 py-2 rounded-lg opacity-75 cursor-not-allowed"
-          >
-            <Spinner />
-            Loading...
-          </button>
-          <button
-            type="button"
-            disabled
-            className="flex items-center gap-2 border border-blue-500 text-blue-500 text-sm font-medium px-4 py-2 rounded-lg opacity-75 cursor-not-allowed"
-          >
-            <Spinner className="h-4 w-4 text-blue-500" />
-            Saving...
-          </button>
+        <Section title="Loading preview" description="Show progress while a real action is running.">
+          <button type="button" disabled className="inline-flex cursor-not-allowed items-center gap-2 rounded-xl bg-teal-700 px-4 py-2.5 text-sm font-semibold text-white"><ArrowPathIcon aria-hidden="true" className="h-4 w-4 animate-spin motion-reduce:animate-none" />Loading…</button>
+          <p className="mt-4 text-xs text-slate-500 dark:text-slate-400">Visual example only; no request is being processed.</p>
         </Section>
       </div>
     </main>

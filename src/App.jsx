@@ -1,42 +1,42 @@
 import "./index.css";
-import { useEffect } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import { Route, Routes, useLocation } from "react-router-dom";
 
 import DefaultLayout from "./layouts/DefaultLayout";
 //Dashborad
-import Dashborad from "./pages/Dashborad";
-import ECommerce from "./pages/ECommerce";
-import CRM from "./pages/CRM";
+const Dashborad = lazy(() => import("./pages/Dashborad"));
+const ECommerce = lazy(() => import("./pages/ECommerce"));
+const CRM = lazy(() => import("./pages/CRM"));
 //UI
-import ButtonsUI from "./pages/UI/ButtonsUI";
-import BadgesUI from "./pages/UI/BadgesUI";
-import CardsUI from "./pages/UI/CardsUI";
-import TabsUI from "./pages/UI/TabsUI";
+const ButtonsUI = lazy(() => import("./pages/UI/ButtonsUI"));
+const BadgesUI = lazy(() => import("./pages/UI/BadgesUI"));
+const CardsUI = lazy(() => import("./pages/UI/CardsUI"));
+const TabsUI = lazy(() => import("./pages/UI/TabsUI"));
 //Forms
-import FormElements from "./pages/forms/FormElements";
-import FormValidation from "./pages/forms/FormValidation";
-import FormWizard from "./pages/forms/FormWizard";
+const FormElements = lazy(() => import("./pages/forms/FormElements"));
+const FormValidation = lazy(() => import("./pages/forms/FormValidation"));
+const FormWizard = lazy(() => import("./pages/forms/FormWizard"));
 //Table
-import BasicTables from "./pages/tables/BasicTables";
-import DataTables from "./pages/tables/DataTables";
+const BasicTables = lazy(() => import("./pages/tables/BasicTables"));
+const DataTables = lazy(() => import("./pages/tables/DataTables"));
 //Chart
-import AreaCharts from "./pages/charts/Areas";
-import BarCharts from "./pages/charts/Bars";
-import BubbleCharts from "./pages/charts/Bubbles";
-import DonutCharts from "./pages/charts/Donuts";
-import LineCharts from "./pages/charts/Lines";
-import PieCharts from "./pages/charts/Pies";
-import PolarAreaChart from "./pages/charts/PolarAreas";
-import RadarCharts from "./pages/charts/Radars";
-import ScatterCharts from "./pages/charts/Scatters";
+const AreaCharts = lazy(() => import("./pages/charts/Areas"));
+const BarCharts = lazy(() => import("./pages/charts/Bars"));
+const BubbleCharts = lazy(() => import("./pages/charts/Bubbles"));
+const DonutCharts = lazy(() => import("./pages/charts/Donuts"));
+const LineCharts = lazy(() => import("./pages/charts/Lines"));
+const PieCharts = lazy(() => import("./pages/charts/Pies"));
+const PolarAreaChart = lazy(() => import("./pages/charts/PolarAreas"));
+const RadarCharts = lazy(() => import("./pages/charts/Radars"));
+const ScatterCharts = lazy(() => import("./pages/charts/Scatters"));
 //Page
-import Login from "./pages/auth/Login";
-import Register from "./pages/auth/Register";
-import Profile from "./pages/Profile";
-import Setting from "./pages/Setting";
-import Error from "./pages/Error";
-import Pricing from "./pages/Pricing";
-import FAQ from "./pages/FAQ";
+const Login = lazy(() => import("./pages/auth/Login"));
+const Register = lazy(() => import("./pages/auth/Register"));
+const Profile = lazy(() => import("./pages/Profile"));
+const Setting = lazy(() => import("./pages/Setting"));
+const Error = lazy(() => import("./pages/Error"));
+const Pricing = lazy(() => import("./pages/Pricing"));
+const FAQ = lazy(() => import("./pages/FAQ"));
 
 export default function App() {
   const { pathname } = useLocation();
@@ -46,6 +46,7 @@ export default function App() {
   }, [pathname]);
 
   return (
+    <Suspense fallback={<div role="status" className="p-10 text-center text-slate-500">Loading page…</div>}>
     <Routes>
       {/* Layout route: ทุก route ลูกจะ render ผ่าน <Outlet /> ใน DefaultLayout */}
       <Route element={<DefaultLayout />}>
@@ -90,5 +91,6 @@ export default function App() {
       <Route path="/error" element={<Error />} />
       <Route path="*" element={<Error />} />
     </Routes>
+    </Suspense>
   );
 }

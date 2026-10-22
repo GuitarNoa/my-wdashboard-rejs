@@ -1,6 +1,6 @@
 // BarCharts.jsx
-import { useRef, useEffect, useState, useMemo } from "react";
-import DefaultLayout from "../../layouts/DefaultLayout";
+import { useMemo } from "react";
+import { chartGradient } from "./chartUtils";
 import { useTheme } from "../../context/ThemeContext";
 import {
   Chart as ChartJS,
@@ -8,7 +8,6 @@ import {
   BarElement, Title, Tooltip, Legend,
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
-import { faker } from "@faker-js/faker";
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
@@ -33,8 +32,8 @@ const SERIES = [
 ];
 
 // ─── HELPERS ─────────────────────────────────────────────────
-const randomData = () =>
-  LABELS.map(() => faker.number.int({ min: 100, max: 500 }));
+const sampleData = (series) =>
+  LABELS.map((_, index) => 100 + ((index * 73 + series * 131) % 401));
 
 function makeGradient(ctx, area, from, to) {
   const g = ctx.createLinearGradient(0, area.bottom, 0, area.top);
@@ -45,7 +44,7 @@ function makeGradient(ctx, area, from, to) {
 
 function buildOptions(dark) {
   const gridColor = dark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.05)";
-  const tickColor = dark ? "#64748b" : "#94a3b8";
+  const tickColor = dark ? "#94a3b8" : "#64748b";
   return {
     responsive: true,
     maintainAspectRatio: false,
@@ -105,11 +104,8 @@ function ChartCard({ title, children }) {
 // ─── COMPONENT ───────────────────────────────────────────────
 export default function BarCharts() {
   const { dark } = useTheme();
-  const chartRef = useRef(null);
-  const [gradientDatasets, setGradientDatasets] = useState([]);
 
-  // generate ครั้งเดียว
-  const staticData = useMemo(() => SERIES.map(() => randomData()), []);
+  const staticData = useMemo(() => SERIES.map((_, index) => sampleData(index)), []);
 
   // Normal datasets
   const normalData = useMemo(() => ({
@@ -123,29 +119,17 @@ export default function BarCharts() {
     })),
   }), [staticData]);
 
-  // Gradient datasets
-  const buildGradientDatasets = () => {
-    const chart = chartRef.current;
-    if (!chart?.chartArea) return;
-    const { ctx, chartArea } = chart;
+  const gradientData = useMemo(() => ({
+    ...normalData,
+    datasets: normalData.datasets.map((dataset, index) => {
+      const series = SERIES[index];
+      return {
+        ...dataset,
+        backgroundColor: chartGradient((ctx, area) => makeGradient(ctx, area, series.gradientFrom, series.gradientTo), series.flat),
+      };
+    }),
+  }), [normalData]);
 
-    setGradientDatasets(
-      SERIES.map((s, i) => ({
-        label: s.label,
-        data: staticData[i],
-        backgroundColor: makeGradient(ctx, chartArea, s.gradientFrom, s.gradientTo),
-        borderWidth: 0,
-      }))
-    );
-  };
-
-  useEffect(() => {
-    buildGradientDatasets();
-    window.addEventListener("resize", buildGradientDatasets);
-    return () => window.removeEventListener("resize", buildGradientDatasets);
-  }, []);
-
-  const gradientData = { labels: LABELS, datasets: gradientDatasets };
   const options = buildOptions(dark);
 
   return (
@@ -155,7 +139,7 @@ export default function BarCharts() {
           <h1 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
             Bar Charts
           </h1>
-          <p className="text-sm text-gray-400 dark:text-gray-500 mt-1">
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
             Bar chart variants with flat and gradient fill
           </p>
         </div>
@@ -165,7 +149,7 @@ export default function BarCharts() {
         </ChartCard>
 
         <ChartCard title="Gradient fill">
-          <Bar ref={chartRef} data={gradientData} options={options} />
+          <Bar data={gradientData} options={options} />
         </ChartCard>
       </div>
     </main>

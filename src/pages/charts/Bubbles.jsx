@@ -1,6 +1,6 @@
 // BubbleCharts.jsx
-import { useRef, useEffect, useState, useMemo } from "react";
-import DefaultLayout from "../../layouts/DefaultLayout";
+import { useMemo } from "react";
+import { chartGradient } from "./chartUtils";
 import { useTheme } from "../../context/ThemeContext";
 import {
   Chart as ChartJS,
@@ -11,7 +11,6 @@ import {
   BubbleController,
 } from "chart.js";
 import { Chart } from "react-chartjs-2";
-import { faker } from "@faker-js/faker";
 
 ChartJS.register(LinearScale, PointElement, Tooltip, Legend, BubbleController);
 
@@ -34,11 +33,11 @@ const SERIES = [
 ];
 
 // ─── HELPERS ─────────────────────────────────────────────────
-const randomBubbles = () =>
-  Array.from({ length: 10 }, () => ({
-    x: faker.number.int({ min: 10, max: 90 }),
-    y: faker.number.int({ min: 10, max: 90 }),
-    r: faker.number.int({ min: 5, max: 18 }),
+const sampleData = (series) =>
+  Array.from({ length: 10 }, (_, index) => ({
+    x: 10 + ((index * 23 + series * 37) % 81),
+    y: 10 + ((index * 41 + series * 19) % 81),
+    r: 5 + ((index * 7 + series * 3) % 14),
   }));
 
 function makeGradient(ctx, area, from, to) {
@@ -55,7 +54,7 @@ function makeGradient(ctx, area, from, to) {
 
 function buildOptions(dark) {
   const gridColor = dark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.05)";
-  const tickColor = dark ? "#64748b" : "#94a3b8";
+  const tickColor = dark ? "#94a3b8" : "#64748b";
   return {
     responsive: true,
     maintainAspectRatio: false,
@@ -120,11 +119,8 @@ function ChartCard({ title, children }) {
 // ─── COMPONENT ───────────────────────────────────────────────
 export default function BubbleCharts() {
   const { dark } = useTheme();
-  const chartRef = useRef(null);
-  const [gradientDatasets, setGradientDatasets] = useState([]);
 
-  // generate ครั้งเดียว
-  const staticData = useMemo(() => SERIES.map(() => randomBubbles()), []);
+  const staticData = useMemo(() => SERIES.map((_, index) => sampleData(index)), []);
 
   const normalData = useMemo(
     () => ({
@@ -139,33 +135,17 @@ export default function BubbleCharts() {
     [staticData],
   );
 
-  const buildGradientDatasets = () => {
-    const chart = chartRef.current;
-    if (!chart?.chartArea) return;
-    const { ctx, chartArea } = chart;
+  const gradientData = useMemo(() => ({
+    ...normalData,
+    datasets: normalData.datasets.map((dataset, index) => {
+      const series = SERIES[index];
+      return {
+        ...dataset,
+        backgroundColor: chartGradient((ctx, area) => makeGradient(ctx, area, series.gradientFrom, series.gradientTo), series.flat),
+      };
+    }),
+  }), [normalData]);
 
-    setGradientDatasets(
-      SERIES.map((s, i) => ({
-        label: s.label,
-        data: staticData[i],
-        backgroundColor: makeGradient(
-          ctx,
-          chartArea,
-          s.gradientFrom,
-          s.gradientTo,
-        ),
-        borderWidth: 0,
-      })),
-    );
-  };
-
-  useEffect(() => {
-    buildGradientDatasets();
-    window.addEventListener("resize", buildGradientDatasets);
-    return () => window.removeEventListener("resize", buildGradientDatasets);
-  }, []);
-
-  const gradientData = { datasets: gradientDatasets };
   const options = buildOptions(dark);
 
   return (
@@ -175,7 +155,7 @@ export default function BubbleCharts() {
           <h1 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
             Bubble Charts
           </h1>
-          <p className="text-sm text-gray-400 dark:text-gray-500 mt-1">
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
             Bubble chart variants with flat and gradient fill
           </p>
         </div>
@@ -186,7 +166,6 @@ export default function BubbleCharts() {
 
         <ChartCard title="Gradient fill">
           <Chart
-            ref={chartRef}
             type="bubble"
             data={gradientData}
             options={options}

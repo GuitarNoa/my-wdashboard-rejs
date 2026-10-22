@@ -1,5 +1,5 @@
 // DefaultLayout.jsx
-import { useState, useEffect, useRef } from "react";
+import { Suspense, useState, useEffect, useRef } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
@@ -9,6 +9,7 @@ const BREAKPOINT = 768; // md — iPad portrait ถือเป็น mobile, la
 export default function DefaultLayout() {
   const { pathname } = useLocation();
   const contentRef = useRef(null);
+  const sidebarRef = useRef(null);
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [isDesktop, setIsDesktop] = useState(
@@ -43,18 +44,29 @@ export default function DefaultLayout() {
 
   useEffect(() => {
     if (!mobileOpen) return;
+    const previous = document.activeElement;
+    const focusable = () => [...sidebarRef.current.querySelectorAll('a, button')].filter(node => node.getClientRects().length && !node.disabled);
+    focusable()[0]?.focus();
     const close = (event) => {
+      if (event.key === "Tab") {
+        const items = focusable();
+        const first = items[0];
+        const last = items.at(-1);
+        if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last?.focus(); }
+        if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first?.focus(); }
+      }
       if (event.key === "Escape") {
         setMobileOpen(false);
         document.querySelector('[aria-controls="sidebar"]')?.focus();
       }
     };
     window.addEventListener("keydown", close);
-    return () => window.removeEventListener("keydown", close);
+    return () => { window.removeEventListener("keydown", close); previous?.focus(); };
   }, [mobileOpen]);
 
   return (
-    <div className="flex h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 overflow-hidden">
+    <div className="flex h-dvh bg-slate-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 overflow-hidden">
+      <a href="#page-content" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-lg focus:bg-white focus:p-3 focus:text-teal-800">Skip to content</a>
       {/* Overlay — portrait (mobile + iPad portrait) */}
       {mobileOpen && (
         <div
@@ -66,6 +78,10 @@ export default function DefaultLayout() {
       {/* Sidebar */}
       <div
         id="sidebar"
+        ref={sidebarRef}
+        role={mobileOpen ? "dialog" : undefined}
+        aria-modal={mobileOpen ? true : undefined}
+        aria-label={mobileOpen ? "Navigation" : undefined}
         inert={!isDesktop && !mobileOpen ? true : undefined}
         className={`
           fixed md:static inset-y-0 left-0 z-50
@@ -74,14 +90,14 @@ export default function DefaultLayout() {
           md:translate-x-0
         `}
       >
-        <Sidebar key={pathname} collapsed={isDesktop && collapsed} onNavigate={() => setMobileOpen(false)} />
+        <Sidebar key={pathname} collapsed={isDesktop && collapsed} onExpand={() => setCollapsed(false)} onClose={() => setMobileOpen(false)} onNavigate={() => setMobileOpen(false)} />
       </div>
 
       {/* Content */}
-      <div className="flex flex-col flex-1 min-w-0 overflow-hidden">
+      <div inert={mobileOpen ? true : undefined} className="flex flex-col flex-1 min-w-0 overflow-hidden">
         <Header onToggleSidebar={toggleSidebar} isSidebarOpen={isSidebarOpen} />
-        <div ref={contentRef} className="flex-1 overflow-y-auto bg-gray-50 dark:bg-gray-900">
-          <Outlet />
+        <div id="page-content" tabIndex={-1} ref={contentRef} className="flex-1 overflow-y-auto bg-slate-50 dark:bg-gray-900">
+          <div className="mx-auto w-full max-w-[1440px]"><Suspense fallback={<p role="status" className="p-10 text-center text-slate-500">Loading page…</p>}><Outlet /></Suspense></div>
         </div>
       </div>
     </div>

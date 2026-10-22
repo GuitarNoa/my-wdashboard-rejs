@@ -1,6 +1,6 @@
 // DonutCharts.jsx
-import { useRef, useEffect, useState, useMemo } from "react";
-import DefaultLayout from "../../layouts/DefaultLayout";
+import { useMemo } from "react";
+import { chartGradient, useCompactChartLegend } from "./chartUtils";
 import { useTheme } from "../../context/ThemeContext";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Doughnut } from "react-chartjs-2";
@@ -144,45 +144,31 @@ function ChartCard({ title, children }) {
 // ─── COMPONENT ───────────────────────────────────────────────
 export default function DonutCharts() {
   const { dark } = useTheme();
-  const chartRef = useRef(null);
-  const [gradientBg, setGradientBg] = useState(SEGMENTS.map((s) => s.flat));
 
-  const buildGradients = () => {
-    const chart = chartRef.current;
-    if (!chart?.chartArea) return;
-    const { ctx, chartArea } = chart;
-    setGradientBg(
-      SEGMENTS.map((s) => makeGradient(ctx, chartArea, s.from, s.to)),
-    );
-  };
-
-  useEffect(() => {
-    buildGradients();
-    window.addEventListener("resize", buildGradients);
-    return () => window.removeEventListener("resize", buildGradients);
-  }, []);
-
-  const baseDataset = {
-    label: "Sales",
-    data: VALUES,
-    borderWidth: 0,
-    hoverOffset: 6,
-  };
-
-  const normalData = useMemo(
-    () => ({
-      labels: LABELS,
-      datasets: [
-        { ...baseDataset, backgroundColor: SEGMENTS.map((s) => s.flat) },
-      ],
-    }),
-    [],
-  );
-
-  const gradientData = {
+  const normalData = useMemo(() => ({
     labels: LABELS,
-    datasets: [{ ...baseDataset, backgroundColor: gradientBg }],
-  };
+    datasets: [{
+      label: "Sales",
+      data: VALUES,
+      borderWidth: 0,
+      hoverOffset: 6,
+      backgroundColor: SEGMENTS.map((segment) => segment.flat),
+    }],
+  }), []);
+
+  const gradientData = useMemo(() => {
+    const colors = SEGMENTS.map((segment) => chartGradient(
+      (ctx, area) => makeGradient(ctx, area, segment.from, segment.to),
+      segment.flat,
+    ));
+    return {
+      ...normalData,
+      datasets: normalData.datasets.map((dataset) => ({
+        ...dataset,
+        backgroundColor: (context) => colors[context.dataIndex % colors.length]?.(context) ?? SEGMENTS[0].flat,
+      })),
+    };
+  }, [normalData]);
 
   const options = buildOptions(dark);
 
@@ -194,7 +180,7 @@ export default function DonutCharts() {
       legend: { display: false },
     },
   };
-  const isMobile = window.innerWidth < 640;
+  const isMobile = useCompactChartLegend();
 
   return (
     <main>
@@ -203,7 +189,7 @@ export default function DonutCharts() {
           <h1 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
             Donut Charts
           </h1>
-          <p className="text-sm text-gray-400 dark:text-gray-500 mt-1">
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
             Doughnut chart variants with flat and gradient fill
           </p>
         </div>
@@ -221,7 +207,6 @@ export default function DonutCharts() {
         <ChartCard title="Gradient fill">
           <div style={{ height: 280 }}>
             <Doughnut
-              ref={chartRef}
               data={gradientData}
               options={isMobile ? mobileOptions : options}
             />

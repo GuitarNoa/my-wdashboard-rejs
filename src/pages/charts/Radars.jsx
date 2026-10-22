@@ -1,6 +1,6 @@
 // RadarCharts.jsx
-import { useRef, useEffect, useState, useMemo } from "react";
-import DefaultLayout from "../../layouts/DefaultLayout";
+import { useMemo } from "react";
+import { chartGradient } from "./chartUtils";
 import { useTheme } from "../../context/ThemeContext";
 import {
   Chart as ChartJS,
@@ -61,7 +61,7 @@ function makeGradient(ctx, area, from, to) {
 
 function buildOptions(dark) {
   const gridColor = dark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.08)";
-  const tickColor = dark ? "#64748b" : "#94a3b8";
+  const tickColor = dark ? "#94a3b8" : "#64748b";
   const labelColor = dark ? "#cbd5e1" : "#475569";
   return {
     responsive: true,
@@ -120,8 +120,6 @@ function ChartCard({ title, children }) {
 // ─── COMPONENT ───────────────────────────────────────────────
 export default function RadarCharts() {
   const { dark } = useTheme();
-  const chartRef = useRef(null);
-  const [gradientDatasets, setGradientDatasets] = useState([]);
 
   const normalData = useMemo(
     () => ({
@@ -143,40 +141,17 @@ export default function RadarCharts() {
     [],
   );
 
-  const buildGradientDatasets = () => {
-    const chart = chartRef.current;
-    if (!chart?.chartArea) return;
-    const { ctx, chartArea } = chart;
+  const gradientData = useMemo(() => ({
+    ...normalData,
+    datasets: normalData.datasets.map((dataset, index) => {
+      const series = SERIES[index];
+      return {
+        ...dataset,
+        backgroundColor: chartGradient((ctx, area) => makeGradient(ctx, area, series.gradientFrom, series.gradientTo), series.flat),
+      };
+    }),
+  }), [normalData]);
 
-    setGradientDatasets(
-      SERIES.map((s) => ({
-        label: s.label,
-        data: s.data,
-        fill: true,
-        borderColor: s.border,
-        backgroundColor: makeGradient(
-          ctx,
-          chartArea,
-          s.gradientFrom,
-          s.gradientTo,
-        ),
-        borderWidth: 2,
-        pointBackgroundColor: s.border,
-        pointBorderColor: "#fff",
-        pointHoverBackgroundColor: "#fff",
-        pointHoverBorderColor: s.border,
-        pointRadius: 3,
-      })),
-    );
-  };
-
-  useEffect(() => {
-    buildGradientDatasets();
-    window.addEventListener("resize", buildGradientDatasets);
-    return () => window.removeEventListener("resize", buildGradientDatasets);
-  }, []);
-
-  const gradientData = { labels: LABELS, datasets: gradientDatasets };
   const options = buildOptions(dark);
 
   return (
@@ -186,7 +161,7 @@ export default function RadarCharts() {
           <h1 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
             Radar Charts
           </h1>
-          <p className="text-sm text-gray-400 dark:text-gray-500 mt-1">
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
             Radar chart variants with flat and gradient fill
           </p>
         </div>
@@ -197,7 +172,6 @@ export default function RadarCharts() {
 
         <ChartCard title="Gradient fill">
           <Chart
-            ref={chartRef}
             type="radar"
             data={gradientData}
             options={options}

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Doughnut } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { useTheme } from "../context/ThemeContext";
@@ -23,22 +23,23 @@ const INITIAL_PRODUCTS = [
 
 // ─── Chart plugin ────────────────────────────────────────────────────────────
 
-const makeCenterTextPlugin = (total, textColor) => ({
+const centerTextPlugin = {
   id: "centerText",
-  beforeDraw: (chart) => {
+  beforeDraw: (chart, _args, options) => {
+    if (!chart.chartArea) return;
     const {
       ctx,
       chartArea: { width, height, left, top },
     } = chart;
     ctx.save();
-    ctx.font = `700 ${(height / 5).toFixed(0)}px "DM Sans", sans-serif`;
-    ctx.fillStyle = textColor;
+    ctx.font = `700 ${(height / 5).toFixed(0)}px "Inter", sans-serif`;
+    ctx.fillStyle = options.color;
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
-    ctx.fillText(`${total}`, left + width / 2, top + height / 2);
+    ctx.fillText(`${options.total}`, left + width / 2, top + height / 2);
     ctx.restore();
   },
-});
+};
 
 // ─── Sub-components ──────────────────────────────────────────────────────────
 
@@ -164,7 +165,7 @@ export default function ECommerce() {
     border: isDark ? "#334155" : "#e2e8f0",
     textPrimary: isDark ? "#f1f5f9" : "#0f172a",
     textSecondary: isDark ? "#cbd5e1" : "#334155",
-    textMuted: isDark ? "#64748b" : "#94a3b8",
+    textMuted: isDark ? "#94a3b8" : "#64748b",
     headerBorder: isDark ? "#1e293b" : "#f1f5f9",
     rowAlt: isDark ? "#172033" : "#fafafa",
     rowHover: isDark ? "#16332a" : "#f0fdf4",
@@ -173,6 +174,20 @@ export default function ECommerce() {
 
   const [products, setProducts] = useState(INITIAL_PRODUCTS);
   const [search, setSearch] = useState("");
+  const [draft, setDraft] = useState(null);
+  const [notice, setNotice] = useState("");
+  const [deleted, setDeleted] = useState(null);
+  const fieldClass = "mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm dark:border-slate-600 dark:bg-gray-900";
+  function saveProduct(event) {
+    event.preventDefault();
+    if (!draft.name.trim()) { setNotice("Enter a product name."); return; }
+    const price = Number(draft.price), stock = Number(draft.stock);
+    if (!Number.isFinite(price) || price < 0 || !Number.isSafeInteger(stock) || stock < 0) { setNotice("Enter a valid price and whole-number stock count."); return; }
+    const product = { ...draft, name: draft.name.trim(), price, stock };
+    setProducts(current => draft.id == null ? [...current, { ...product, id: Math.max(0, ...current.map(item => item.id)) + 1 }] : current.map(item => item.id === draft.id ? product : item));
+    setDraft(null);
+    setNotice("Product updated for this visit. Changes are not saved to a server.");
+  }
 
   const inStockCount = products.filter((p) => p.stock > 0).length;
   const outOfStockCount = products.filter((p) => p.stock === 0).length;
@@ -198,10 +213,11 @@ export default function ECommerce() {
   const chartOptions = {
     cutout: "72%",
     plugins: {
+      centerText: { total: products.length, color: c.textPrimary },
       legend: {
         position: "bottom",
         labels: {
-          font: { family: "DM Sans, sans-serif", size: 13, weight: "500" },
+          font: { family: "Inter, sans-serif", size: 13, weight: "500" },
           color: c.textMuted,
           padding: 16,
           usePointStyle: true,
@@ -216,18 +232,19 @@ export default function ECommerce() {
     },
   };
 
-  const handleDelete = (id) =>
-    setProducts((prev) => prev.filter((p) => p.id !== id));
+  const handleDelete = (id) => {
+    setDeleted(products.find(product => product.id === id));
+    setProducts(prev => prev.filter(product => product.id !== id));
+    if (draft?.id === id) setDraft(null);
+    setNotice("Product removed from this demo.");
+  };
 
   return (
     <main>
-      {/* Google Font */}
-      <style>{`@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap');`}</style>
-
-      <div
+<div
         style={{
-          fontFamily: "'DM Sans', sans-serif",
-          padding: "28px 32px",
+          fontFamily: "'Inter', sans-serif",
+
           background: c.pageBg,
           minHeight: "100vh",
         }}
@@ -239,6 +256,8 @@ export default function ECommerce() {
             justifyContent: "space-between",
             alignItems: "center",
             marginBottom: 28,
+            flexWrap: "wrap",
+            gap: 16,
           }}
         >
           <div>
@@ -253,12 +272,14 @@ export default function ECommerce() {
               E-Commerce
             </h1>
             <p style={{ fontSize: 14, color: c.textMuted, margin: "4px 0 0" }}>
-              Product inventory overview
+              Product inventory overview · Sample data for this visit
             </p>
           </div>
           <button
+            type="button"
+            onClick={() => setDraft({ name: "", price: "", stock: "" })}
             style={{
-              background: "linear-gradient(135deg, #34d399, #22d3ee)",
+              background: "#0f766e",
               color: "#fff",
               border: "none",
               borderRadius: 10,
@@ -274,11 +295,20 @@ export default function ECommerce() {
           </button>
         </div>
 
+        {notice && <p role="status" className="mb-4 rounded-xl bg-teal-50 p-4 text-sm text-teal-800 dark:bg-teal-950 dark:text-teal-200">{notice}{deleted && <button type="button" className="ml-2 font-semibold underline" onClick={() => { setProducts(current => [...current, deleted].sort((a,b) => a.id-b.id)); setDeleted(null); setNotice("Product restored."); }}>Undo delete</button>}</p>}
+        {draft && <form onSubmit={saveProduct} className="mb-6 space-y-4 rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-700 dark:bg-gray-800">
+          <h2 className="font-semibold">{draft.id == null ? "Add product" : "Edit product"}</h2>
+          <div className="grid gap-4 sm:grid-cols-3">
+            <label className="text-sm">Product name<input autoFocus required maxLength={120} value={draft.name} onChange={event => setDraft({ ...draft, name: event.target.value })} className={fieldClass} /></label>
+            <label className="text-sm">Price (THB)<input type="number" required min="0" max="1000000000" step="0.01" value={draft.price} onChange={event => setDraft({ ...draft, price: event.target.value })} className={fieldClass} /></label>
+            <label className="text-sm">Stock<input type="number" required min="0" max="1000000000" step="1" value={draft.stock} onChange={event => setDraft({ ...draft, stock: event.target.value })} className={fieldClass} /></label>
+          </div>
+          <div className="flex gap-3"><button type="submit" className="rounded-lg bg-teal-700 px-4 py-2 text-sm font-medium text-white">Save product</button><button type="button" onClick={() => setDraft(null)} className="rounded-lg border border-slate-300 px-4 py-2 text-sm dark:border-slate-600">Cancel</button></div>
+        </form>}
         {/* ── Stats + Chart ── */}
         <div
+          className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_220px]"
           style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 220px",
             gap: 20,
             marginBottom: 24,
             alignItems: "start",
@@ -286,9 +316,8 @@ export default function ECommerce() {
         >
           {/* Stat cards (stacked) */}
           <div
+            className="grid grid-cols-1 sm:grid-cols-3"
             style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(3, 1fr)",
               gap: 16,
             }}
           >
@@ -344,7 +373,8 @@ export default function ECommerce() {
             <Doughnut
               data={chartData}
               options={chartOptions}
-              plugins={[makeCenterTextPlugin(products.length, c.textPrimary)]}
+              plugins={[centerTextPlugin]}
+              aria-label={`Stock ratio: ${inStockCount} in stock, ${outOfStockCount} out of stock`}
             />
           </div>
         </div>
@@ -365,6 +395,8 @@ export default function ECommerce() {
               justifyContent: "space-between",
               alignItems: "center",
               padding: "16px 20px",
+              flexWrap: "wrap",
+              gap: 12,
               borderBottom: `1px solid ${c.headerBorder}`,
             }}
           >
@@ -374,6 +406,8 @@ export default function ECommerce() {
               Products
             </span>
             <input
+              aria-label="Search products"
+              type="search"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search product…"
@@ -476,6 +510,9 @@ export default function ECommerce() {
                     <td style={{ padding: "12px 20px" }}>
                       <div style={{ display: "flex", gap: 8 }}>
                         <button
+                          type="button"
+                          onClick={() => setDraft({ ...product })}
+                          aria-label={"Edit " + product.name}
                           style={{
                             padding: "5px 14px",
                             borderRadius: 7,
@@ -491,6 +528,7 @@ export default function ECommerce() {
                           Edit
                         </button>
                         <button
+                          aria-label={"Delete " + product.name}
                           onClick={() => handleDelete(product.id)}
                           style={{
                             padding: "5px 14px",

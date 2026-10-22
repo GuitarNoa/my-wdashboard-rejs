@@ -1,5 +1,5 @@
 import React from "react";
-import DefaultLayout from "../../layouts/DefaultLayout";
+
 
 export default function BasicTables() {
   const users = [
@@ -14,8 +14,8 @@ export default function BasicTables() {
       <div className="container mx-auto p-6">
         <h1 className="text-3xl font-bold mb-6">Basic Tables</h1>
         <div className="overflow-x-auto">
-          <table className="min-w-full border border-gray-200 rounded-lg overflow-hidden">
-            <thead className="bg-gray-100">
+          <table className="min-w-full border border-slate-200 dark:border-slate-700 rounded-lg overflow-hidden">
+            <thead className="bg-slate-100 dark:bg-slate-800">
               <tr>
                 <th className="py-3 px-6 text-left">ID</th>
                 <th className="py-3 px-6 text-left">Name</th>
@@ -29,8 +29,8 @@ export default function BasicTables() {
                   key={user.id}
                   className={
                     index % 2 === 0
-                      ? "bg-white hover:bg-gray-50"
-                      : "bg-gray-50 hover:bg-gray-100"
+                      ? "bg-white hover:bg-slate-50 dark:bg-gray-900 dark:hover:bg-gray-800"
+                      : "bg-slate-50 hover:bg-slate-100 dark:bg-gray-800 dark:hover:bg-gray-700"
                   }
                 >
                   <td className="py-3 px-6">{user.id}</td>
@@ -40,7 +40,7 @@ export default function BasicTables() {
                 </tr>
               ))}
             </tbody>
-            <tfoot className="bg-gray-100">
+            <tfoot className="bg-slate-100 dark:bg-slate-800">
               <tr>
                 <td className="py-3 px-6" colSpan={4}>
                   Total Users: {users.length}
@@ -49,10 +49,10 @@ export default function BasicTables() {
             </tfoot>
           </table>
         </div>
-        <h1 className="text-3xl font-bold mb-6">Adv Table</h1>
+        <h2 className="text-xl font-semibold mb-6 mt-10">Accent table</h2>
         <div className="overflow-x-auto">
-          <table className="min-w-full border border-gray-200 rounded-lg overflow-hidden">
-            <thead className="bg-gradient-to-t from-green-400/90 to-cyan-400/90">
+          <table className="min-w-full border border-slate-200 dark:border-slate-700 rounded-lg overflow-hidden">
+            <thead className="bg-teal-700">
               <tr className="text-white">
                 <th className="py-3 px-6 text-left">ID</th>
                 <th className="py-3 px-6 text-left">Name</th>
@@ -66,8 +66,8 @@ export default function BasicTables() {
                   key={user.id}
                   className={
                     index % 2 === 0
-                      ? "bg-white hover:bg-gray-50"
-                      : "bg-gray-50 hover:bg-gray-100"
+                      ? "bg-white hover:bg-slate-50 dark:bg-gray-900 dark:hover:bg-gray-800"
+                      : "bg-slate-50 hover:bg-slate-100 dark:bg-gray-800 dark:hover:bg-gray-700"
                   }
                 >
                   <td className="py-3 px-6">{user.id}</td>
@@ -77,7 +77,7 @@ export default function BasicTables() {
                 </tr>
               ))}
             </tbody>
-            <tfoot className="bg-gray-100">
+            <tfoot className="bg-slate-100 dark:bg-slate-800">
               <tr>
                 <td className="py-3 px-6" colSpan={4}>
                   Total Users: {users.length}

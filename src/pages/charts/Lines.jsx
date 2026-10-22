@@ -1,6 +1,6 @@
 // LineCharts.jsx
-import { useRef, useEffect, useState, useMemo } from "react";
-import DefaultLayout from "../../layouts/DefaultLayout";
+import { useMemo } from "react";
+import { chartGradient } from "./chartUtils";
 import { useTheme } from "../../context/ThemeContext";
 import {
   Chart as ChartJS,
@@ -8,17 +8,18 @@ import {
   LinearScale,
   PointElement,
   LineElement,
+  LineController,
   Tooltip,
   Legend,
 } from "chart.js";
 import { Chart } from "react-chartjs-2";
-import { faker } from "@faker-js/faker";
 
 ChartJS.register(
   CategoryScale,
   LinearScale,
   PointElement,
   LineElement,
+  LineController,
   Tooltip,
   Legend,
 );
@@ -42,8 +43,8 @@ const SERIES = [
 ];
 
 // ─── HELPERS ─────────────────────────────────────────────────
-const randomData = () =>
-  LABELS.map(() => faker.number.int({ min: -1000, max: 1000 }));
+const sampleData = (series) =>
+  LABELS.map((_, index) => -500 + ((index * 257 + series * 431) % 1501));
 
 function makeLineGradient(ctx, area, stops) {
   const g = ctx.createLinearGradient(0, area.bottom, 0, area.top);
@@ -53,7 +54,7 @@ function makeLineGradient(ctx, area, stops) {
 
 function buildOptions(dark) {
   const gridColor = dark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.05)";
-  const tickColor = dark ? "#64748b" : "#94a3b8";
+  const tickColor = dark ? "#94a3b8" : "#64748b";
   return {
     responsive: true,
     maintainAspectRatio: false,
@@ -120,11 +121,8 @@ function ChartCard({ title, children }) {
 // ─── COMPONENT ───────────────────────────────────────────────
 export default function LineCharts() {
   const { dark } = useTheme();
-  const chartRef = useRef(null);
-  const [gradientDatasets, setGradientDatasets] = useState([]);
 
-  // generate ครั้งเดียว
-  const staticData = useMemo(() => SERIES.map(() => randomData()), []);
+  const staticData = useMemo(() => SERIES.map((_, index) => sampleData(index)), []);
 
   const normalData = useMemo(
     () => ({
@@ -145,34 +143,17 @@ export default function LineCharts() {
     [staticData],
   );
 
-  const buildGradientDatasets = () => {
-    const chart = chartRef.current;
-    if (!chart?.chartArea) return;
-    const { ctx, chartArea } = chart;
+  const gradientData = useMemo(() => ({
+    ...normalData,
+    datasets: normalData.datasets.map((dataset, index) => {
+      const series = SERIES[index];
+      return {
+        ...dataset,
+        borderColor: chartGradient((ctx, area) => makeLineGradient(ctx, area, series.gradientStops), series.border),
+      };
+    }),
+  }), [normalData]);
 
-    setGradientDatasets(
-      SERIES.map((s, i) => ({
-        label: s.label,
-        data: staticData[i],
-        borderColor: makeLineGradient(ctx, chartArea, s.gradientStops),
-        backgroundColor: "transparent",
-        borderWidth: 2.5,
-        tension: 0.4,
-        pointRadius: 4,
-        pointBackgroundColor: s.gradientStops[1],
-        pointBorderColor: "#fff",
-        pointBorderWidth: 2,
-      })),
-    );
-  };
-
-  useEffect(() => {
-    buildGradientDatasets();
-    window.addEventListener("resize", buildGradientDatasets);
-    return () => window.removeEventListener("resize", buildGradientDatasets);
-  }, []);
-
-  const gradientData = { labels: LABELS, datasets: gradientDatasets };
   const options = buildOptions(dark);
 
   return (
@@ -182,7 +163,7 @@ export default function LineCharts() {
           <h1 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
             Line Charts
           </h1>
-          <p className="text-sm text-gray-400 dark:text-gray-500 mt-1">
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
             Line chart variants with flat and gradient stroke
           </p>
         </div>
@@ -193,7 +174,6 @@ export default function LineCharts() {
 
         <ChartCard title="Gradient line">
           <Chart
-            ref={chartRef}
             type="line"
             data={gradientData}
             options={options}
